@@ -1,6 +1,8 @@
 # FSM multiciclo da O1
 
 > **Status:** especificação derivada da tabela ISA fornecida em `Tabela ISA - Página1.pdf`. A tabela define as instruções, codificações e operações descritas abaixo; detalhes de implementação do datapath que ela não especifica continuam identificados como premissas.
+>
+> O repositório não contém implementação RTL. A coerência deste diagrama é conferida com a FSM documentada; a validação contra o código fica pendente até a inclusão da implementação.
 
 ## 1. Premissas do datapath
 
@@ -27,6 +29,76 @@
 6. **Acesso à memória de dados:** `MDR <- DMem[ALUOut]` para `lw`; `DMem[ALUOut] <- B` para `sw`.
 7. **Branch:** se `A - B == 0`, `PC <- ALUOut`; caso contrário, o PC não muda.
 8. **Write-back:** instrução R escreve `ALUOut` em `rd`; `addi` escreve `ALUOut` em `rt`; `lw` escreve `MDR` em `rt`.
+
+### Diagrama do caminho de dados
+
+O diagrama mostra os caminhos compartilhados ao longo dos ciclos. Os fios de controle tracejados vêm da FSM; a escrita em cada registrador só ocorre no estado que habilita seu sinal `Write`.
+
+```mermaid
+flowchart LR
+    PC["PC<br/>32 bits"] -->|endereço| IMEM["Memória de instruções<br/>IMem"]
+    IMEM -->|instrução| IR["IR<br/>32 bits"]
+    IR -->|opcode, funct| CU["Unidade de controle<br/>FSM"]
+    IR -->|rs, rt| RF["Banco de registradores<br/>2 portas de leitura<br/>1 porta de escrita"]
+    RF -->|leitura 1| A["A<br/>32 bits"]
+    RF -->|leitura 2| B["B<br/>32 bits"]
+
+    PC --> MUXA{"Mux ALUSrcA<br/>PC / A"}
+    A --> MUXA
+    B --> MUXB{"Mux ALUSrcB<br/>B / 4 / imm / imm<<2"}
+    FOUR["Constante 4"] --> MUXB
+    IR -->|imm16| EXT["Extensão de sinal<br/>16 para 32 bits"]
+    EXT --> MUXB
+    EXT --> SHIFT["Deslocamento à esquerda<br/>2 bits"]
+    SHIFT --> MUXB
+    MUXA --> ALU["ALU<br/>ADD, SUB, AND,<br/>OR, SLT e Zero"]
+    MUXB --> ALU
+    IR -->|funct| CU
+    CU -.->|ALUControl| ALU
+
+    ALU -->|resultado| ALUOUT["ALUOut<br/>32 bits"]
+    ALU -->|fonte ALU| PCMUX{"Mux PCSource<br/>ALU / ALUOut"}
+    ALUOUT -->|fonte ALUOut| PCMUX
+    PCMUX -->|entrada de dados do PC| PC
+    ALU -->|Zero| CU
+
+    ALUOUT -->|endereço| DMEM["Memória de dados<br/>DMem"]
+    B -->|dado para sw| DMEM
+    DMEM -->|dado lido| MDR["MDR<br/>32 bits"]
+
+    ALUOUT -->|resultado ALU| MUXWB{"Mux MemToReg<br/>ALUOut / MDR"}
+    MDR -->|dado da memória| MUXWB
+    MUXWB -->|dado de escrita| RF
+    IR -->|rt| MUXDST{"Mux RegDst<br/>rt / rd"}
+    IR -->|rd| MUXDST
+    MUXDST -->|endereço de escrita| RF
+
+    CU -.->|IRWrite| IR
+    CU -.->|AWrite| A
+    CU -.->|BWrite| B
+    CU -.->|ALUOutWrite| ALUOUT
+    CU -.->|MDRWrite| MDR
+    CU -.->|ALUSrcA| MUXA
+    CU -.->|ALUSrcB| MUXB
+    CU -.->|PCSource| PCMUX
+    CU -.->|PCWrite / PCWriteCond| PC
+    CU -.->|RegDst| MUXDST
+    CU -.->|RegWrite| RF
+    CU -.->|MemToReg| MUXWB
+    CU -.->|MemRead, MemWrite| DMEM
+```
+
+#### Seleção dos muxes por estado
+
+| Caminho/mux | Entradas e seleção | Estados que usam a seleção |
+|---|---|---|
+| `ALUSrcA` | `PC` ou `A` | `FETCH` e `DECODE`: `PC`; execução R, `addi`, endereço e `beq`: `A`. |
+| `ALUSrcB` | `B`, `4`, `signext(imm16)` ou `signext(imm16)<<2` | `FETCH`: `4`; `DECODE`: imediato deslocado; execução R e `beq`: `B`; `addi` e cálculo de endereço: imediato estendido. |
+| `PCSource` | Resultado direto da ALU ou `ALUOut` | `FETCH`: resultado da ALU (`PC+4`); `BRANCH`: `ALUOut` (alvo calculado em `DECODE`). |
+| `RegDst` | `rt` ou `rd` | `R_WB`: `rd`; `ADDI_WB` e `MEM_WB`: `rt`. |
+| `MemToReg` | `ALUOut` ou `MDR` | `R_WB` e `ADDI_WB`: `ALUOut`; `MEM_WB`: `MDR`. |
+
+`RegWrite` habilita a escrita do banco nos estados de write-back. `IRWrite`, `AWrite`, `BWrite`, `ALUOutWrite` e `MDRWrite` habilitam os registradores correspondentes; `MemRead` e `MemWrite` controlam apenas `DMem`. Em `BRANCH`, o PC só é habilitado quando `Zero=1`; em `FETCH`, `PCWrite` o habilita incondicionalmente. `break` é decodificado pela FSM e mantém o processador em `HALT`, sem habilitar escrita.
 
 ### Decodificação da ISA
 
@@ -136,3 +208,4 @@ Depois de `break`, `HALT` se repete a cada ciclo; portanto, 3 ciclos é a latên
 - Os sinais de controle e suas seleções estão relacionados por estado.
 - A contagem foi derivada dos estados percorridos, incluindo ambos os resultados de `beq`.
 - Memórias de instruções e dados têm caminhos de endereço distintos; `IorD` não é um sinal de controle da FSM.
+- O diagrama nomeia os registradores intermediários e muxes e segue as operações da FSM; a verificação contra RTL permanece pendente porque não há código no repositório.
