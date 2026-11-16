@@ -49,13 +49,18 @@ architecture rtl of cpu_top_o2 is
     signal done_reg       : std_logic := '0';
     signal stream_active  : std_logic := '1';   -- fluxo de instruções não chegou ao fim
     signal fetch_valid_now : std_logic;         -- instrução real (não bolha) em IF
+    -- Snapshot do slot IF no instante do aborto: mantém stage_valid(0) com o
+    -- estado congelado da detecção (issue #15).
+    signal if_slot_frozen : std_logic := '0';
+    signal if_slot_now    : std_logic;
 
     -- Detecção do conflito estrutural (issue #13).
     signal structural_conflict : std_logic;
 
     -- Contagem de ciclos na convenção do tb_cpu (1-based): o tb incrementa o
     -- contador na borda de descida de cada ciclo; aqui contamos na borda de
-    -- subida do mesmo ciclo.
+    -- subida do mesmo ciclo. O reset zera a contagem para que hazard_cycle
+    -- recomece em 1 após um aborto (issue #15).
     signal cycle_cnt : unsigned(31 downto 0) := (others => '0');
 
     -- Caminho de dados.
@@ -287,6 +292,15 @@ begin
                 frozen        <= '0';
                 done_reg      <= '0';
                 stream_active <= '1';
+                if_slot_frozen <= '0';
+            elsif structural_conflict = '1' then
+                -- Issue #13/#15: ciclo da detecção do conflito estrutural. A
+                -- instrução mais antiga (MEM) conclui o acesso concedido — a
+                -- escrita acontece nesta borda, dentro da memória. A mais
+                -- nova (IF) é abortada: nada avança. O congelamento é
+                -- registrado aqui e todo o estado fica estável até o reset.
+                frozen        <= '1';
+                if_slot_frozen <= fetch_valid_now;
             elsif frozen = '1' then
                 -- Aborto (R4): congelar PC, pipeline, banco e memória; os
                 -- sinais hazard_* permanecem estáveis até o reset.
@@ -346,12 +360,6 @@ begin
                     done_reg <= '1';
                 end if;
 
-                -- Issue #13: a instrução mais antiga (MEM) mantém o recurso e
-                -- conclui o acesso; a mais nova (IF) é abortada no fim do ciclo.
-                if structural_conflict = '1' then
-                    frozen <= '1';
-                end if;
-
                 -- Desvio tomado: mata a busca corrente e a instrução em ID.
                 if idex_reg.valid = '1' and idex_reg.is_beq = '1' and alu_zero = '1' then
                     pc             <= branch_target;
@@ -365,6 +373,15 @@ begin
     ----------------------------------------------------------------------------
     -- Interface R3.
     ----------------------------------------------------------------------------
+    -- Semântica de aborto (issue #15): hazard_abort/hazard_type são
+    -- combinacionais com o ciclo da detecção e ficam estáveis depois, porque
+    -- o congelamento impede que um novo conflito seja detectado
+    -- (structural_conflict exige frozen = '0'). O primeiro hazard detectado,
+    -- portanto, é o único reportado. Quando os detectores de conflito de
+    -- dados (issue #12) e de controle (issue #14) forem adicionados, eles
+    -- devem seguir o mesmo padrão: registrar o primeiro hazard e não
+    -- sobrescrevê-lo até o reset (a prioridade entre tipos simultâneos está
+    -- fora do escopo dos traços TD/TE/TC individuais).
     done <= done_reg or (memwb_reg.valid and memwb_reg.is_break);
 
     hazard_abort <= frozen or structural_conflict;
@@ -380,7 +397,11 @@ begin
                else "00";
 
     -- Slots 0..4: IF, ID (IF/ID), EX (ID/EX), MEM (EX/MEM), WB (MEM/WB).
-    stage_valid <= (0 => fetch_valid_now,
+    -- Após o aborto, o slot IF mostra o valor congelado no instante da
+    -- detecção (snapshot), não a busca corrente (issue #15).
+    if_slot_now <= fetch_valid_now when frozen = '0' else if_slot_frozen;
+
+    stage_valid <= (0 => if_slot_now,
                     1 => ifid_reg.valid,
                     2 => idex_reg.valid,
                     3 => exmem_reg.valid,
@@ -391,7 +412,9 @@ begin
     cycle_counter : process (clk)
     begin
         if rising_edge(clk) then
-            if rst = '0' and frozen = '0' then
+            if rst = '1' then
+                cycle_cnt <= (others => '0');
+            elsif frozen = '0' then
                 cycle_cnt <= cycle_cnt + 1;
             end if;
         end if;

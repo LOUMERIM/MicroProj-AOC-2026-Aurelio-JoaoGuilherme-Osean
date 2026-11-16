@@ -20,6 +20,7 @@ entity tb_cpu is
 end entity;
 
 architecture sim of tb_cpu is
+    constant PC_ZERO : std_logic_vector(31 downto 0) := (others => '0');
     signal clk            : std_logic := '0';
     signal rst            : std_logic := '1';
     signal fim_sim        : boolean := false;
@@ -97,6 +98,12 @@ begin
         variable reg_num : integer;
         variable valor : std_logic_vector(31 downto 0);
         variable cpi, ipc, ocup : real := 0.0;
+        -- cópias no instante do aborto, para checar estabilidade (issue #15)
+        variable v_abort : std_logic;
+        variable v_type  : std_logic_vector(1 downto 0);
+        variable v_pc    : std_logic_vector(31 downto 0);
+        variable v_cycle : unsigned(31 downto 0);
+        variable v_stage : std_logic_vector(9 downto 0);
     begin
         -- 3.1 Reset
         rst <= '1';
@@ -131,13 +138,70 @@ begin
                 report "Tipo de conflito diferente do esperado"
                 severity error;
             
-            assert hazard_pc = PC_ESPERADO
-                report "hazard_pc difere do esperado"
-                severity warning;
-            
+            -- Divergência em hazard_pc falha o teste quando um PC esperado é
+            -- configurado (PC_ESPERADO /= 0); sem expectativa, não há o que
+            -- conferir (issue #15).
+            if PC_ESPERADO /= PC_ZERO then
+                assert hazard_pc = PC_ESPERADO
+                    report "hazard_pc difere do esperado"
+                    severity error;
+            end if;
+
             assert to_integer(hazard_cycle) = ciclos
                 report "hazard_cycle difere da contagem do testbench"
-                severity warning;
+                severity error;
+
+            -- 3.3.1 Semântica de aborto (R4, issue #15): o estado congelado
+            -- mantém os sinais hazard_* estáveis por vários ciclos, nada é
+            -- aposentado e os slots válidos não mudam.
+            v_abort := hazard_abort;
+            v_type  := hazard_type;
+            v_pc    := hazard_pc;
+            v_cycle := hazard_cycle;
+            v_stage := stage_valid;
+            for i in 1 to 5 loop
+                wait until falling_edge(clk);
+
+                assert hazard_abort = v_abort
+                    report "hazard_abort não permaneceu estável após o aborto"
+                    severity error;
+                assert hazard_type = v_type
+                    report "hazard_type não permaneceu estável após o aborto"
+                    severity error;
+                assert hazard_pc = v_pc
+                    report "hazard_pc não permaneceu estável após o aborto"
+                    severity error;
+                assert hazard_cycle = v_cycle
+                    report "hazard_cycle não permaneceu estável após o aborto"
+                    severity error;
+                assert stage_valid = v_stage
+                    report "stage_valid não permaneceu estável após o aborto"
+                    severity error;
+                assert to_integer(retired) = 0
+                    report "instrução foi aposentada após o congelamento"
+                    severity error;
+            end loop;
+
+            -- 3.3.2 O reset limpa o estado de aborto e os metadados: sem
+            -- hazard, e a contagem de ciclos recomeça em 1 (issue #15).
+            rst <= '1';
+            wait until rising_edge(clk);
+            wait until rising_edge(clk);
+            rst <= '0';
+            wait until falling_edge(clk);
+
+            assert hazard_abort = '0'
+                report "reset não limpou hazard_abort"
+                severity error;
+            assert hazard_type = "00"
+                report "reset não limpou hazard_type"
+                severity error;
+            assert to_integer(hazard_cycle) = 1
+                report "hazard_cycle não reiniciou em 1 após o reset"
+                severity error;
+            assert to_integer(retired) = 0
+                report "reset não limpou retired"
+                severity error;
 
         elsif done = '1' then
             assert not ESPERA_ABORTO
