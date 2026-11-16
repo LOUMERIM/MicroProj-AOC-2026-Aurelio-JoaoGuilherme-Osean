@@ -2,7 +2,7 @@
 
 > **Status:** especificação derivada da tabela ISA fornecida em `Tabela ISA - Página1.pdf`. A tabela define as instruções, codificações e operações descritas abaixo; detalhes de implementação do datapath que ela não especifica continuam identificados como premissas.
 >
-> O repositório não contém implementação RTL. A coerência deste diagrama é conferida com a FSM documentada; a validação contra o código fica pendente até a inclusão da implementação.
+> O repositório contém RTL dos componentes isolados em `src/rtl/`, mas ainda não uma FSM/top-level integrado. O diagrama descreve a arquitetura e os componentes são testados isoladamente; a validação ponta a ponta fica pendente da integração.
 
 ## 1. Premissas do datapath
 
@@ -11,11 +11,11 @@
 - Há memórias separadas: a memória de instruções recebe somente o PC e a memória de dados recebe somente o endereço efetivo calculado pela ALU.
 - O banco tem 32 registradores, duas portas de leitura e uma de escrita. `$zero` lê zero e não aceita escrita.
 - `IR` guarda a instrução; `A` e `B` guardam os operandos lidos; `ALUOut` guarda resultados intermediários; `MDR` guarda dados lidos da memória de dados.
-- A leitura dos registradores é combinacional; `A`, `B`, `IR`, `ALUOut`, `MDR` e o PC atualizam na borda do clock quando habilitados.
-- Cada acesso à memória ocupa um estado: a busca da instrução ocorre em `FETCH`, e leitura/escrita de dados ocorre em estado próprio.
+- A leitura dos registradores é combinacional; o banco de registradores escreve na borda de descida do clock. `A`, `B`, `IR`, `ALUOut`, `MDR` e o PC atualizam na borda do clock quando habilitados.
+- As leituras de memória são combinacionais e as escritas em memória de dados são síncronas na borda de subida; cada acesso ocupa o estado correspondente da FSM (`FETCH`, `MEM_READ` ou `MEM_WRITE`).
 - Os campos seguem os formatos MIPS da tabela: formato R com `opcode`, `rs`, `rt`, `rd`, `shamt` e `funct`; formato I com `opcode`, `rs`, `rt` e `imm16`. Os opcodes têm 6 bits e `funct` tem 6 bits; zeros à esquerda são preservados na comparação. O imediato é estendido com sinal.
 - A tabela define as operações R `add`, `sub`, `and`, `or` e `slt`, além de `break`. As codificações dos campos `opcode` e `funct` são listadas na seção de decodificação.
-- `slt` produz 1 quando `R[rs] < R[rt]` e 0 caso contrário. A tabela não especifica se a comparação é assinada; essa interpretação precisa ser confirmada antes de fixar a implementação da ALU.
+- `slt` produz 1 quando `R[rs] < R[rt]` em comparação signed e 0 caso contrário. A tabela não especifica signedness; a implementação adota a interpretação usual MIPS.
 - `beq` compara os operandos por subtração. Se forem iguais, o alvo é `PC + (signext(immediate) << 2)`. O PC usado já foi incrementado na busca.
 - `break` entra em `HALT` e permanece nesse estado indefinidamente. O PC já foi incrementado durante `FETCH`.
 
@@ -208,4 +208,4 @@ Depois de `break`, `HALT` se repete a cada ciclo; portanto, 3 ciclos é a latên
 - Os sinais de controle e suas seleções estão relacionados por estado.
 - A contagem foi derivada dos estados percorridos, incluindo ambos os resultados de `beq`.
 - Memórias de instruções e dados têm caminhos de endereço distintos; `IorD` não é um sinal de controle da FSM.
-- O diagrama nomeia os registradores intermediários e muxes e segue as operações da FSM; a verificação contra RTL permanece pendente porque não há código no repositório.
+- O diagrama nomeia os registradores intermediários e muxes e segue as operações da FSM; a validação ponta a ponta permanece pendente porque a FSM ainda não está integrada em RTL.
