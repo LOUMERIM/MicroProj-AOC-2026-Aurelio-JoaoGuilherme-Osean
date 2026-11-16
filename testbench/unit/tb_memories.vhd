@@ -21,7 +21,7 @@ begin
     imem : entity work.instruction_memory
         generic map (
             DEPTH     => 8,
-            INIT_FILE => "tests/fixtures/instructions.hex"
+            INIT_FILE => "../testbench/unit/fixtures/instructions.hex"
         )
         port map (
             address => imem_address,

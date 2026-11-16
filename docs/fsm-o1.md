@@ -2,7 +2,7 @@
 
 > **Status:** especificação derivada da tabela ISA fornecida em `Tabela ISA - Página1.pdf`. A tabela define as instruções, codificações e operações descritas abaixo; detalhes de implementação do datapath que ela não especifica continuam identificados como premissas.
 >
-> A FSM está integrada em `src/rtl/cpu_top.vhd` e usa os componentes VHDL-2008 em `src/rtl/`. Os testbenches verificam os componentes isoladamente e a execução integrada de T0.
+> A FSM está integrada em `vhdl/cpu_top.vhd` e usa os componentes VHDL-2008 em `vhdl/`. `testbench/tb_cpu.vhd` é o testbench de integração; os testbenches em `testbench/unit/` verificam os componentes isoladamente.
 
 ## 1. Premissas do datapath
 
