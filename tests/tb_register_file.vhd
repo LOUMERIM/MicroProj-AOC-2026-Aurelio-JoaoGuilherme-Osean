@@ -8,6 +8,7 @@ end entity;
 
 architecture test of tb_register_file is
     signal clk          : std_logic := '0';
+    signal rst          : std_logic := '0';
     signal write_enable : std_logic := '0';
     signal write_addr   : reg_addr_t := (others => '0');
     signal write_data   : word_t := (others => '0');
@@ -23,6 +24,7 @@ begin
     dut : entity work.register_file
         port map (
             clk          => clk,
+            rst          => rst,
             write_enable => write_enable,
             write_addr   => write_addr,
             write_data   => write_data,
@@ -84,6 +86,14 @@ begin
         assert read_data_1 = x"12345678"
             report "Register file changed data while writes were disabled"
             severity failure;
+
+        rst <= '1';
+        wait until rising_edge(clk);
+        wait for 1 ns;
+        assert read_data_1 = x"00000000"
+            report "Synchronous reset did not clear the register file"
+            severity failure;
+        rst <= '0';
 
         report "tb_register_file passed" severity note;
         std.env.stop;
