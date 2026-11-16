@@ -19,15 +19,22 @@ As instruções suportadas estão em [`isa_table_mips.md`](isa_table_mips.md).
 .
 ├── docs/
 │   └── fsm-o1.md       # FSM, caminho de dados e ciclos por classe da O1
-├── vhdl/               # RTL: o1_pkg, register_file, alu, instruction_memory, data_memory, cpu_top
+├── vhdl/               # RTL
+│   ├── o1_pkg, register_file, alu, instruction_memory, data_memory   # componentes comuns
+│   ├── cpu_top.vhd     #   O1: multiciclo (FSM)
+│   ├── o2_pkg.vhd      #   O2: tipos dos registradores entre estágios
+│   ├── unified_memory.vhd #  O2: memória unificada IF/MEM (MEM_UNIFICADA = true)
+│   └── cpu_top_o2.vhd  #   O2: pipeline de 5 estágios, detecção estrutural e aborto
 ├── testbench/
-│   ├── tb_cpu.vhd      #   testbench único: carrega o .hex, conta ciclos/instruções,
+│   ├── tb_cpu.vhd      #   testbench único (ORG=O2 instancia cpu_top_o2; outro valor usa a O1):
+│   │                   #   carrega o .hex, conta ciclos/instruções,
 │   │                   #   confere os registradores com o *_esperado.txt e grava métricas
 │   └── unit/           #   testes isolados dos componentes (register_file, alu, memórias)
 ├── tracos/             # Traços de teste
 │   ├── t0.asm          #   T0: traço limpo (sem conflitos), fonte em assembly
 │   ├── t0.hex          #   T0 montado (uma instrução de 32 bits em hex por linha)
-│   └── t0_esperado.txt #   estado final esperado dos registradores ("reg valor_hex")
+│   ├── t0_esperado.txt #   estado final esperado dos registradores ("reg valor_hex")
+│   └── te.*            #   TE: conflito estrutural (asm, hex e esperado)
 ├── scripts/            # run_ghdl_tests.sh: limpa, roda os testes unitários e o tb_cpu
 ├── build/              # Gerado pelo make (objetos do GHDL e ondas .ghw) — não versionado
 ├── isa_table_mips.md   # Tabela da ISA (mnemônico, formato, opcode/funct, RTL)
@@ -77,6 +84,7 @@ Exemplos:
 ```bash
 make sim                                   # O1 executando o T0
 make sim ORG=O2 SLOTS=5                    # O2 (pipeline) executando o T0
+make sim ORG=O2 SLOTS=5 PROG=tracos/te.hex ESPERADO=tracos/te_esperado.txt ABORTO=true TIPO=2 MEMUNI=true   # TE: aborto estrutural
 make sim PROG=tracos/td.hex ESPERADO=tracos/td_esperado.txt ABORTO=true TIPO=1
 ```
 
