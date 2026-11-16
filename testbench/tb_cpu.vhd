@@ -38,24 +38,51 @@ begin
     clk <= not clk after T_CLK / 2 when not fim_sim else '0';
 
     -- 2. DUT
-    dut : entity work.cpu_top
-        generic map (
-            PROG_FILE     => PROG_FILE,
-            MEM_UNIFICADA => MEM_UNIFICADA
-        )
-        port map (
-            clk           => clk,
-            rst           => rst,
-            done          => done,
-            hazard_abort  => hazard_abort,
-            hazard_type   => hazard_type,
-            hazard_pc     => hazard_pc,
-            hazard_cycle  => hazard_cycle,
-            retired       => retired,
-            stage_valid   => stage_valid,
-            dbg_reg_addr  => dbg_reg_addr,
-            dbg_reg_data  => dbg_reg_data
-        );
+    -- O rótulo ORG_NOME (preenchido pela variável ORG do make) também seleciona
+    -- o núcleo: "O2" instancia o pipeline; qualquer outro valor usa a O1.
+    gen_o1 : if ORG_NOME /= "O2" generate
+    begin
+        dut : entity work.cpu_top
+            generic map (
+                PROG_FILE     => PROG_FILE,
+                MEM_UNIFICADA => MEM_UNIFICADA
+            )
+            port map (
+                clk           => clk,
+                rst           => rst,
+                done          => done,
+                hazard_abort  => hazard_abort,
+                hazard_type   => hazard_type,
+                hazard_pc     => hazard_pc,
+                hazard_cycle  => hazard_cycle,
+                retired       => retired,
+                stage_valid   => stage_valid,
+                dbg_reg_addr  => dbg_reg_addr,
+                dbg_reg_data  => dbg_reg_data
+            );
+    end generate gen_o1;
+
+    gen_o2 : if ORG_NOME = "O2" generate
+    begin
+        dut : entity work.cpu_top_o2
+            generic map (
+                PROG_FILE     => PROG_FILE,
+                MEM_UNIFICADA => MEM_UNIFICADA
+            )
+            port map (
+                clk           => clk,
+                rst           => rst,
+                done          => done,
+                hazard_abort  => hazard_abort,
+                hazard_type   => hazard_type,
+                hazard_pc     => hazard_pc,
+                hazard_cycle  => hazard_cycle,
+                retired       => retired,
+                stage_valid   => stage_valid,
+                dbg_reg_addr  => dbg_reg_addr,
+                dbg_reg_data  => dbg_reg_data
+            );
+    end generate gen_o2;
 
     -- 3. Processo principal
     principal : process

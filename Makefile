@@ -8,11 +8,14 @@ BUILD_DIR = build
 # Keep package declarations before units that import them; wildcard order is not
 # a valid dependency order for VHDL analysis.
 SOURCES = $(VHDL_DIR)/o1_pkg.vhd \
+          $(VHDL_DIR)/o2_pkg.vhd \
           $(VHDL_DIR)/register_file.vhd \
           $(VHDL_DIR)/alu.vhd \
           $(VHDL_DIR)/instruction_memory.vhd \
           $(VHDL_DIR)/data_memory.vhd \
-          $(VHDL_DIR)/cpu_top.vhd
+          $(VHDL_DIR)/unified_memory.vhd \
+          $(VHDL_DIR)/cpu_top.vhd \
+          $(VHDL_DIR)/cpu_top_o2.vhd
 TESTBENS = $(TB_DIR)/tb_cpu.vhd
 UNIT_TESTBENS = $(TB_DIR)/unit/tb_register_file.vhd \
                 $(TB_DIR)/unit/tb_alu.vhd \
