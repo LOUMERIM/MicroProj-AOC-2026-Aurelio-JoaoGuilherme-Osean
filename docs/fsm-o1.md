@@ -2,7 +2,7 @@
 
 > **Status:** especificação derivada da tabela ISA fornecida em `Tabela ISA - Página1.pdf`. A tabela define as instruções, codificações e operações descritas abaixo; detalhes de implementação do datapath que ela não especifica continuam identificados como premissas.
 >
-> O repositório contém RTL dos componentes isolados em `src/rtl/`, mas ainda não uma FSM/top-level integrado. O diagrama descreve a arquitetura e os componentes são testados isoladamente; a validação ponta a ponta fica pendente da integração.
+> A FSM está integrada em `src/rtl/cpu_top.vhd` e usa os componentes VHDL-2008 em `src/rtl/`. Os testbenches verificam os componentes isoladamente e a execução integrada de T0.
 
 ## 1. Premissas do datapath
 
@@ -208,4 +208,4 @@ Depois de `break`, `HALT` se repete a cada ciclo; portanto, 3 ciclos é a latên
 - Os sinais de controle e suas seleções estão relacionados por estado.
 - A contagem foi derivada dos estados percorridos, incluindo ambos os resultados de `beq`.
 - Memórias de instruções e dados têm caminhos de endereço distintos; `IorD` não é um sinal de controle da FSM.
-- O diagrama nomeia os registradores intermediários e muxes e segue as operações da FSM; a validação ponta a ponta permanece pendente porque a FSM ainda não está integrada em RTL.
+- O diagrama nomeia os registradores intermediários e muxes e segue os estados e operações da FSM integrada em `cpu_top`.

@@ -7,6 +7,7 @@ use work.o1_pkg.all;
 entity register_file is
     port (
         clk          : in  std_logic;
+        rst          : in  std_logic := '0';
         write_enable : in  std_logic;
         write_addr   : in  reg_addr_t;
         write_data   : in  word_t;
@@ -24,8 +25,12 @@ architecture rtl of register_file is
 begin
     process (clk)
     begin
-        if falling_edge(clk) then
-            if write_enable = '1' and write_addr /= "00000" then
+        if rising_edge(clk) then
+            if rst = '1' then
+                registers <= (others => (others => '0'));
+            end if;
+        elsif falling_edge(clk) then
+            if rst = '0' and write_enable = '1' and write_addr /= "00000" then
                 registers(to_integer(unsigned(write_addr))) <= write_data;
             end if;
         end if;
