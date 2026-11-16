@@ -1,0 +1,11 @@
+# TE — estado final esperado dos registradores.
+# Na execução com aborto (MEM_UNIFICADA=true, TIPO=2) o tb_cpu não consulta
+# este arquivo; ele é conferido quando o TE roda sem conflito
+# (MEM_UNIFICADA=false), validando o caso negativo do issue #13.
+# O sw grava 0x78 em Mem[0x100], fora do segmento de texto.
+8 00000078
+9 0000009a
+10 000000bc
+11 00000001
+12 00000002
+13 00000003
