@@ -47,6 +47,14 @@ GENERICS = -gORG_NOME=$(ORG) -gNUM_SLOTS=$(SLOTS) \
            -gPROG_FILE=../$(PROG) -gESPERADO_FILE=../$(ESPERADO) \
            -gESPERA_ABORTO=$(ABORTO) -gTIPO_ESPERADO=$(TIPO) -gMEM_UNIFICADA=$(MEMUNI)
 
+# PC esperado do aborto (issue #15): com PCESP configurado, divergência em
+# hazard_pc falha a simulação. Passe o literal VHDL entre aspas simples, ex.:
+#   make sim ... PCESP='x"00000018"'
+PCESP ?=
+ifneq ($(PCESP),)
+GENERICS += -gPC_ESPERADO='$(PCESP)'
+endif
+
 # Limite de tempo simulado: protege contra simulacao infinita (e arquivo de onda gigante).
 # O testbench ja para sozinho (std.env.stop); isto e so uma rede de seguranca.
 # Para simular mais tempo: make sim STOP_TIME=1ms
