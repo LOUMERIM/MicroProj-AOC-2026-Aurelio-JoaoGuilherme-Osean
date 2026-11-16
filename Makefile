@@ -5,9 +5,19 @@ VHDL_DIR = vhdl
 TB_DIR = testbench
 BUILD_DIR = build
 
-# Files
-SOURCES = $(wildcard $(VHDL_DIR)/*.vhd)
-TESTBENS = $(wildcard $(TB_DIR)/*.vhd)
+# Keep package declarations before units that import them; wildcard order is not
+# a valid dependency order for VHDL analysis.
+SOURCES = $(VHDL_DIR)/o1_pkg.vhd \
+          $(VHDL_DIR)/register_file.vhd \
+          $(VHDL_DIR)/alu.vhd \
+          $(VHDL_DIR)/instruction_memory.vhd \
+          $(VHDL_DIR)/data_memory.vhd \
+          $(VHDL_DIR)/cpu_top.vhd
+TESTBENS = $(TB_DIR)/tb_cpu.vhd
+UNIT_TESTBENS = $(TB_DIR)/unit/tb_register_file.vhd \
+                $(TB_DIR)/unit/tb_alu.vhd \
+                $(TB_DIR)/unit/tb_memories.vhd
+UNIT_TESTS = tb_register_file tb_alu tb_memories
 
 # Targets
 TESTBENCH = tb_cpu
@@ -43,17 +53,20 @@ STOP_TIME ?= 200us
 # fica em build/ e o arquivo work-obj08.cf nao grava o caminho absoluto da pasta
 # (que quebra o GHDL quando o caminho tem acentos, como "COMPUTAÇÂO").
 
-.PHONY: all clean run sim compile elaborate
+.PHONY: all clean run sim compile compile-unit elaborate test-unit
 
 all: $(BUILD_DIR) $(SOURCES)
 
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
-# Compile all VHDL files
+# Compile the RTL in dependency order, then the single integration testbench.
 compile: $(BUILD_DIR)
 	cd $(BUILD_DIR) && ghdl -a $(GHDL_FLAGS) $(addprefix ../,$(SOURCES))
 	cd $(BUILD_DIR) && ghdl -a $(GHDL_FLAGS) $(addprefix ../,$(TESTBENS))
+
+compile-unit: compile
+	cd $(BUILD_DIR) && ghdl -a $(GHDL_FLAGS) $(addprefix ../,$(UNIT_TESTBENS))
 
 # Elaborate the testbench
 elaborate: compile
@@ -64,7 +77,13 @@ run: elaborate
 	cd $(BUILD_DIR) && ghdl -r $(GHDL_FLAGS) $(TESTBENCH) $(GENERICS) --stop-time=$(STOP_TIME) --wave=$(WAVE_FILE)
 
 # Simpler target for development: compile and run
-sim: compile elaborate run
+sim: run
+
+test-unit: compile-unit
+	cd $(BUILD_DIR) && for tb in $(UNIT_TESTS); do \
+		ghdl -e $(GHDL_FLAGS) $$tb && \
+		ghdl -r $(GHDL_FLAGS) $$tb --assert-level=error || exit $$?; \
+	done
 
 clean:
 	rm -rf $(BUILD_DIR)
