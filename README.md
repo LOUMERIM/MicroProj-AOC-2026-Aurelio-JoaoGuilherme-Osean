@@ -97,6 +97,20 @@ make sim ORG=O2 SLOTS=5 PROG=tracos/tc.hex ESPERADO=tracos/tc_esperado.txt ABORT
 > O GHDL roda dentro de `build/` com caminhos relativos, porque o caminho absoluto da pasta
 > pode ter acentos e isso quebra o `work-obj08.cf`. Por isso use sempre o `make`.
 
+### Traços de conflito (O2)
+
+Cada traço tem fonte (`.asm`), `.hex` (MARS) e `_esperado.txt`. Na O2 ele aborta; na O1, que
+não tem conflitos, roda até o fim e confere os registradores com o esperado.
+
+| Traço | Conflito | Instrução envolvida | `hazard_type` | `hazard_pc` | `hazard_cycle` | Comando (O2) |
+| --- | --- | --- | --- | --- | --- | --- |
+| TD | dados (RAW, distância 1) | `sub` consumidora | `01` | `0x14` | 7 | `make sim ORG=O2 SLOTS=5 PROG=tracos/td.hex ESPERADO=tracos/td_esperado.txt ABORTO=true TIPO=1 PCESP=00000014` |
+| TE | estrutural (`MEM_UNIFICADA`) | `addi` em IF que não obteve a memória | `10` | `0x18` | 7 | `make sim ORG=O2 SLOTS=5 PROG=tracos/te.hex ESPERADO=tracos/te_esperado.txt ABORTO=true TIPO=2 MEMUNI=true PCESP=00000018` |
+| TC | controle (`beq` tomado) | o `beq` | `11` | `0x18` | 9 | `make sim ORG=O2 SLOTS=5 PROG=tracos/tc.hex ESPERADO=tracos/tc_esperado.txt ABORTO=true TIPO=3 PCESP=00000018` |
+
+Cada traço também tem casos que **não** podem abortar: o TD tem escrita em `$zero` e dependência a
+distância 3; o TE roda limpo com `MEMUNI=false`; o TC tem um `beq` não tomado antes do tomado.
+
 ### Ver as formas de onda
 
 A simulação grava `build/<testbench>.ghw`:
