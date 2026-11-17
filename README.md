@@ -39,10 +39,12 @@ As instruções suportadas estão em [`isa_table_mips.md`](isa_table_mips.md).
 │   ├── t0.asm          #   T0: traço limpo (sem conflitos), fonte em assembly
 │   ├── t0.hex          #   T0 montado (uma instrução de 32 bits em hex por linha)
 │   ├── t0_esperado.txt #   estado final esperado dos registradores ("reg valor_hex")
+│   ├── s005 … s200.*   #   série S: T0 com 5, 10, 20, 50, 100 e 200 instruções úteis (gerada)
 │   ├── tc.*            #   TC: conflito de controle (asm, hex e esperado)
 │   ├── td.*            #   TD: conflito de dados RAW (asm, hex e esperado)
 │   └── te.*            #   TE: conflito estrutural (asm, hex e esperado)
 ├── scripts/            # run_ghdl_tests.sh: limpa, roda os testes unitários e o tb_cpu
+│                       # gerar_serie_s.py: gera a série S a partir do T0 (make serie-s)
 │                       # waveform_o2.py: figuras anotadas + .gtkw a partir do .ghw (make wave-t0)
 ├── build/              # Gerado pelo make (objetos do GHDL e ondas .ghw) — não versionado
 ├── isa_table_mips.md   # Tabela da ISA (mnemônico, formato, opcode/funct, RTL)
@@ -116,6 +118,20 @@ não tem conflitos, roda até o fim e confere os registradores com o esperado.
 Cada traço também tem casos que **não** podem abortar: o TD tem escrita em `$zero` e dependência a
 distância 3; o TE roda limpo com `MEMUNI=false`; o TC tem um `beq` não tomado antes do tomado.
 
+### Série S (R5)
+
+Variações do T0 com 5, 10, 20, 50, 100 e 200 instruções úteis, para o gráfico de speedup por tamanho.
+Cada `sNNN` é formado pelas *N* primeiras instruções da repetição do corpo do T0, seguidas de `break`.
+Um prefixo de um programa sem conflitos continua sem conflitos, e cada cópia do T0 recalcula os
+registradores que lê, então a série também é livre de conflitos. O script confere isso e monta o
+`.hex` e o `_esperado.txt` no MARS:
+
+```bash
+make serie-s                                         # regenera tracos/s005 … s200 (só se o T0 mudar)
+make sim ORG=O2 SLOTS=5 PROG=tracos/s200.hex ESPERADO=tracos/s200_esperado.txt
+```
+
+Na O2 cada traço leva *N* + 5 ciclos (*N* úteis + `break` + 4 de enchimento).
 ### Métricas (R6)
 
 ```bash

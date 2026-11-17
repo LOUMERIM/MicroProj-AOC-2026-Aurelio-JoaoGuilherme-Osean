@@ -65,6 +65,7 @@ STOP_TIME ?= 200us
 # fica em build/ e o arquivo work-obj08.cf nao grava o caminho absoluto da pasta
 # (que quebra o GHDL quando o caminho tem acentos, como "COMPUTAÇÂO").
 
+.PHONY: all clean run sim compile compile-unit elaborate test-unit serie-s
 .PHONY: all clean run sim compile compile-unit elaborate test-unit metricas
 .PHONY: all clean run sim compile compile-unit elaborate test-unit wave-t0
 
@@ -98,6 +99,11 @@ test-unit: compile-unit
 		ghdl -r $(GHDL_FLAGS) $$tb --assert-level=error || exit $$?; \
 	done
 
+# Serie S (R5, issue #19): regenera tracos/s005..s200 (.asm, .hex e _esperado.txt)
+# a partir do T0. Precisa do MARS: make serie-s MARS_JAR=/caminho/Mars4_5.jar
+# Os arquivos gerados ficam versionados; so e preciso rodar de novo se o T0 mudar.
+serie-s:
+	python3 scripts/gerar_serie_s.py $(if $(MARS_JAR),--mars $(MARS_JAR))
 # Metricas do R6 (issue #18): roda cada traco limpo nas duas organizacoes e grava
 # metricas.csv na raiz (uma linha por organizacao x traco). Tracos limpos: T0 e a
 # serie S (tracos/s*.hex, quando existir), cada um com o seu _esperado.txt.
