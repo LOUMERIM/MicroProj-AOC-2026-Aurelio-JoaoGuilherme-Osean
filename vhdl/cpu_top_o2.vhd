@@ -13,6 +13,15 @@ use work.o2_pkg.all;
 -- dados no estágio MEM no mesmo ciclo. A instrução mais antiga (MEM) mantém
 -- o recurso; a mais nova (IF) não o obteve e é apontada por hazard_pc.
 -- hazard_type = "10" e hazard_pc/hazard_cycle ficam estáveis até o reset.
+--
+-- Issue #12 (conflito de dados, RAW): a instrução em ID lê rs e/ou rt que uma
+-- instrução em EX (distância 1) ou em MEM (distância 2) ainda vai escrever.
+-- Distância 3 (produtora em WB) não é conflito: o banco escreve na 1ª metade
+-- do ciclo e lê na 2ª (R2). Escritas em $zero não geram dependência (R1).
+-- O aborto ocorre no ciclo da detecção, com a consumidora ainda em ID (antes
+-- de qualquer efeito errado): hazard_type = "01", hazard_pc = PC da consumidora.
+-- Se os conflitos de dados e estrutural ocorrerem no mesmo ciclo, vale o de
+-- dados: a consumidora (ID) é mais antiga que a instrução em IF.
 entity cpu_top_o2 is
     generic (
         PROG_FILE     : string  := "tracos/t0.hex";
@@ -56,6 +65,16 @@ architecture rtl of cpu_top_o2 is
 
     -- Detecção do conflito estrutural (issue #13).
     signal structural_conflict : std_logic;
+
+    -- Detecção do conflito de dados (issue #12).
+    signal data_conflict  : std_logic;
+    signal id_uses_rs     : std_logic;          -- instrução em ID lê rs
+    signal id_uses_rt     : std_logic;          -- instrução em ID lê rt
+    signal branch_taken   : std_logic;          -- beq tomado em EX neste ciclo
+
+    -- Tipo e PC do conflito, registrados no ciclo do aborto (estáveis até o reset).
+    signal hazard_type_reg : std_logic_vector(1 downto 0) := "00";
+    signal hazard_pc_reg   : word_t := (others => '0');
 
     -- Contagem de ciclos na convenção do tb_cpu (1-based): o tb incrementa o
     -- contador na borda de descida de cada ciclo; aqui contamos na borda de
@@ -127,7 +146,7 @@ begin
 
     ----------------------------------------------------------------------------
     -- Banco de registradores: leituras assíncronas no estágio ID, escrita na
-    -- borda de descida do ciclo de WB (distância >= 4 dispensa forwarding).
+    -- borda de descida do ciclo de WB (escreve na 1ª metade, lê na 2ª: a distância 3 já enxerga o valor novo).
     ----------------------------------------------------------------------------
     registers : entity work.register_file
         port map (
@@ -257,6 +276,75 @@ begin
                              and (exmem_reg.is_lw = '1' or exmem_reg.is_sw = '1')
                          else '0';
 
+    ----------------------------------------------------------------------------
+    -- Detecção do conflito de dados (issue #12).
+    ----------------------------------------------------------------------------
+    -- Quais registradores a instrução em ID realmente lê:
+    --   rs: tipo R (exceto break), addi, lw, sw, beq
+    --   rt: tipo R (exceto break), sw (dado a gravar), beq
+    -- Em addi/lw o campo rt é o destino, então não gera dependência.
+    operand_use : process (all)
+        variable opcode : std_logic_vector(5 downto 0);
+    begin
+        opcode := ifid_reg.instr(31 downto 26);
+        id_uses_rs <= '0';
+        id_uses_rt <= '0';
+        if ifid_reg.valid = '1' then
+            case opcode is
+                when OP_R =>
+                    if not is_break_instr(ifid_reg.instr) then
+                        id_uses_rs <= '1';
+                        id_uses_rt <= '1';
+                    end if;
+                when OP_ADDI | OP_LW =>
+                    id_uses_rs <= '1';
+                when OP_SW | OP_BEQ =>
+                    id_uses_rs <= '1';
+                    id_uses_rt <= '1';
+                when others =>
+                    null;
+            end case;
+        end if;
+    end process;
+
+    -- beq tomado em EX descarta a instrução em ID neste ciclo: ela não chega a
+    -- produzir efeito, então não é consumidora.
+    branch_taken <= idex_reg.valid and idex_reg.is_beq and alu_zero;
+
+    data_detect : process (all)
+        variable rs, rt : reg_addr_t;
+        variable hit    : boolean;
+    begin
+        rs  := ifid_reg.instr(25 downto 21);
+        rt  := ifid_reg.instr(20 downto 16);
+        hit := false;
+
+        -- Distância 1: produtora em EX (ID/EX).
+        if idex_reg.valid = '1' and idex_reg.wb_enable = '1'
+           and idex_reg.wb_addr /= "00000" then
+            if (id_uses_rs = '1' and rs = idex_reg.wb_addr) or
+               (id_uses_rt = '1' and rt = idex_reg.wb_addr) then
+                hit := true;
+            end if;
+        end if;
+
+        -- Distância 2: produtora em MEM (EX/MEM).
+        if exmem_reg.valid = '1' and exmem_reg.wb_enable = '1'
+           and exmem_reg.wb_addr /= "00000" then
+            if (id_uses_rs = '1' and rs = exmem_reg.wb_addr) or
+               (id_uses_rt = '1' and rt = exmem_reg.wb_addr) then
+                hit := true;
+            end if;
+        end if;
+
+        -- Distância 3 (produtora em WB) não entra: escrita na 1ª metade do ciclo.
+        if hit and frozen = '0' and branch_taken = '0' then
+            data_conflict <= '1';
+        else
+            data_conflict <= '0';
+        end if;
+    end process;
+
     -- A instrução em IF é real enquanto o fluxo de instruções não terminou.
     -- A entrada em IF também é suprimida no ciclo em que um break está no ID
     -- (a instrução seguinte vira bolha).
@@ -293,6 +381,18 @@ begin
                 done_reg      <= '0';
                 stream_active <= '1';
                 if_slot_frozen <= '0';
+                hazard_type_reg <= "00";
+                hazard_pc_reg   <= (others => '0');
+            elsif data_conflict = '1' then
+                -- Issue #12/#15: aborta com a consumidora ainda em ID. Nada
+                -- avança nesta borda (PC e registradores entre estágios ficam
+                -- como no ciclo da detecção); as instruções mais antigas, em
+                -- MEM e WB, concluem o que já tinham iniciado, como no conflito
+                -- estrutural. Tipo e PC ficam registrados até o reset.
+                frozen          <= '1';
+                if_slot_frozen  <= fetch_valid_now;
+                hazard_type_reg <= "01";
+                hazard_pc_reg   <= ifid_reg.pc;
             elsif structural_conflict = '1' then
                 -- Issue #13/#15: ciclo da detecção do conflito estrutural. A
                 -- instrução mais antiga (MEM) conclui o acesso concedido — a
@@ -301,6 +401,8 @@ begin
                 -- registrado aqui e todo o estado fica estável até o reset.
                 frozen        <= '1';
                 if_slot_frozen <= fetch_valid_now;
+                hazard_type_reg <= "10";
+                hazard_pc_reg   <= pc;   -- PC da instrução em IF (a mais nova)
             elsif frozen = '1' then
                 -- Aborto (R4): congelar PC, pipeline, banco e memória; os
                 -- sinais hazard_* permanecem estáveis até o reset.
@@ -384,11 +486,18 @@ begin
     -- fora do escopo dos traços TD/TE/TC individuais).
     done <= done_reg or (memwb_reg.valid and memwb_reg.is_break);
 
-    hazard_abort <= frozen or structural_conflict;
-    hazard_type  <= "10" when (frozen = '1' or structural_conflict = '1') else "00";
-    -- Durante o conflito, o PC da instrução em IF (a mais nova, que não obteve
-    -- o recurso); após o congelamento, o PC permanece nesse valor.
-    hazard_pc    <= pc;
+    -- No ciclo da detecção os valores saem da lógica de detecção; depois do
+    -- congelamento, dos registradores (estáveis até o reset).
+    hazard_abort <= frozen or data_conflict or structural_conflict;
+    hazard_type  <= hazard_type_reg when frozen = '1' else
+                    "01"            when data_conflict = '1' else
+                    "10"            when structural_conflict = '1' else
+                    "00";
+    -- Dados: PC da consumidora (ID). Estrutural: PC da instrução em IF, a mais
+    -- nova, que não obteve o recurso.
+    hazard_pc    <= hazard_pc_reg   when frozen = '1' else
+                    ifid_reg.pc     when data_conflict = '1' else
+                    pc;
     hazard_cycle <= cycle_cnt + 1 when frozen = '0' else cycle_cnt;
 
     retired <= "01" when (memwb_reg.valid = '1'
