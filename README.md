@@ -34,6 +34,7 @@ As instruções suportadas estão em [`isa_table_mips.md`](isa_table_mips.md).
 │   ├── t0.asm          #   T0: traço limpo (sem conflitos), fonte em assembly
 │   ├── t0.hex          #   T0 montado (uma instrução de 32 bits em hex por linha)
 │   ├── t0_esperado.txt #   estado final esperado dos registradores ("reg valor_hex")
+│   ├── td.*            #   TD: conflito de dados RAW (asm, hex e esperado)
 │   └── te.*            #   TE: conflito estrutural (asm, hex e esperado)
 ├── scripts/            # run_ghdl_tests.sh: limpa, roda os testes unitários e o tb_cpu
 ├── build/              # Gerado pelo make (objetos do GHDL e ondas .ghw) — não versionado
@@ -77,6 +78,7 @@ Os parâmetros são passados como variáveis do `make` e viram *generics* do `tb
 | `ABORTO` | `false` | `true` se o traço deve provocar aborto por conflito |
 | `TIPO` | `0` | tipo de conflito esperado: `1` dados, `2` estrutural, `3` controle |
 | `MEMUNI` | `false` | memória unificada (instruções + dados) |
+| `PCESP` | — | `hazard_pc` esperado em hex, sem `0x` (ex.: `00000014`); opcional, falha a simulação se divergir |
 | `STOP_TIME` | `200us` | limite de tempo simulado (rede de segurança) |
 
 Exemplos:
@@ -84,8 +86,8 @@ Exemplos:
 ```bash
 make sim                                   # O1 executando o T0
 make sim ORG=O2 SLOTS=5                    # O2 (pipeline) executando o T0
-make sim ORG=O2 SLOTS=5 PROG=tracos/te.hex ESPERADO=tracos/te_esperado.txt ABORTO=true TIPO=2 MEMUNI=true   # TE: aborto estrutural
-make sim PROG=tracos/td.hex ESPERADO=tracos/td_esperado.txt ABORTO=true TIPO=1
+make sim ORG=O2 SLOTS=5 PROG=tracos/te.hex ESPERADO=tracos/te_esperado.txt ABORTO=true TIPO=2 MEMUNI=true PCESP=00000018   # TE: aborto estrutural
+make sim ORG=O2 SLOTS=5 PROG=tracos/td.hex ESPERADO=tracos/td_esperado.txt ABORTO=true TIPO=1 PCESP=00000014   # TD: aborto por dados
 ```
 
 > O GHDL roda dentro de `build/` com caminhos relativos, porque o caminho absoluto da pasta

@@ -47,12 +47,13 @@ GENERICS = -gORG_NOME=$(ORG) -gNUM_SLOTS=$(SLOTS) \
            -gPROG_FILE=../$(PROG) -gESPERADO_FILE=../$(ESPERADO) \
            -gESPERA_ABORTO=$(ABORTO) -gTIPO_ESPERADO=$(TIPO) -gMEM_UNIFICADA=$(MEMUNI)
 
-# PC esperado do aborto (issue #15): com PCESP configurado, divergência em
-# hazard_pc falha a simulação. Passe o literal VHDL entre aspas simples, ex.:
-#   make sim ... PCESP='x"00000018"'
+# PC esperado do aborto (issue #15): com PCESP configurado, divergencia em
+# hazard_pc falha a simulacao. Passe o valor em hexadecimal, sem 0x, ex.:
+#   make sim ... PCESP=00000018
+# (o GHDL so aceita std_logic_vector em binario na linha de comando, entao convertemos)
 PCESP ?=
 ifneq ($(PCESP),)
-GENERICS += -gPC_ESPERADO='$(PCESP)'
+GENERICS += -gPC_ESPERADO=$(shell python3 -c 'print(format(int("$(PCESP)", 16), "032b"))')
 endif
 
 # Limite de tempo simulado: protege contra simulacao infinita (e arquivo de onda gigante).
