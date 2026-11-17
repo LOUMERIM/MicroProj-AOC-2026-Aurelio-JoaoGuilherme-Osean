@@ -66,6 +66,8 @@ STOP_TIME ?= 200us
 # (que quebra o GHDL quando o caminho tem acentos, como "COMPUTAÇÂO").
 
 .PHONY: all clean run sim compile compile-unit elaborate test-unit serie-s
+.PHONY: all clean run sim compile compile-unit elaborate test-unit metricas
+.PHONY: all clean run sim compile compile-unit elaborate test-unit wave-t0
 
 all: $(BUILD_DIR) $(SOURCES)
 
@@ -102,6 +104,46 @@ test-unit: compile-unit
 # Os arquivos gerados ficam versionados; so e preciso rodar de novo se o T0 mudar.
 serie-s:
 	python3 scripts/gerar_serie_s.py $(if $(MARS_JAR),--mars $(MARS_JAR))
+# Metricas do R6 (issue #18): roda cada traco limpo nas duas organizacoes e grava
+# metricas.csv na raiz (uma linha por organizacao x traco). Tracos limpos: T0 e a
+# serie S (tracos/s*.hex, quando existir), cada um com o seu _esperado.txt.
+# O CSV de build/ e truncado no inicio; o tb_cpu escreve o cabecalho em arquivo vazio.
+# Qualquer falha de simulacao (registrador divergente do esperado, aborto ou tempo
+# esgotado em traco limpo) interrompe o make antes de copiar: metricas.csv nao e
+# sobrescrito. A saida de cada execucao fica em build/metricas_run.log.
+TRACOS_LIMPOS ?= tracos/t0.hex $(sort $(wildcard tracos/s[0-9]*.hex))
+metricas: elaborate
+	: > $(BUILD_DIR)/metricas.csv
+	@for prog in $(TRACOS_LIMPOS); do \
+		esp=$${prog%.hex}_esperado.txt; \
+		for org in "O1 1" "O2 5"; do set -- $$org; \
+			echo "== $$1 $$prog"; \
+			( cd $(BUILD_DIR) && ghdl -r $(GHDL_FLAGS) $(TESTBENCH) -gORG_NOME=$$1 -gNUM_SLOTS=$$2 \
+				-gPROG_FILE=../$$prog -gESPERADO_FILE=../$$esp --stop-time=$(STOP_TIME) \
+				--assert-level=error ) > $(BUILD_DIR)/metricas_run.log 2>&1; \
+			rc=$$?; \
+			grep -E "fim da simul|error|failure" $(BUILD_DIR)/metricas_run.log; \
+			if [ $$rc -ne 0 ]; then \
+				echo "ERRO: simulacao de $$1 em $$prog falhou (codigo $$rc); metricas.csv nao foi atualizado"; \
+				exit 1; \
+			fi; \
+		done; \
+	done
+	cp $(BUILD_DIR)/metricas.csv metricas.csv
+	@echo "metricas.csv:"; column -t -s';' metricas.csv
+# Waveform anotada do T0 na O2 (issue #17): simula com dump GHW (guarda os records
+# dos registradores entre estagios) e gera em docs/waveforms/ as figuras SVG/PNG,
+# a tabela ciclo a ciclo (CSV) e a sessao do GTKWave (.gtkw).
+# Abrir no GTKWave: gtkwave build/t0_o2.ghw docs/waveforms/t0_o2.gtkw
+WAVE_DIR = docs/waveforms
+wave-t0: elaborate
+	cd $(BUILD_DIR) && ghdl -r $(GHDL_FLAGS) $(TESTBENCH) -gORG_NOME=O2 -gNUM_SLOTS=5 \
+		-gPROG_FILE=../tracos/t0.hex -gESPERADO_FILE=../tracos/t0_esperado.txt \
+		--stop-time=$(STOP_TIME) --wave=t0_o2.ghw
+	python3 scripts/waveform_o2.py $(BUILD_DIR)/t0_o2.ghw tracos/t0.asm $(WAVE_DIR) t0_o2
+	@if command -v magick >/dev/null 2>&1; then \
+		for f in $(WAVE_DIR)/t0_o2_*.svg; do magick -density 110 $$f $${f%.svg}.png; done; \
+	else echo "(ImageMagick ausente: PNGs nao gerados; os SVGs abrem no navegador)"; fi
 
 clean:
 	rm -rf $(BUILD_DIR)

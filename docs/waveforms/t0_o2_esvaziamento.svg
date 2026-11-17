@@ -1,0 +1,148 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1316" height="420" font-family="DejaVu Sans Mono, monospace" font-size="11">
+<rect width="100%" height="100%" fill="white"/>
+<text x="10" y="20" font-size="15" font-weight="bold">O2 — esvaziamento do pipeline (t0.asm)</text>
+<rect x="120" y="40" width="168" height="350" fill="#dcfce7" stroke="white"/>
+<text x="204.0" y="54" text-anchor="middle" font-weight="bold">C31</text>
+<text x="204.0" y="66" text-anchor="middle" font-size="9" fill="#4b5563">cheio</text>
+<rect x="288" y="40" width="168" height="350" fill="#dcfce7" stroke="white"/>
+<text x="372.0" y="54" text-anchor="middle" font-weight="bold">C32</text>
+<text x="372.0" y="66" text-anchor="middle" font-size="9" fill="#4b5563">cheio</text>
+<rect x="456" y="40" width="168" height="350" fill="#dcfce7" stroke="white"/>
+<text x="540.0" y="54" text-anchor="middle" font-weight="bold">C33</text>
+<text x="540.0" y="66" text-anchor="middle" font-size="9" fill="#4b5563">cheio</text>
+<rect x="624" y="40" width="168" height="350" fill="#ffedd5" stroke="white"/>
+<text x="708.0" y="54" text-anchor="middle" font-weight="bold">C34</text>
+<text x="708.0" y="66" text-anchor="middle" font-size="9" fill="#4b5563">esvaziamento</text>
+<rect x="792" y="40" width="168" height="350" fill="#ffedd5" stroke="white"/>
+<text x="876.0" y="54" text-anchor="middle" font-weight="bold">C35</text>
+<text x="876.0" y="66" text-anchor="middle" font-size="9" fill="#4b5563">esvaziamento</text>
+<rect x="960" y="40" width="168" height="350" fill="#ffedd5" stroke="white"/>
+<text x="1044.0" y="54" text-anchor="middle" font-weight="bold">C36</text>
+<text x="1044.0" y="66" text-anchor="middle" font-size="9" fill="#4b5563">esvaziamento</text>
+<rect x="1128" y="40" width="168" height="350" fill="#ffedd5" stroke="white"/>
+<text x="1212.0" y="54" text-anchor="middle" font-weight="bold">C37</text>
+<text x="1212.0" y="66" text-anchor="middle" font-size="9" fill="#4b5563">esvaziamento</text>
+<text x="8" y="94.0" font-weight="bold">IF</text>
+<line x1="0" y1="70" x2="1316" y2="70" stroke="#9ca3af"/>
+<rect x="123" y="73" width="162" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="204.0" y="87" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x78</text>
+<text x="204.0" y="101" text-anchor="middle" font-size="10">beq $s0, $s1, skip_beq_1</text>
+<rect x="291" y="73" width="162" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="372.0" y="87" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x7C</text>
+<text x="372.0" y="101" text-anchor="middle" font-size="10">beq $s2, $s3, skip_beq_2</text>
+<rect x="459" y="73" width="162" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="540.0" y="87" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x80</text>
+<text x="540.0" y="101" text-anchor="middle" font-size="10">break</text>
+<text x="708.0" y="94.0" text-anchor="middle" fill="#9ca3af">bolha</text>
+<text x="876.0" y="94.0" text-anchor="middle" fill="#9ca3af">bolha</text>
+<text x="1044.0" y="94.0" text-anchor="middle" fill="#9ca3af">bolha</text>
+<text x="1212.0" y="94.0" text-anchor="middle" fill="#9ca3af">bolha</text>
+<text x="8" y="134.0" font-weight="bold">ID</text>
+<line x1="0" y1="110" x2="1316" y2="110" stroke="#9ca3af"/>
+<rect x="123" y="113" width="162" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="204.0" y="127" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x74</text>
+<text x="204.0" y="141" text-anchor="middle" font-size="10">lw $s7, 12($a0)</text>
+<rect x="291" y="113" width="162" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="372.0" y="127" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x78</text>
+<text x="372.0" y="141" text-anchor="middle" font-size="10">beq $s0, $s1, skip_beq_1</text>
+<rect x="459" y="113" width="162" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="540.0" y="127" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x7C</text>
+<text x="540.0" y="141" text-anchor="middle" font-size="10">beq $s2, $s3, skip_beq_2</text>
+<rect x="627" y="113" width="162" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="708.0" y="127" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x80</text>
+<text x="708.0" y="141" text-anchor="middle" font-size="10">break</text>
+<text x="876.0" y="134.0" text-anchor="middle" fill="#9ca3af">bolha</text>
+<text x="1044.0" y="134.0" text-anchor="middle" fill="#9ca3af">bolha</text>
+<text x="1212.0" y="134.0" text-anchor="middle" fill="#9ca3af">bolha</text>
+<text x="8" y="174.0" font-weight="bold">EX</text>
+<line x1="0" y1="150" x2="1316" y2="150" stroke="#9ca3af"/>
+<rect x="123" y="153" width="162" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="204.0" y="167" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x70</text>
+<text x="204.0" y="181" text-anchor="middle" font-size="10">lw $s6, 8($a0)</text>
+<rect x="291" y="153" width="162" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="372.0" y="167" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x74</text>
+<text x="372.0" y="181" text-anchor="middle" font-size="10">lw $s7, 12($a0)</text>
+<rect x="459" y="153" width="162" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="540.0" y="167" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x78</text>
+<text x="540.0" y="181" text-anchor="middle" font-size="10">beq $s0, $s1, skip_beq_1</text>
+<rect x="627" y="153" width="162" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="708.0" y="167" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x7C</text>
+<text x="708.0" y="181" text-anchor="middle" font-size="10">beq $s2, $s3, skip_beq_2</text>
+<rect x="795" y="153" width="162" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="876.0" y="167" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x80</text>
+<text x="876.0" y="181" text-anchor="middle" font-size="10">break</text>
+<text x="1044.0" y="174.0" text-anchor="middle" fill="#9ca3af">bolha</text>
+<text x="1212.0" y="174.0" text-anchor="middle" fill="#9ca3af">bolha</text>
+<text x="8" y="214.0" font-weight="bold">MEM</text>
+<line x1="0" y1="190" x2="1316" y2="190" stroke="#9ca3af"/>
+<rect x="123" y="193" width="162" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="204.0" y="207" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x6C</text>
+<text x="204.0" y="221" text-anchor="middle" font-size="10">lw $s5, 4($a0)</text>
+<rect x="291" y="193" width="162" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="372.0" y="207" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x70</text>
+<text x="372.0" y="221" text-anchor="middle" font-size="10">lw $s6, 8($a0)</text>
+<rect x="459" y="193" width="162" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="540.0" y="207" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x74</text>
+<text x="540.0" y="221" text-anchor="middle" font-size="10">lw $s7, 12($a0)</text>
+<rect x="627" y="193" width="162" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="708.0" y="207" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x78</text>
+<text x="708.0" y="221" text-anchor="middle" font-size="10">beq $s0, $s1, skip_beq_1</text>
+<rect x="795" y="193" width="162" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="876.0" y="207" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x7C</text>
+<text x="876.0" y="221" text-anchor="middle" font-size="10">beq $s2, $s3, skip_beq_2</text>
+<rect x="963" y="193" width="162" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="1044.0" y="207" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x80</text>
+<text x="1044.0" y="221" text-anchor="middle" font-size="10">break</text>
+<text x="1212.0" y="214.0" text-anchor="middle" fill="#9ca3af">bolha</text>
+<text x="8" y="254.0" font-weight="bold">WB</text>
+<line x1="0" y1="230" x2="1316" y2="230" stroke="#9ca3af"/>
+<rect x="123" y="233" width="162" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="204.0" y="247" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x68</text>
+<text x="204.0" y="261" text-anchor="middle" font-size="10">lw $s4, 0($a0)</text>
+<rect x="291" y="233" width="162" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="372.0" y="247" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x6C</text>
+<text x="372.0" y="261" text-anchor="middle" font-size="10">lw $s5, 4($a0)</text>
+<rect x="459" y="233" width="162" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="540.0" y="247" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x70</text>
+<text x="540.0" y="261" text-anchor="middle" font-size="10">lw $s6, 8($a0)</text>
+<rect x="627" y="233" width="162" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="708.0" y="247" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x74</text>
+<text x="708.0" y="261" text-anchor="middle" font-size="10">lw $s7, 12($a0)</text>
+<rect x="795" y="233" width="162" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="876.0" y="247" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x78</text>
+<text x="876.0" y="261" text-anchor="middle" font-size="10">beq $s0, $s1, skip_beq_1</text>
+<rect x="963" y="233" width="162" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="1044.0" y="247" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x7C</text>
+<text x="1044.0" y="261" text-anchor="middle" font-size="10">beq $s2, $s3, skip_beq_2</text>
+<rect x="1131" y="233" width="162" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="1212.0" y="247" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x80</text>
+<text x="1212.0" y="261" text-anchor="middle" font-size="10">break</text>
+<text x="8" y="294.0" font-weight="bold">stage_valid</text>
+<line x1="0" y1="270" x2="1316" y2="270" stroke="#9ca3af"/>
+<text x="204.0" y="294.0" text-anchor="middle">0x1F</text>
+<text x="372.0" y="294.0" text-anchor="middle">0x1F</text>
+<text x="540.0" y="294.0" text-anchor="middle">0x1F</text>
+<text x="708.0" y="294.0" text-anchor="middle">0x1E</text>
+<text x="876.0" y="294.0" text-anchor="middle">0x1C</text>
+<text x="1044.0" y="294.0" text-anchor="middle">0x18</text>
+<text x="1212.0" y="294.0" text-anchor="middle">0x10</text>
+<text x="8" y="334.0" font-weight="bold">retired</text>
+<line x1="0" y1="310" x2="1316" y2="310" stroke="#9ca3af"/>
+<text x="204.0" y="334.0" text-anchor="middle">1</text>
+<text x="372.0" y="334.0" text-anchor="middle">1</text>
+<text x="540.0" y="334.0" text-anchor="middle">1</text>
+<text x="708.0" y="334.0" text-anchor="middle">1</text>
+<text x="876.0" y="334.0" text-anchor="middle">1</text>
+<text x="1044.0" y="334.0" text-anchor="middle">1</text>
+<text x="1212.0" y="334.0" text-anchor="middle">0</text>
+<text x="8" y="374.0" font-weight="bold">done</text>
+<line x1="0" y1="350" x2="1316" y2="350" stroke="#9ca3af"/>
+<text x="204.0" y="374.0" text-anchor="middle">0</text>
+<text x="372.0" y="374.0" text-anchor="middle">0</text>
+<text x="540.0" y="374.0" text-anchor="middle">0</text>
+<text x="708.0" y="374.0" text-anchor="middle">0</text>
+<text x="876.0" y="374.0" text-anchor="middle">0</text>
+<text x="1044.0" y="374.0" text-anchor="middle">0</text>
+<text x="1212.0" y="374.0" text-anchor="middle">1</text>
+<text x="10" y="410" fill="#4b5563" font-size="10">Cada célula: PC (hex) e instrução no estágio. PC de MEM/WB = PC de EX 1/2 ciclos antes.</text>
+</svg>

@@ -1,0 +1,3 @@
+org;programa;ciclos;instrucoes;CPI;IPC;ocupacao;erros;desfecho;ocup_IF;ocup_ID;ocup_EX;ocup_MEM;ocup_WB;ocup_via0;ocup_via1
+O1;../tracos/t0.hex;133;32;4.156250;0.240602;0.984962;0;done;0.984962;;;;;0.984962;
+O2;../tracos/t0.hex;37;32;1.156250;0.864865;0.891892;0;done;0.891892;0.891892;0.891892;0.891892;0.891892;0.891892;

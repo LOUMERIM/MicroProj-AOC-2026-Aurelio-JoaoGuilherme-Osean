@@ -13,6 +13,7 @@ As instruções suportadas estão em [`isa_table_mips.md`](isa_table_mips.md).
 
 - [FSM, caminho de dados e ISA da O1](docs/fsm-o1.md): premissas, diagrama do datapath com registradores e muxes, estados, sinais de controle e ciclos por classe.
 - [Conflito de controle na O2](docs/controle-o2.md): por que o `beq` é resolvido em EX e como o desvio tomado é detectado.
+- [Execução do T0 na O2](docs/waveform-t0-o2.md): waveform anotada (enchimento, pipeline cheio e esvaziamento), gerada por `make wave-t0`.
 
 ## Estrutura de pastas
 
@@ -20,7 +21,9 @@ As instruções suportadas estão em [`isa_table_mips.md`](isa_table_mips.md).
 .
 ├── docs/
 │   ├── fsm-o1.md       # FSM, caminho de dados e ciclos por classe da O1
-│   └── controle-o2.md  # O2: estágio de resolução do beq (EX), justificativa e detecção
+│   ├── controle-o2.md  # O2: estágio de resolução do beq (EX), justificativa e detecção
+│   ├── waveform-t0-o2.md # O2: waveform anotada do T0 (enchimento e esvaziamento)
+│   └── waveforms/      # figuras SVG/PNG, CSV ciclo a ciclo e sessão .gtkw (make wave-t0)
 ├── vhdl/               # RTL
 │   ├── o1_pkg, register_file, alu, instruction_memory, data_memory   # componentes comuns
 │   ├── cpu_top.vhd     #   O1: multiciclo (FSM)
@@ -42,8 +45,10 @@ As instruções suportadas estão em [`isa_table_mips.md`](isa_table_mips.md).
 │   └── te.*            #   TE: conflito estrutural (asm, hex e esperado)
 ├── scripts/            # run_ghdl_tests.sh: limpa, roda os testes unitários e o tb_cpu
 │                       # gerar_serie_s.py: gera a série S a partir do T0 (make serie-s)
+│                       # waveform_o2.py: figuras anotadas + .gtkw a partir do .ghw (make wave-t0)
 ├── build/              # Gerado pelo make (objetos do GHDL e ondas .ghw) — não versionado
 ├── isa_table_mips.md   # Tabela da ISA (mnemônico, formato, opcode/funct, RTL)
+├── metricas.csv        # Métricas do R6 por organização × traço limpo (make metricas)
 └── Makefile
 ```
 
@@ -127,6 +132,29 @@ make sim ORG=O2 SLOTS=5 PROG=tracos/s200.hex ESPERADO=tracos/s200_esperado.txt
 ```
 
 Na O2 cada traço leva *N* + 5 ciclos (*N* úteis + `break` + 4 de enchimento).
+### Métricas (R6)
+
+```bash
+make metricas    # roda os traços limpos (T0 e a série S, quando existir) na O1 e na O2 e grava metricas.csv
+```
+
+Cada execução do `tb_cpu` acrescenta uma linha em `build/metricas.csv` (o cabeçalho é escrito quando o
+arquivo está vazio); `make metricas` começa de um arquivo vazio e copia o resultado para `metricas.csv`
+na raiz. As 8 primeiras colunas seguem o modelo do enunciado (seção 3.5):
+
+| Coluna | Significado |
+| --- | --- |
+| `org`, `programa` | organização e traço (`.hex`) |
+| `ciclos` | do 1º ciclo após o reset até o ciclo em que `done = 1`, **inclusive** |
+| `instrucoes` | soma de `retired`: instruções úteis; o `break` **não** conta |
+| `CPI`, `IPC` | `ciclos / instrucoes` e `instrucoes / ciclos` |
+| `ocupacao` | fração dos `ciclos × NUM_SLOTS` com bit de `stage_valid` em 1 |
+| `erros` | registradores que divergiram do `_esperado.txt` |
+| `desfecho` | `done`, `aborto` (conflito) ou `tempo_esgotado` |
+| `ocup_IF` … `ocup_WB` | ocupação de cada estágio da via 0 (bits 0..4 de `stage_valid`); a O1 só tem o slot 0 (`ocup_IF`) |
+| `ocup_via0`, `ocup_via1` | ocupação média de cada via (bits 4..0 e 9..5); `ocup_via1` só existe com emissão dupla |
+
+Tempo de execução (ciclos × período) e speedup dependem do período de clock de cada organização (R6).
 
 ### Ver as formas de onda
 
@@ -135,6 +163,17 @@ A simulação grava `build/<testbench>.ghw`:
 ```bash
 gtkwave build/tb_cpu.ghw
 ```
+
+Waveform anotada do T0 na O2 (figuras em `docs/waveforms/` e sessão pronta para o GTKWave, com sinais
+agrupados por estágio, hex e marcadores de enchimento/esvaziamento):
+
+```bash
+make wave-t0
+gtkwave build/t0_o2.ghw docs/waveforms/t0_o2.gtkw
+```
+
+O `scripts/waveform_o2.py` usa o `ghwdump`, que vem com o GHDL (variável `GHWDUMP` para indicar outro
+caminho), e o ImageMagick (`magick`), opcional, para gerar os PNGs.
 
 ### Montar um traço novo (MARS)
 
