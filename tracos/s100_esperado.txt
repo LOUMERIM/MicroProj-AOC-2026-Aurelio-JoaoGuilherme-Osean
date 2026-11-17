@@ -1,0 +1,20 @@
+# S100 — estado final esperado (gerado no MARS 4.5 com CompactDataAtZero
+# por scripts/gerar_serie_s.py a partir de tracos/s100.asm).
+# Formato: <numero_do_registrador> <valor_hex_32bits>
+4 00000000
+8 0000000A
+9 00000014
+10 0000001E
+11 00000028
+12 00000001
+13 0000003C
+14 00000046
+15 00000050
+16 0000001E
+17 FFFFFFF6
+18 00000030
+19 00000056
+20 0000001E
+21 FFFFFFF6
+22 00000030
+23 00000056
