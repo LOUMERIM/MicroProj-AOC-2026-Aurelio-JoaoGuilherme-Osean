@@ -136,6 +136,7 @@ na raiz. As 8 primeiras colunas seguem o modelo do enunciado (seção 3.5):
 
 Tempo de execução (ciclos × período) e speedup dependem do período de clock de cada organização (R6).
 
+### Ver as formas de onda
 
 A simulação grava `build/<testbench>.ghw`:
 

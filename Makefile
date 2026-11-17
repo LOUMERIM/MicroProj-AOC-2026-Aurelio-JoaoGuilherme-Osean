@@ -101,6 +101,9 @@ test-unit: compile-unit
 # metricas.csv na raiz (uma linha por organizacao x traco). Tracos limpos: T0 e a
 # serie S (tracos/s*.hex, quando existir), cada um com o seu _esperado.txt.
 # O CSV de build/ e truncado no inicio; o tb_cpu escreve o cabecalho em arquivo vazio.
+# Qualquer falha de simulacao (registrador divergente do esperado, aborto ou tempo
+# esgotado em traco limpo) interrompe o make antes de copiar: metricas.csv nao e
+# sobrescrito. A saida de cada execucao fica em build/metricas_run.log.
 TRACOS_LIMPOS ?= tracos/t0.hex $(sort $(wildcard tracos/s[0-9]*.hex))
 metricas: elaborate
 	: > $(BUILD_DIR)/metricas.csv
@@ -110,7 +113,13 @@ metricas: elaborate
 			echo "== $$1 $$prog"; \
 			( cd $(BUILD_DIR) && ghdl -r $(GHDL_FLAGS) $(TESTBENCH) -gORG_NOME=$$1 -gNUM_SLOTS=$$2 \
 				-gPROG_FILE=../$$prog -gESPERADO_FILE=../$$esp --stop-time=$(STOP_TIME) \
-				--assert-level=error ) 2>&1 | grep -E "fim da simul|error|failure" || exit 1; \
+				--assert-level=error ) > $(BUILD_DIR)/metricas_run.log 2>&1; \
+			rc=$$?; \
+			grep -E "fim da simul|error|failure" $(BUILD_DIR)/metricas_run.log; \
+			if [ $$rc -ne 0 ]; then \
+				echo "ERRO: simulacao de $$1 em $$prog falhou (codigo $$rc); metricas.csv nao foi atualizado"; \
+				exit 1; \
+			fi; \
 		done; \
 	done
 	cp $(BUILD_DIR)/metricas.csv metricas.csv
