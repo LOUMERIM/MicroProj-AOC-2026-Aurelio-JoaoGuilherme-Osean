@@ -43,12 +43,15 @@ As instruções suportadas estão em [`isa_table_mips.md`](isa_table_mips.md).
 │   ├── tc.*            #   TC: conflito de controle (asm, hex e esperado)
 │   ├── td.*            #   TD: conflito de dados RAW (asm, hex e esperado)
 │   └── te.*            #   TE: conflito estrutural (asm, hex e esperado)
-├── scripts/            # run_ghdl_tests.sh: limpa, roda os testes unitários e o tb_cpu
+├── scripts/            # run_all.sh: compila, simula todos os traços e gera métricas e tabelas (R7)
+│                       # tabelas_metricas.py: tabelas do relatório a partir do metricas.csv
+│                       # run_ghdl_tests.sh: limpa, roda os testes unitários e o tb_cpu
 │                       # gerar_serie_s.py: gera a série S a partir do T0 (make serie-s)
 │                       # waveform_o2.py: figuras anotadas + .gtkw a partir do .ghw (make wave-t0)
 ├── build/              # Gerado pelo make (objetos do GHDL e ondas .ghw) — não versionado
 ├── isa_table_mips.md   # Tabela da ISA (mnemônico, formato, opcode/funct, RTL)
 ├── metricas.csv        # Métricas do R6 por organização × traço limpo (make metricas)
+├── resultados/         # conflitos.csv e tabelas.md, gerados pelo run_all
 └── Makefile
 ```
 
@@ -64,6 +67,32 @@ As instruções suportadas estão em [`isa_table_mips.md`](isa_table_mips.md).
 ## Como executar
 
 Todos os comandos são rodados na raiz do repositório.
+
+### Tudo com um comando (R7)
+
+```bash
+./scripts/run_all.sh
+```
+
+Compila, roda os testes unitários, simula os traços limpos (T0 e série S) na O1 e na O2, confere os
+traços de conflito (TD, TE e TC abortam na O2 com o tipo, `hazard_pc` e `hazard_cycle` esperados e
+rodam limpos na O1) e gera:
+
+| Arquivo | Conteúdo |
+| --- | --- |
+| `metricas.csv` | métricas do R6 por organização × traço limpo |
+| `resultados/conflitos.csv` | tipo, `hazard_pc` e `hazard_cycle` detectados em cada traço de conflito |
+| `resultados/tabelas.md` | tabelas do relatório: T0, speedup, série S, ocupação por estágio e registro de conflitos |
+
+Para no primeiro erro, com código de saída ≠ 0. Só precisa de `ghdl`, `make` e `python3` (bash 4+): os
+`.hex` e os `_esperado.txt` estão versionados, então o MARS não é necessário. Com os períodos de clock
+(R6, issue #21), as tabelas também trazem tempo de execução e speedup em tempo:
+
+```bash
+PERIODO_O1_NS=<período O1> PERIODO_O2_NS=<período O2> ./scripts/run_all.sh
+```
+
+### Comandos individuais
 
 ```bash
 make sim                      # compila vhdl/ + tb_cpu, elabora e simula (padrão: O1, T0)
