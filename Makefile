@@ -65,7 +65,7 @@ STOP_TIME ?= 200us
 # fica em build/ e o arquivo work-obj08.cf nao grava o caminho absoluto da pasta
 # (que quebra o GHDL quando o caminho tem acentos, como "COMPUTAÇÂO").
 
-.PHONY: all clean run sim compile compile-unit elaborate test-unit serie-s
+.PHONY: diagramas all clean run sim compile compile-unit elaborate test-unit serie-s
 .PHONY: all clean run sim compile compile-unit elaborate test-unit metricas
 .PHONY: all clean run sim compile compile-unit elaborate test-unit wave-t0
 
@@ -144,6 +144,18 @@ wave-t0: elaborate
 	@if command -v magick >/dev/null 2>&1; then \
 		for f in $(WAVE_DIR)/t0_o2_*.svg; do magick -density 110 $$f $${f%.svg}.png; done; \
 	else echo "(ImageMagick ausente: PNGs nao gerados; os SVGs abrem no navegador)"; fi
+
+# Diagramas instrucao x ciclo do T0 (issue #22): simula o T0 na O1 e na O2 com dump GHW e
+# gera docs/diagrama-instrucao-ciclo.md (10 primeiras e 3 ultimas instrucoes, formato 6.1)
+# e as tabelas completas em docs/diagramas/. Usa o ghwdump (vem com o GHDL).
+diagramas: elaborate
+	cd $(BUILD_DIR) && ghdl -r $(GHDL_FLAGS) $(TESTBENCH) -gORG_NOME=O1 -gNUM_SLOTS=1 \
+		-gPROG_FILE=../tracos/t0.hex -gESPERADO_FILE=../tracos/t0_esperado.txt \
+		--stop-time=$(STOP_TIME) --wave=t0_o1.ghw
+	cd $(BUILD_DIR) && ghdl -r $(GHDL_FLAGS) $(TESTBENCH) -gORG_NOME=O2 -gNUM_SLOTS=5 \
+		-gPROG_FILE=../tracos/t0.hex -gESPERADO_FILE=../tracos/t0_esperado.txt \
+		--stop-time=$(STOP_TIME) --wave=t0_o2.ghw
+	python3 scripts/diagrama_instr_ciclo.py $(BUILD_DIR)/t0_o1.ghw $(BUILD_DIR)/t0_o2.ghw tracos/t0.asm docs
 
 clean:
 	rm -rf $(BUILD_DIR)

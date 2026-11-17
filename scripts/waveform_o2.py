@@ -45,10 +45,14 @@ def ghwdump_cmd():
 
 
 def run(args, ghw):
-    out = subprocess.run(ghwdump_cmd() + args + [ghw], capture_output=True, text=True)
-    if out.returncode != 0:
-        sys.exit(out.stderr)
-    return out.stdout
+    # Até 3 tentativas: via distrobox, o podman às vezes falha ao registrar o fim da
+    # sessão (exit != 0 com a saída já impressa) — falha do contêiner, não do ghwdump.
+    for tentativa in range(3):
+        out = subprocess.run(ghwdump_cmd() + args + [ghw], capture_output=True, text=True,
+                             stdin=subprocess.DEVNULL)
+        if out.returncode == 0:
+            return out.stdout
+    sys.exit(out.stderr)
 
 
 def parse_types(text):
