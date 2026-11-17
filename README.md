@@ -12,13 +12,15 @@ As instruções suportadas estão em [`isa_table_mips.md`](isa_table_mips.md).
 ## Documentação da O1
 
 - [FSM, caminho de dados e ISA da O1](docs/fsm-o1.md): premissas, diagrama do datapath com registradores e muxes, estados, sinais de controle e ciclos por classe.
+- [Conflito de controle na O2](docs/controle-o2.md): por que o `beq` é resolvido em EX e como o desvio tomado é detectado.
 
 ## Estrutura de pastas
 
 ```
 .
 ├── docs/
-│   └── fsm-o1.md       # FSM, caminho de dados e ciclos por classe da O1
+│   ├── fsm-o1.md       # FSM, caminho de dados e ciclos por classe da O1
+│   └── controle-o2.md  # O2: estágio de resolução do beq (EX), justificativa e detecção
 ├── vhdl/               # RTL
 │   ├── o1_pkg, register_file, alu, instruction_memory, data_memory   # componentes comuns
 │   ├── cpu_top.vhd     #   O1: multiciclo (FSM)
@@ -34,6 +36,7 @@ As instruções suportadas estão em [`isa_table_mips.md`](isa_table_mips.md).
 │   ├── t0.asm          #   T0: traço limpo (sem conflitos), fonte em assembly
 │   ├── t0.hex          #   T0 montado (uma instrução de 32 bits em hex por linha)
 │   ├── t0_esperado.txt #   estado final esperado dos registradores ("reg valor_hex")
+│   ├── tc.*            #   TC: conflito de controle (asm, hex e esperado)
 │   ├── td.*            #   TD: conflito de dados RAW (asm, hex e esperado)
 │   └── te.*            #   TE: conflito estrutural (asm, hex e esperado)
 ├── scripts/            # run_ghdl_tests.sh: limpa, roda os testes unitários e o tb_cpu
@@ -88,6 +91,7 @@ make sim                                   # O1 executando o T0
 make sim ORG=O2 SLOTS=5                    # O2 (pipeline) executando o T0
 make sim ORG=O2 SLOTS=5 PROG=tracos/te.hex ESPERADO=tracos/te_esperado.txt ABORTO=true TIPO=2 MEMUNI=true PCESP=00000018   # TE: aborto estrutural
 make sim ORG=O2 SLOTS=5 PROG=tracos/td.hex ESPERADO=tracos/td_esperado.txt ABORTO=true TIPO=1 PCESP=00000014   # TD: aborto por dados
+make sim ORG=O2 SLOTS=5 PROG=tracos/tc.hex ESPERADO=tracos/tc_esperado.txt ABORTO=true TIPO=3 PCESP=00000018   # TC: aborto por controle
 ```
 
 > O GHDL roda dentro de `build/` com caminhos relativos, porque o caminho absoluto da pasta
