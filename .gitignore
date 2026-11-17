@@ -3,3 +3,4 @@ build/
 *.cf
 *.ghw
 *.vcd
+__pycache__/

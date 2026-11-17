@@ -71,7 +71,7 @@ def main():
         if r:
             l = [o, r["ciclos"], r["instrucoes"], f3(r["CPI"]), f3(r["IPC"]), pct(r["ocupacao"])]
             if com_tempo:
-                l += [per[o], f3(int(r["ciclos"]) * float(per[o]))]
+                l += [per[o].replace(".", ","), f3(int(r["ciclos"]) * float(per[o]))]
             linhas.append(l)
     print(tabela(cab, linhas) + "\n")
 
@@ -97,6 +97,10 @@ def main():
     if not com_tempo:
         print("Tempo de execução e speedup em tempo dependem do período de clock de cada organização "
               "(R6, issue #21); defina `PERIODO_O1_NS` e `PERIODO_O2_NS` para incluí-los.\n")
+    else:
+        print(f"Períodos de clock: O1 = {per['O1'].replace('.', ',')} ns, "
+              f"O2 = {per['O2'].replace('.', ',')} ns "
+              "(critério e justificativa em `docs/periodo-clock.md`).\n")
 
     # 3. série S
     serie = [t for t in tracos if t.startswith("S")]
