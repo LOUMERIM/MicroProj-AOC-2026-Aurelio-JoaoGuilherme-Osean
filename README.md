@@ -9,7 +9,7 @@ inspecionado no **GTKWave**.
 
 As instruções suportadas estão em [`isa_table_mips.md`](isa_table_mips.md).
 
-## Documentação da O1
+## Documentação
 
 - [FSM, caminho de dados e ISA da O1](docs/fsm-o1.md): premissas, diagrama do datapath com registradores e muxes, estados, sinais de controle e ciclos por classe.
 - [Conflito de controle na O2](docs/controle-o2.md): por que o `beq` é resolvido em EX e como o desvio tomado é detectado.
@@ -25,7 +25,10 @@ As instruções suportadas estão em [`isa_table_mips.md`](isa_table_mips.md).
 │   ├── fsm-o1.md       # FSM, caminho de dados e ciclos por classe da O1
 │   ├── controle-o2.md  # O2: estágio de resolução do beq (EX), justificativa e detecção
 │   ├── waveform-t0-o2.md # O2: waveform anotada do T0 (enchimento e esvaziamento)
-│   └── waveforms/      # figuras SVG/PNG, CSV ciclo a ciclo e sessão .gtkw (make wave-t0)
+│   ├── waveforms/      # figuras SVG/PNG, CSV ciclo a ciclo e sessão .gtkw (make wave-t0)
+│   ├── diagrama-instrucao-ciclo.md # diagramas instrução × ciclo do T0, O1 e O2 (make diagramas)
+│   ├── diagramas/      # tabelas instrução × ciclo completas em CSV
+│   └── periodo-clock.md # período de clock: tabela de atrasos e caminho crítico (O1 e O2)
 ├── vhdl/               # RTL
 │   ├── o1_pkg, register_file, alu, instruction_memory, data_memory   # componentes comuns
 │   ├── cpu_top.vhd     #   O1: multiciclo (FSM)
@@ -37,6 +40,7 @@ As instruções suportadas estão em [`isa_table_mips.md`](isa_table_mips.md).
 │   │                   #   carrega o .hex, conta ciclos/instruções,
 │   │                   #   confere os registradores com o *_esperado.txt e grava métricas
 │   └── unit/           #   testes isolados dos componentes (register_file, alu, memórias)
+│       └── fixtures/   #   imagens de memória usadas pelos testes unitários
 ├── tracos/             # Traços de teste
 │   ├── t0.asm          #   T0: traço limpo (sem conflitos), fonte em assembly
 │   ├── t0.hex          #   T0 montado (uma instrução de 32 bits em hex por linha)
@@ -47,6 +51,8 @@ As instruções suportadas estão em [`isa_table_mips.md`](isa_table_mips.md).
 │   └── te.*            #   TE: conflito estrutural (asm, hex e esperado)
 ├── scripts/            # run_all.sh: compila, simula todos os traços e gera métricas e tabelas (R7)
 │                       # tabelas_metricas.py: tabelas do relatório a partir do metricas.csv
+│                       # graficos.py: gráficos do relatório a partir do metricas.csv (make graficos)
+│                       # diagrama_instr_ciclo.py: diagramas instrução × ciclo (make diagramas)
 │                       # run_ghdl_tests.sh: limpa, roda os testes unitários e o tb_cpu
 │                       # gerar_serie_s.py: gera a série S a partir do T0 (make serie-s)
 │                       # waveform_o2.py: figuras anotadas + .gtkw a partir do .ghw (make wave-t0)
@@ -59,12 +65,34 @@ As instruções suportadas estão em [`isa_table_mips.md`](isa_table_mips.md).
 
 ## Pré-requisitos
 
-| Ferramenta | Uso | Verificar |
-| --- | --- | --- |
-| GHDL (≥ 4, com suporte a VHDL-2008) | compilar e simular | `ghdl --version` |
-| GTKWave | visualizar as formas de onda | `gtkwave --version` |
-| GNU Make | automatizar compilação/simulação | `make --version` |
-| MARS 4.5 (Java) | montar os traços `.asm` e gerar o esperado | `java -jar Mars4_5.jar` |
+| Ferramenta | Uso | Obrigatória? | Verificar |
+| --- | --- | --- | --- |
+| GHDL (≥ 4, com suporte a VHDL-2008; traz o `ghwdump`) | compilar e simular | sim | `ghdl --version` |
+| GNU Make | automatizar compilação/simulação | sim | `make --version` |
+| Python 3 (só biblioteca padrão) | `run_all`, tabelas, gráficos, `PCESP` | sim | `python3 --version` |
+| bash ≥ 4 | `scripts/run_all.sh` | sim | `bash --version` |
+| GTKWave | visualizar as formas de onda | para ver ondas | `gtkwave --version` |
+| ImageMagick (`magick`) | PNG dos gráficos e das figuras | não (os SVGs saem sempre) | `magick --version` |
+| MARS 4.5 (Java) | montar traços novos e gerar o esperado | só para traços novos | `java -jar Mars4_5.jar` |
+
+Os `.hex` e os `_esperado.txt` de todos os traços estão versionados: para simular e gerar os
+resultados, o MARS não é necessário.
+
+## Primeiros passos (clone limpo)
+
+```bash
+git clone https://github.com/LOUMERIM/MicroProj-AOC-2026-Aurelio-JoaoGuilherme-Osean.git
+cd MicroProj-AOC-2026-Aurelio-JoaoGuilherme-Osean
+./scripts/run_all.sh          # compila, testa, simula tudo e gera métricas, tabelas e gráficos
+```
+
+Se terminar com `run_all: OK`, o ambiente está pronto. O resultado fica em `metricas.csv` e
+`resultados/`. Para ver a execução do T0 na O2 no GTKWave:
+
+```bash
+make wave-t0
+gtkwave build/t0_o2.ghw docs/waveforms/t0_o2.gtkw
+```
 
 ## Como executar
 
@@ -88,8 +116,9 @@ rodam limpos na O1) e gera:
 | `resultados/graficos/` | gráficos do relatório: CPI por organização, speedup medido × ideal e speedup × tamanho (eixo x log), SVG e PNG |
 
 Para no primeiro erro, com código de saída ≠ 0. Só precisa de `ghdl`, `make` e `python3` (bash 4+): os
-`.hex` e os `_esperado.txt` estão versionados, então o MARS não é necessário. Com os períodos de clock
-(R6, issue #21), as tabelas também trazem tempo de execução e speedup em tempo:
+`.hex` e os `_esperado.txt` estão versionados, então o MARS não é necessário. O tempo de execução e o
+speedup em tempo usam o período de clock de [`docs/periodo-clock.md`](docs/periodo-clock.md)
+(0,22 ns nas duas organizações); para outro critério:
 
 ```bash
 PERIODO_O1_NS=<período O1> PERIODO_O2_NS=<período O2> ./scripts/run_all.sh
@@ -97,11 +126,16 @@ PERIODO_O1_NS=<período O1> PERIODO_O2_NS=<período O2> ./scripts/run_all.sh
 
 ### Comandos individuais
 
-```bash
-make sim                      # compila vhdl/ + tb_cpu, elabora e simula (padrão: O1, T0)
-make test-unit                # testes isolados dos componentes (testbench/unit/)
-make clean                    # apaga a pasta build/
-```
+| Comando | O que faz |
+| --- | --- |
+| `make sim` | compila `vhdl/` + `tb_cpu`, elabora e simula (padrão: O1, T0; parâmetros abaixo) |
+| `make test-unit` | testes isolados dos componentes (`testbench/unit/`) |
+| `make metricas` | traços limpos (T0 e série S) na O1 e na O2 → `metricas.csv` |
+| `make graficos` | redesenha os gráficos a partir do `metricas.csv` → `resultados/graficos/` |
+| `make wave-t0` | waveform anotada do T0 na O2 → `docs/waveforms/` e `build/t0_o2.ghw` |
+| `make diagramas` | diagramas instrução × ciclo do T0 → `docs/diagrama-instrucao-ciclo.md` |
+| `make serie-s` | regenera a série S a partir do T0 (precisa do MARS; só se o T0 mudar) |
+| `make clean` | apaga a pasta `build/` |
 
 `make sim` compila, elabora e simula; `make compile`, `make elaborate` e `make run` também podem ser chamados sozinhos.
 `./scripts/run_ghdl_tests.sh` faz `make clean`, `make test-unit` e `make sim` em sequência.
@@ -164,6 +198,7 @@ make sim ORG=O2 SLOTS=5 PROG=tracos/s200.hex ESPERADO=tracos/s200_esperado.txt
 ```
 
 Na O2 cada traço leva *N* + 5 ciclos (*N* úteis + `break` + 4 de enchimento).
+
 ### Métricas (R6)
 
 ```bash
@@ -186,7 +221,8 @@ na raiz. As 8 primeiras colunas seguem o modelo do enunciado (seção 3.5):
 | `ocup_IF` … `ocup_WB` | ocupação de cada estágio da via 0 (bits 0..4 de `stage_valid`); a O1 só tem o slot 0 (`ocup_IF`) |
 | `ocup_via0`, `ocup_via1` | ocupação média de cada via (bits 4..0 e 9..5); `ocup_via1` só existe com emissão dupla |
 
-Tempo de execução (ciclos × período) e speedup dependem do período de clock de cada organização (R6).
+Tempo de execução (ciclos × período) e speedup ficam em `resultados/tabelas.md`, com o período de
+[`docs/periodo-clock.md`](docs/periodo-clock.md).
 
 ### Ver as formas de onda
 
@@ -245,10 +281,12 @@ Ao criar um arquivo novo em `vhdl/` (ex.: componentes do O2), inclua-o em `SOURC
 ## Regras de equipe
 
 - **Branches:** `main` guarda só versões estáveis/entregáveis; o trabalho do dia a dia vai em `develop`,
-  e cada tarefa em uma branch própria criada a partir de `develop` (ex.: `issue-7-traco-t0`).
+  e cada tarefa em uma branch própria criada a partir de `develop`, com o número da issue
+  (ex.: `23issue`).
 - **Ninguém faz push direto em `main`.** Toda mudança entra por *Pull Request*.
 - **Todo PR é revisado e aprovado por outro integrante** (não pelo autor) antes do merge.
-- O PR referencia a issue que resolve (`Closes #N`) e só é aberto com `make sim` rodando sem erro.
+- O PR referencia a issue que resolve (`Closes #N`) e só é aberto com `./scripts/run_all.sh`
+  terminando em `run_all: OK`.
 - Cada issue preenche o campo **"Usou IA?"** (sim/não e para quê), que alimenta o Apêndice C do relatório.
 - Arquivos gerados (`build/`, `*.ghw`, `*.vcd`, `*.cf`) não são versionados.
 
