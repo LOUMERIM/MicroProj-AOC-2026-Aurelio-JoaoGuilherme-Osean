@@ -13,6 +13,7 @@
 #                                           hazard_cycle esperados; rodam limpos na O1
 #                                           -> resultados/conflitos.csv
 #   5. scripts/tabelas_metricas.py          -> resultados/tabelas.md
+#      scripts/graficos.py                  -> resultados/graficos/*.svg (e .png com ImageMagick)
 #
 # Não depende de caminho absoluto nem do MARS: os .hex e _esperado.txt estão versionados.
 #
@@ -92,10 +93,15 @@ done
     || falha "só $verificados de ${#CONFLITOS[@]} traços de conflito foram verificados"
 
 # ------------------------------------------------------------------ 5. tabelas
-etapa "5/5 tabelas"
+etapa "5/5 tabelas e gráficos"
 python3 scripts/tabelas_metricas.py metricas.csv "$RES/conflitos.csv" >"$RES/tabelas.md" \
     || falha "geração das tabelas"
+python3 scripts/graficos.py metricas.csv "$RES/graficos" >/dev/null || falha "geração dos gráficos"
+if command -v magick >/dev/null 2>&1; then
+    for f in "$RES"/graficos/*.svg; do magick -density 150 "$f" "${f%.svg}.png" || falha "PNG de $f"; done
+fi
 echo "    metricas.csv, $RES/conflitos.csv e $RES/tabelas.md (períodos O1=${PERIODO_O1_NS} ns, O2=${PERIODO_O2_NS} ns)"
+echo "    $RES/graficos/: cpi_t0, speedup_t0, speedup_tamanho"
 
 echo
 echo "run_all: OK"
