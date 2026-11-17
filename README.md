@@ -42,6 +42,7 @@ As instruções suportadas estão em [`isa_table_mips.md`](isa_table_mips.md).
 ├── scripts/            # run_ghdl_tests.sh: limpa, roda os testes unitários e o tb_cpu
 ├── build/              # Gerado pelo make (objetos do GHDL e ondas .ghw) — não versionado
 ├── isa_table_mips.md   # Tabela da ISA (mnemônico, formato, opcode/funct, RTL)
+├── metricas.csv        # Métricas do R6 por organização × traço limpo (make metricas)
 └── Makefile
 ```
 
@@ -111,7 +112,30 @@ não tem conflitos, roda até o fim e confere os registradores com o esperado.
 Cada traço também tem casos que **não** podem abortar: o TD tem escrita em `$zero` e dependência a
 distância 3; o TE roda limpo com `MEMUNI=false`; o TC tem um `beq` não tomado antes do tomado.
 
-### Ver as formas de onda
+### Métricas (R6)
+
+```bash
+make metricas    # roda os traços limpos (T0 e a série S, quando existir) na O1 e na O2 e grava metricas.csv
+```
+
+Cada execução do `tb_cpu` acrescenta uma linha em `build/metricas.csv` (o cabeçalho é escrito quando o
+arquivo está vazio); `make metricas` começa de um arquivo vazio e copia o resultado para `metricas.csv`
+na raiz. As 8 primeiras colunas seguem o modelo do enunciado (seção 3.5):
+
+| Coluna | Significado |
+| --- | --- |
+| `org`, `programa` | organização e traço (`.hex`) |
+| `ciclos` | do 1º ciclo após o reset até o ciclo em que `done = 1`, **inclusive** |
+| `instrucoes` | soma de `retired`: instruções úteis; o `break` **não** conta |
+| `CPI`, `IPC` | `ciclos / instrucoes` e `instrucoes / ciclos` |
+| `ocupacao` | fração dos `ciclos × NUM_SLOTS` com bit de `stage_valid` em 1 |
+| `erros` | registradores que divergiram do `_esperado.txt` |
+| `desfecho` | `done`, `aborto` (conflito) ou `tempo_esgotado` |
+| `ocup_IF` … `ocup_WB` | ocupação de cada estágio da via 0 (bits 0..4 de `stage_valid`); a O1 só tem o slot 0 (`ocup_IF`) |
+| `ocup_via0`, `ocup_via1` | ocupação média de cada via (bits 4..0 e 9..5); `ocup_via1` só existe com emissão dupla |
+
+Tempo de execução (ciclos × período) e speedup dependem do período de clock de cada organização (R6).
+
 
 A simulação grava `build/<testbench>.ghw`:
 
