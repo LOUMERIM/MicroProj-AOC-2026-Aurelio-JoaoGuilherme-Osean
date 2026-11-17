@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="420" viewBox="0 0 640 420" font-family="Inter, DejaVu Sans, Helvetica, Arial, sans-serif">
+<rect width="100%" height="100%" fill="#fcfcfb"/>
+<text x="64" y="28" font-size="17" font-weight="600" fill="#0b0b0b">Speedup da O2 sobre a O1 — T0</text>
+<text x="64" y="48" font-size="12" fill="#52514e">medido = tempo O1 / tempo O2 = 3,59× (71,89 % do ideal)</text>
+<line x1="64" y1="344.0" x2="616" y2="344.0" stroke="#9b9a95" stroke-width="1"/>
+<text x="56" y="348.0" font-size="11" text-anchor="end" fill="#52514e">0</text>
+<line x1="64" y1="298.7" x2="616" y2="298.7" stroke="#e6e5e1" stroke-width="1"/>
+<text x="56" y="302.7" font-size="11" text-anchor="end" fill="#52514e">1</text>
+<line x1="64" y1="253.3" x2="616" y2="253.3" stroke="#e6e5e1" stroke-width="1"/>
+<text x="56" y="257.3" font-size="11" text-anchor="end" fill="#52514e">2</text>
+<line x1="64" y1="208.0" x2="616" y2="208.0" stroke="#e6e5e1" stroke-width="1"/>
+<text x="56" y="212.0" font-size="11" text-anchor="end" fill="#52514e">3</text>
+<line x1="64" y1="162.7" x2="616" y2="162.7" stroke="#e6e5e1" stroke-width="1"/>
+<text x="56" y="166.7" font-size="11" text-anchor="end" fill="#52514e">4</text>
+<line x1="64" y1="117.3" x2="616" y2="117.3" stroke="#e6e5e1" stroke-width="1"/>
+<text x="56" y="121.3" font-size="11" text-anchor="end" fill="#52514e">5</text>
+<line x1="64" y1="72.0" x2="616" y2="72.0" stroke="#e6e5e1" stroke-width="1"/>
+<text x="56" y="76.0" font-size="11" text-anchor="end" fill="#52514e">6</text>
+<text transform="translate(16,208) rotate(-90)" font-size="11.5" text-anchor="middle" fill="#52514e">Speedup da O2 sobre a O1</text>
+<path d="M185.0,344.0 V185.04504504504504 Q185.0,181.04504504504504 189.0,181.04504504504504 H291.0 Q295.0,181.04504504504504 295.0,185.04504504504504 V344.0 Z" fill="#eb6834"/>
+<text x="240.0" y="173.0" font-size="13" font-weight="600" text-anchor="middle" fill="#0b0b0b">3,59×</text>
+<text x="240.0" y="364.0" font-size="12" text-anchor="middle" fill="#0b0b0b">Medido</text>
+<path d="M385.0,344.0 V121.33333333333334 Q385.0,117.33333333333334 389.0,117.33333333333334 H491.0 Q495.0,117.33333333333334 495.0,121.33333333333334 V344.0 Z" fill="#fcfcfb" stroke="#8a8984" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="440.0" y="109.3" font-size="13" font-weight="600" text-anchor="middle" fill="#0b0b0b">5,00×</text>
+<text x="440.0" y="364.0" font-size="12" text-anchor="middle" fill="#0b0b0b">Ideal (5 estágios)</text>
+<text x="64" y="410" font-size="10.5" fill="#52514e">Fonte: metricas.csv; períodos O1 = 0,22 ns e O2 = 0,22 ns (docs/periodo-clock.md).</text>
+</svg>
