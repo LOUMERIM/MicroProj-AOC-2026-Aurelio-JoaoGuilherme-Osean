@@ -13,6 +13,7 @@ As instruções suportadas estão em [`isa_table_mips.md`](isa_table_mips.md).
 
 - [FSM, caminho de dados e ISA da O1](docs/fsm-o1.md): premissas, diagrama do datapath com registradores e muxes, estados, sinais de controle e ciclos por classe.
 - [Conflito de controle na O2](docs/controle-o2.md): por que o `beq` é resolvido em EX e como o desvio tomado é detectado.
+- [Execução do T0 na O2](docs/waveform-t0-o2.md): waveform anotada (enchimento, pipeline cheio e esvaziamento), gerada por `make wave-t0`.
 
 ## Estrutura de pastas
 
@@ -20,7 +21,9 @@ As instruções suportadas estão em [`isa_table_mips.md`](isa_table_mips.md).
 .
 ├── docs/
 │   ├── fsm-o1.md       # FSM, caminho de dados e ciclos por classe da O1
-│   └── controle-o2.md  # O2: estágio de resolução do beq (EX), justificativa e detecção
+│   ├── controle-o2.md  # O2: estágio de resolução do beq (EX), justificativa e detecção
+│   ├── waveform-t0-o2.md # O2: waveform anotada do T0 (enchimento e esvaziamento)
+│   └── waveforms/      # figuras SVG/PNG, CSV ciclo a ciclo e sessão .gtkw (make wave-t0)
 ├── vhdl/               # RTL
 │   ├── o1_pkg, register_file, alu, instruction_memory, data_memory   # componentes comuns
 │   ├── cpu_top.vhd     #   O1: multiciclo (FSM)
@@ -40,6 +43,7 @@ As instruções suportadas estão em [`isa_table_mips.md`](isa_table_mips.md).
 │   ├── td.*            #   TD: conflito de dados RAW (asm, hex e esperado)
 │   └── te.*            #   TE: conflito estrutural (asm, hex e esperado)
 ├── scripts/            # run_ghdl_tests.sh: limpa, roda os testes unitários e o tb_cpu
+│                       # waveform_o2.py: figuras anotadas + .gtkw a partir do .ghw (make wave-t0)
 ├── build/              # Gerado pelo make (objetos do GHDL e ondas .ghw) — não versionado
 ├── isa_table_mips.md   # Tabela da ISA (mnemônico, formato, opcode/funct, RTL)
 ├── metricas.csv        # Métricas do R6 por organização × traço limpo (make metricas)
@@ -143,6 +147,17 @@ A simulação grava `build/<testbench>.ghw`:
 ```bash
 gtkwave build/tb_cpu.ghw
 ```
+
+Waveform anotada do T0 na O2 (figuras em `docs/waveforms/` e sessão pronta para o GTKWave, com sinais
+agrupados por estágio, hex e marcadores de enchimento/esvaziamento):
+
+```bash
+make wave-t0
+gtkwave build/t0_o2.ghw docs/waveforms/t0_o2.gtkw
+```
+
+O `scripts/waveform_o2.py` usa o `ghwdump`, que vem com o GHDL (variável `GHWDUMP` para indicar outro
+caminho), e o ImageMagick (`magick`), opcional, para gerar os PNGs.
 
 ### Montar um traço novo (MARS)
 

@@ -66,6 +66,7 @@ STOP_TIME ?= 200us
 # (que quebra o GHDL quando o caminho tem acentos, como "COMPUTAÇÂO").
 
 .PHONY: all clean run sim compile compile-unit elaborate test-unit metricas
+.PHONY: all clean run sim compile compile-unit elaborate test-unit wave-t0
 
 all: $(BUILD_DIR) $(SOURCES)
 
@@ -124,6 +125,19 @@ metricas: elaborate
 	done
 	cp $(BUILD_DIR)/metricas.csv metricas.csv
 	@echo "metricas.csv:"; column -t -s';' metricas.csv
+# Waveform anotada do T0 na O2 (issue #17): simula com dump GHW (guarda os records
+# dos registradores entre estagios) e gera em docs/waveforms/ as figuras SVG/PNG,
+# a tabela ciclo a ciclo (CSV) e a sessao do GTKWave (.gtkw).
+# Abrir no GTKWave: gtkwave build/t0_o2.ghw docs/waveforms/t0_o2.gtkw
+WAVE_DIR = docs/waveforms
+wave-t0: elaborate
+	cd $(BUILD_DIR) && ghdl -r $(GHDL_FLAGS) $(TESTBENCH) -gORG_NOME=O2 -gNUM_SLOTS=5 \
+		-gPROG_FILE=../tracos/t0.hex -gESPERADO_FILE=../tracos/t0_esperado.txt \
+		--stop-time=$(STOP_TIME) --wave=t0_o2.ghw
+	python3 scripts/waveform_o2.py $(BUILD_DIR)/t0_o2.ghw tracos/t0.asm $(WAVE_DIR) t0_o2
+	@if command -v magick >/dev/null 2>&1; then \
+		for f in $(WAVE_DIR)/t0_o2_*.svg; do magick -density 110 $$f $${f%.svg}.png; done; \
+	else echo "(ImageMagick ausente: PNGs nao gerados; os SVGs abrem no navegador)"; fi
 
 clean:
 	rm -rf $(BUILD_DIR)
