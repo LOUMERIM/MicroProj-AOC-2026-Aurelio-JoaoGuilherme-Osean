@@ -1,0 +1,81 @@
+[*] MicroProj-AOC: T0 na O2, gerado por scripts/waveform_o2.py (issue #17)
+[dumpfile] "t0_o2.ghw"
+[timestart] 0
+[size] 1800 950
+[pos] -1 -1
+*-24.000000 20000000 20000000 60000000 340000000 350000000 380000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[markername] AC1 IF busca 0x00: inicio do enchimento
+[markername] BC5 1a instr em WB, stage_valid=0x1F: pipeline cheio
+[markername] CC33 ultima busca (break) em IF
+[markername] DC34 IF vazio: inicio do esvaziamento
+[markername] EC37 break em WB: done=1
+[signals_width] 330
+[sst_expanded] 1
+@200
+-Ciclo k = (15 ns + (k-1) x 10 ns) a (15 ns + k x 10 ns); amostragem na borda de descida
+@800200
+-Relogio
+@28
++{clk} top.tb_cpu.clk
+@28
++{rst} top.tb_cpu.rst
+@1000200
+-Relogio
+@800200
+-Estagio IF
+@28
++{IF valido (stage_valid[0])} top.tb_cpu.stage_valid[0]
+@22
+#{IF PC} top.tb_cpu.gen_o2.dut.pc[31] top.tb_cpu.gen_o2.dut.pc[30] top.tb_cpu.gen_o2.dut.pc[29] top.tb_cpu.gen_o2.dut.pc[28] top.tb_cpu.gen_o2.dut.pc[27] top.tb_cpu.gen_o2.dut.pc[26] top.tb_cpu.gen_o2.dut.pc[25] top.tb_cpu.gen_o2.dut.pc[24] top.tb_cpu.gen_o2.dut.pc[23] top.tb_cpu.gen_o2.dut.pc[22] top.tb_cpu.gen_o2.dut.pc[21] top.tb_cpu.gen_o2.dut.pc[20] top.tb_cpu.gen_o2.dut.pc[19] top.tb_cpu.gen_o2.dut.pc[18] top.tb_cpu.gen_o2.dut.pc[17] top.tb_cpu.gen_o2.dut.pc[16] top.tb_cpu.gen_o2.dut.pc[15] top.tb_cpu.gen_o2.dut.pc[14] top.tb_cpu.gen_o2.dut.pc[13] top.tb_cpu.gen_o2.dut.pc[12] top.tb_cpu.gen_o2.dut.pc[11] top.tb_cpu.gen_o2.dut.pc[10] top.tb_cpu.gen_o2.dut.pc[9] top.tb_cpu.gen_o2.dut.pc[8] top.tb_cpu.gen_o2.dut.pc[7] top.tb_cpu.gen_o2.dut.pc[6] top.tb_cpu.gen_o2.dut.pc[5] top.tb_cpu.gen_o2.dut.pc[4] top.tb_cpu.gen_o2.dut.pc[3] top.tb_cpu.gen_o2.dut.pc[2] top.tb_cpu.gen_o2.dut.pc[1] top.tb_cpu.gen_o2.dut.pc[0]
+@22
+#{IF instrucao} top.tb_cpu.gen_o2.dut.if_instr[31] top.tb_cpu.gen_o2.dut.if_instr[30] top.tb_cpu.gen_o2.dut.if_instr[29] top.tb_cpu.gen_o2.dut.if_instr[28] top.tb_cpu.gen_o2.dut.if_instr[27] top.tb_cpu.gen_o2.dut.if_instr[26] top.tb_cpu.gen_o2.dut.if_instr[25] top.tb_cpu.gen_o2.dut.if_instr[24] top.tb_cpu.gen_o2.dut.if_instr[23] top.tb_cpu.gen_o2.dut.if_instr[22] top.tb_cpu.gen_o2.dut.if_instr[21] top.tb_cpu.gen_o2.dut.if_instr[20] top.tb_cpu.gen_o2.dut.if_instr[19] top.tb_cpu.gen_o2.dut.if_instr[18] top.tb_cpu.gen_o2.dut.if_instr[17] top.tb_cpu.gen_o2.dut.if_instr[16] top.tb_cpu.gen_o2.dut.if_instr[15] top.tb_cpu.gen_o2.dut.if_instr[14] top.tb_cpu.gen_o2.dut.if_instr[13] top.tb_cpu.gen_o2.dut.if_instr[12] top.tb_cpu.gen_o2.dut.if_instr[11] top.tb_cpu.gen_o2.dut.if_instr[10] top.tb_cpu.gen_o2.dut.if_instr[9] top.tb_cpu.gen_o2.dut.if_instr[8] top.tb_cpu.gen_o2.dut.if_instr[7] top.tb_cpu.gen_o2.dut.if_instr[6] top.tb_cpu.gen_o2.dut.if_instr[5] top.tb_cpu.gen_o2.dut.if_instr[4] top.tb_cpu.gen_o2.dut.if_instr[3] top.tb_cpu.gen_o2.dut.if_instr[2] top.tb_cpu.gen_o2.dut.if_instr[1] top.tb_cpu.gen_o2.dut.if_instr[0]
+@1000200
+-Estagio IF
+@800200
+-Estagio ID  (IF/ID)
+@28
++{ID valido} top.tb_cpu.gen_o2.dut.ifid_reg.valid
+@22
+#{ID PC} top.tb_cpu.gen_o2.dut.ifid_reg.pc[31] top.tb_cpu.gen_o2.dut.ifid_reg.pc[30] top.tb_cpu.gen_o2.dut.ifid_reg.pc[29] top.tb_cpu.gen_o2.dut.ifid_reg.pc[28] top.tb_cpu.gen_o2.dut.ifid_reg.pc[27] top.tb_cpu.gen_o2.dut.ifid_reg.pc[26] top.tb_cpu.gen_o2.dut.ifid_reg.pc[25] top.tb_cpu.gen_o2.dut.ifid_reg.pc[24] top.tb_cpu.gen_o2.dut.ifid_reg.pc[23] top.tb_cpu.gen_o2.dut.ifid_reg.pc[22] top.tb_cpu.gen_o2.dut.ifid_reg.pc[21] top.tb_cpu.gen_o2.dut.ifid_reg.pc[20] top.tb_cpu.gen_o2.dut.ifid_reg.pc[19] top.tb_cpu.gen_o2.dut.ifid_reg.pc[18] top.tb_cpu.gen_o2.dut.ifid_reg.pc[17] top.tb_cpu.gen_o2.dut.ifid_reg.pc[16] top.tb_cpu.gen_o2.dut.ifid_reg.pc[15] top.tb_cpu.gen_o2.dut.ifid_reg.pc[14] top.tb_cpu.gen_o2.dut.ifid_reg.pc[13] top.tb_cpu.gen_o2.dut.ifid_reg.pc[12] top.tb_cpu.gen_o2.dut.ifid_reg.pc[11] top.tb_cpu.gen_o2.dut.ifid_reg.pc[10] top.tb_cpu.gen_o2.dut.ifid_reg.pc[9] top.tb_cpu.gen_o2.dut.ifid_reg.pc[8] top.tb_cpu.gen_o2.dut.ifid_reg.pc[7] top.tb_cpu.gen_o2.dut.ifid_reg.pc[6] top.tb_cpu.gen_o2.dut.ifid_reg.pc[5] top.tb_cpu.gen_o2.dut.ifid_reg.pc[4] top.tb_cpu.gen_o2.dut.ifid_reg.pc[3] top.tb_cpu.gen_o2.dut.ifid_reg.pc[2] top.tb_cpu.gen_o2.dut.ifid_reg.pc[1] top.tb_cpu.gen_o2.dut.ifid_reg.pc[0]
+@22
+#{ID instrucao} top.tb_cpu.gen_o2.dut.ifid_reg.instr[31] top.tb_cpu.gen_o2.dut.ifid_reg.instr[30] top.tb_cpu.gen_o2.dut.ifid_reg.instr[29] top.tb_cpu.gen_o2.dut.ifid_reg.instr[28] top.tb_cpu.gen_o2.dut.ifid_reg.instr[27] top.tb_cpu.gen_o2.dut.ifid_reg.instr[26] top.tb_cpu.gen_o2.dut.ifid_reg.instr[25] top.tb_cpu.gen_o2.dut.ifid_reg.instr[24] top.tb_cpu.gen_o2.dut.ifid_reg.instr[23] top.tb_cpu.gen_o2.dut.ifid_reg.instr[22] top.tb_cpu.gen_o2.dut.ifid_reg.instr[21] top.tb_cpu.gen_o2.dut.ifid_reg.instr[20] top.tb_cpu.gen_o2.dut.ifid_reg.instr[19] top.tb_cpu.gen_o2.dut.ifid_reg.instr[18] top.tb_cpu.gen_o2.dut.ifid_reg.instr[17] top.tb_cpu.gen_o2.dut.ifid_reg.instr[16] top.tb_cpu.gen_o2.dut.ifid_reg.instr[15] top.tb_cpu.gen_o2.dut.ifid_reg.instr[14] top.tb_cpu.gen_o2.dut.ifid_reg.instr[13] top.tb_cpu.gen_o2.dut.ifid_reg.instr[12] top.tb_cpu.gen_o2.dut.ifid_reg.instr[11] top.tb_cpu.gen_o2.dut.ifid_reg.instr[10] top.tb_cpu.gen_o2.dut.ifid_reg.instr[9] top.tb_cpu.gen_o2.dut.ifid_reg.instr[8] top.tb_cpu.gen_o2.dut.ifid_reg.instr[7] top.tb_cpu.gen_o2.dut.ifid_reg.instr[6] top.tb_cpu.gen_o2.dut.ifid_reg.instr[5] top.tb_cpu.gen_o2.dut.ifid_reg.instr[4] top.tb_cpu.gen_o2.dut.ifid_reg.instr[3] top.tb_cpu.gen_o2.dut.ifid_reg.instr[2] top.tb_cpu.gen_o2.dut.ifid_reg.instr[1] top.tb_cpu.gen_o2.dut.ifid_reg.instr[0]
+@1000200
+-Estagio ID  (IF/ID)
+@800200
+-Estagio EX  (ID/EX)
+@28
++{EX valido} top.tb_cpu.gen_o2.dut.idex_reg.valid
+@22
+#{EX PC+4} top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[31] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[30] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[29] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[28] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[27] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[26] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[25] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[24] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[23] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[22] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[21] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[20] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[19] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[18] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[17] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[16] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[15] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[14] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[13] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[12] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[11] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[10] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[9] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[8] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[7] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[6] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[5] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[4] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[3] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[2] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[1] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[0]
+@1000200
+-Estagio EX  (ID/EX)
+@800200
+-Estagio MEM (EX/MEM)
+@28
++{MEM valido} top.tb_cpu.gen_o2.dut.exmem_reg.valid
+@22
+#{MEM alu_result} top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[31] top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[30] top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[29] top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[28] top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[27] top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[26] top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[25] top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[24] top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[23] top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[22] top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[21] top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[20] top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[19] top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[18] top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[17] top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[16] top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[15] top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[14] top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[13] top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[12] top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[11] top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[10] top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[9] top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[8] top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[7] top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[6] top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[5] top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[4] top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[3] top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[2] top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[1] top.tb_cpu.gen_o2.dut.exmem_reg.alu_result[0]
+@1000200
+-Estagio MEM (EX/MEM)
+@800200
+-Estagio WB  (MEM/WB)
+@28
++{WB valido} top.tb_cpu.gen_o2.dut.memwb_reg.valid
+@22
+#{WB registrador} top.tb_cpu.gen_o2.dut.memwb_reg.wb_addr[4] top.tb_cpu.gen_o2.dut.memwb_reg.wb_addr[3] top.tb_cpu.gen_o2.dut.memwb_reg.wb_addr[2] top.tb_cpu.gen_o2.dut.memwb_reg.wb_addr[1] top.tb_cpu.gen_o2.dut.memwb_reg.wb_addr[0]
+@22
+#{WB dado} top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[31] top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[30] top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[29] top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[28] top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[27] top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[26] top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[25] top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[24] top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[23] top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[22] top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[21] top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[20] top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[19] top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[18] top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[17] top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[16] top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[15] top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[14] top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[13] top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[12] top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[11] top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[10] top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[9] top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[8] top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[7] top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[6] top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[5] top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[4] top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[3] top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[2] top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[1] top.tb_cpu.gen_o2.dut.memwb_reg.wb_data[0]
+@1000200
+-Estagio WB  (MEM/WB)
+@800200
+-Saidas R3
+@22
+#{stage_valid} top.tb_cpu.stage_valid[9] top.tb_cpu.stage_valid[8] top.tb_cpu.stage_valid[7] top.tb_cpu.stage_valid[6] top.tb_cpu.stage_valid[5] top.tb_cpu.stage_valid[4] top.tb_cpu.stage_valid[3] top.tb_cpu.stage_valid[2] top.tb_cpu.stage_valid[1] top.tb_cpu.stage_valid[0]
+@24
+#{retired} top.tb_cpu.retired[1] top.tb_cpu.retired[0]
+@28
++{done} top.tb_cpu.done
+@1000200
+-Saidas R3
+[pattern_trace] 1
+[pattern_trace] 0
