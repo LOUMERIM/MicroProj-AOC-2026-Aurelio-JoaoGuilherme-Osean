@@ -20,8 +20,18 @@ use work.o2_pkg.all;
 -- do ciclo e lê na 2ª (R2). Escritas em $zero não geram dependência (R1).
 -- O aborto ocorre no ciclo da detecção, com a consumidora ainda em ID (antes
 -- de qualquer efeito errado): hazard_type = "01", hazard_pc = PC da consumidora.
--- Se os conflitos de dados e estrutural ocorrerem no mesmo ciclo, vale o de
--- dados: a consumidora (ID) é mais antiga que a instrução em IF.
+--
+-- Issue #14 (conflito de controle): o beq é resolvido no estágio EX (a ULA faz
+-- rs - rt e o sinal zero decide; o somador de alvo também fica em EX). Um beq
+-- tomado em EX tem sempre instruções já buscadas depois dele (em ID e IF), que
+-- seriam executadas indevidamente, porque a O2 não faz flush: o processador
+-- aborta com hazard_type = "11" e hazard_pc = PC do desvio. Buscar em
+-- sequência após um beq não tomado é o caminho correto, então não é conflito.
+-- Justificativa da escolha de EX: docs/controle-o2.md.
+--
+-- Prioridade quando mais de um conflito ocorre no mesmo ciclo: vale o da
+-- instrução mais antiga — controle (EX), depois dados (ID), depois estrutural
+-- (IF). As instruções mais novas são descartadas pelo aborto de qualquer forma.
 entity cpu_top_o2 is
     generic (
         PROG_FILE     : string  := "tracos/t0.hex";
@@ -71,6 +81,10 @@ architecture rtl of cpu_top_o2 is
     signal id_uses_rs     : std_logic;          -- instrução em ID lê rs
     signal id_uses_rt     : std_logic;          -- instrução em ID lê rt
     signal branch_taken   : std_logic;          -- beq tomado em EX neste ciclo
+
+    -- Detecção do conflito de controle (issue #14).
+    signal control_conflict : std_logic;
+    signal branch_pc        : word_t;           -- PC do beq em EX
 
     -- Tipo e PC do conflito, registrados no ciclo do aborto (estáveis até o reset).
     signal hazard_type_reg : std_logic_vector(1 downto 0) := "00";
@@ -181,6 +195,8 @@ begin
         );
 
     -- beq tomado: alvo = PC+4 + (imediato << 2).
+    -- (Somador de alvo do caminho de dados em EX. Na O2 sem flush o PC nunca é
+    -- redirecionado: todo beq tomado aborta por conflito de controle, issue #14.)
     branch_target <= std_logic_vector(unsigned(idex_reg.pc_plus4) +
                                        shift_left(unsigned(idex_reg.imm), 2));
 
@@ -307,9 +323,23 @@ begin
         end if;
     end process;
 
-    -- beq tomado em EX descarta a instrução em ID neste ciclo: ela não chega a
-    -- produzir efeito, então não é consumidora.
+    ----------------------------------------------------------------------------
+    -- Detecção do conflito de controle (issue #14): beq resolvido em EX.
+    ----------------------------------------------------------------------------
+    -- O desvio é tomado quando rs - rt = 0 (alu_zero) para um beq válido em EX.
     branch_taken <= idex_reg.valid and idex_reg.is_beq and alu_zero;
+    -- ID/EX guarda PC+4; o PC do próprio beq é PC+4 - 4.
+    branch_pc    <= std_logic_vector(unsigned(idex_reg.pc_plus4) - 4);
+
+    -- Conflito: desvio tomado com instrução já buscada depois dele (em ID ou
+    -- IF). beq não tomado nunca gera conflito.
+    control_conflict <= '1' when branch_taken = '1'
+                             and (ifid_reg.valid = '1' or fetch_valid_now = '1')
+                             and frozen = '0'
+                        else '0';
+
+    -- Um beq tomado em EX tem prioridade (é mais antigo): a instrução em ID é do
+    -- caminho errado e não é tratada como consumidora de conflito de dados.
 
     data_detect : process (all)
         variable rs, rt : reg_addr_t;
@@ -383,6 +413,15 @@ begin
                 if_slot_frozen <= '0';
                 hazard_type_reg <= "00";
                 hazard_pc_reg   <= (others => '0');
+            elsif control_conflict = '1' then
+                -- Issue #14: aborta no ciclo em que o beq tomado está em EX. As
+                -- instruções do caminho errado (ID e IF) não avançam e nunca
+                -- produzem efeito; as mais antigas, em MEM e WB, concluem o que
+                -- já tinham iniciado, como nos demais conflitos (issue #15).
+                frozen          <= '1';
+                if_slot_frozen  <= fetch_valid_now;
+                hazard_type_reg <= "11";
+                hazard_pc_reg   <= branch_pc;
             elsif data_conflict = '1' then
                 -- Issue #12/#15: aborta com a consumidora ainda em ID. Nada
                 -- avança nesta borda (PC e registradores entre estágios ficam
@@ -408,27 +447,19 @@ begin
                 -- sinais hazard_* permanecem estáveis até o reset.
                 null;
             else
-                -- PC: avança uma palavra por ciclo (desvio tomado sobrepõe).
-                if idex_reg.valid = '1' and idex_reg.is_beq = '1' and alu_zero = '1' then
-                    pc <= branch_target;
-                else
-                    pc <= std_logic_vector(unsigned(pc) + 4);
-                end if;
+                -- PC: avança uma palavra por ciclo. Sem flush, um beq tomado
+                -- nunca chega a redirecionar o PC: ele aborta antes (issue #14).
+                pc <= std_logic_vector(unsigned(pc) + 4);
 
-                -- IF/ID: bolha depois de um break no ID ou em desvio tomado.
+                -- IF/ID: bolha depois de um break no ID.
                 ifid_reg.valid <= fetch_valid_now;
                 if fetch_valid_now = '1' then
                     ifid_reg.pc    <= pc;
                     ifid_reg.instr <= if_instr;
                 end if;
 
-                -- O fluxo de instruções termina quando um break commita no
-                -- pipeline (chegou ao ID sem ser morto por um flush de
-                -- desvio tomado no mesmo ciclo).
-                if ifid_reg.valid = '1'
-                   and is_break_instr(ifid_reg.instr)
-                   and not (idex_reg.valid = '1'
-                            and idex_reg.is_beq = '1' and alu_zero = '1') then
+                -- O fluxo de instruções termina quando um break chega ao ID.
+                if ifid_reg.valid = '1' and is_break_instr(ifid_reg.instr) then
                     stream_active <= '0';
                 end if;
 
@@ -462,12 +493,6 @@ begin
                     done_reg <= '1';
                 end if;
 
-                -- Desvio tomado: mata a busca corrente e a instrução em ID.
-                if idex_reg.valid = '1' and idex_reg.is_beq = '1' and alu_zero = '1' then
-                    pc             <= branch_target;
-                    ifid_reg.valid <= '0';
-                    idex_reg.valid <= '0';
-                end if;
             end if;
         end if;
     end process;
@@ -477,25 +502,23 @@ begin
     ----------------------------------------------------------------------------
     -- Semântica de aborto (issue #15): hazard_abort/hazard_type são
     -- combinacionais com o ciclo da detecção e ficam estáveis depois, porque
-    -- o congelamento impede que um novo conflito seja detectado
-    -- (structural_conflict exige frozen = '0'). O primeiro hazard detectado,
-    -- portanto, é o único reportado. Quando os detectores de conflito de
-    -- dados (issue #12) e de controle (issue #14) forem adicionados, eles
-    -- devem seguir o mesmo padrão: registrar o primeiro hazard e não
-    -- sobrescrevê-lo até o reset (a prioridade entre tipos simultâneos está
-    -- fora do escopo dos traços TD/TE/TC individuais).
+    -- o congelamento impede que um novo conflito seja detectado (todos os
+    -- detectores exigem frozen = '0'). O primeiro hazard detectado, portanto,
+    -- é o único reportado. Conflitos simultâneos: controle > dados > estrutural.
     done <= done_reg or (memwb_reg.valid and memwb_reg.is_break);
 
     -- No ciclo da detecção os valores saem da lógica de detecção; depois do
     -- congelamento, dos registradores (estáveis até o reset).
-    hazard_abort <= frozen or data_conflict or structural_conflict;
+    hazard_abort <= frozen or control_conflict or data_conflict or structural_conflict;
     hazard_type  <= hazard_type_reg when frozen = '1' else
+                    "11"            when control_conflict = '1' else
                     "01"            when data_conflict = '1' else
                     "10"            when structural_conflict = '1' else
                     "00";
-    -- Dados: PC da consumidora (ID). Estrutural: PC da instrução em IF, a mais
-    -- nova, que não obteve o recurso.
+    -- Controle: PC do desvio (EX). Dados: PC da consumidora (ID). Estrutural:
+    -- PC da instrução em IF, a mais nova, que não obteve o recurso.
     hazard_pc    <= hazard_pc_reg   when frozen = '1' else
+                    branch_pc       when control_conflict = '1' else
                     ifid_reg.pc     when data_conflict = '1' else
                     pc;
     hazard_cycle <= cycle_cnt + 1 when frozen = '0' else cycle_cnt;
