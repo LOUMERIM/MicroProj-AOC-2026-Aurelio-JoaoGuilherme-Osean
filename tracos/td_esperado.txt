@@ -1,0 +1,9 @@
+# TD — estado final esperado dos registradores (gerado no MARS 4.5 a partir de tracos/td.asm).
+# Na O2 o traço aborta por conflito de dados (TIPO=1) e o tb_cpu não consulta
+# este arquivo; ele é conferido na O1, que executa o traço até o fim sem conflitos.
+# Formato: <numero_do_registrador> <valor_hex_32bits>
+8 00000005
+9 00000000
+10 0000000A
+11 00000003
+12 FFFFFFF9
