@@ -65,6 +65,7 @@ STOP_TIME ?= 200us
 # fica em build/ e o arquivo work-obj08.cf nao grava o caminho absoluto da pasta
 # (que quebra o GHDL quando o caminho tem acentos, como "COMPUTAÇÂO").
 
+.PHONY: all clean run sim compile compile-unit elaborate test-unit metricas
 .PHONY: all clean run sim compile compile-unit elaborate test-unit wave-t0
 
 all: $(BUILD_DIR) $(SOURCES)
@@ -97,6 +98,33 @@ test-unit: compile-unit
 		ghdl -r $(GHDL_FLAGS) $$tb --assert-level=error || exit $$?; \
 	done
 
+# Metricas do R6 (issue #18): roda cada traco limpo nas duas organizacoes e grava
+# metricas.csv na raiz (uma linha por organizacao x traco). Tracos limpos: T0 e a
+# serie S (tracos/s*.hex, quando existir), cada um com o seu _esperado.txt.
+# O CSV de build/ e truncado no inicio; o tb_cpu escreve o cabecalho em arquivo vazio.
+# Qualquer falha de simulacao (registrador divergente do esperado, aborto ou tempo
+# esgotado em traco limpo) interrompe o make antes de copiar: metricas.csv nao e
+# sobrescrito. A saida de cada execucao fica em build/metricas_run.log.
+TRACOS_LIMPOS ?= tracos/t0.hex $(sort $(wildcard tracos/s[0-9]*.hex))
+metricas: elaborate
+	: > $(BUILD_DIR)/metricas.csv
+	@for prog in $(TRACOS_LIMPOS); do \
+		esp=$${prog%.hex}_esperado.txt; \
+		for org in "O1 1" "O2 5"; do set -- $$org; \
+			echo "== $$1 $$prog"; \
+			( cd $(BUILD_DIR) && ghdl -r $(GHDL_FLAGS) $(TESTBENCH) -gORG_NOME=$$1 -gNUM_SLOTS=$$2 \
+				-gPROG_FILE=../$$prog -gESPERADO_FILE=../$$esp --stop-time=$(STOP_TIME) \
+				--assert-level=error ) > $(BUILD_DIR)/metricas_run.log 2>&1; \
+			rc=$$?; \
+			grep -E "fim da simul|error|failure" $(BUILD_DIR)/metricas_run.log; \
+			if [ $$rc -ne 0 ]; then \
+				echo "ERRO: simulacao de $$1 em $$prog falhou (codigo $$rc); metricas.csv nao foi atualizado"; \
+				exit 1; \
+			fi; \
+		done; \
+	done
+	cp $(BUILD_DIR)/metricas.csv metricas.csv
+	@echo "metricas.csv:"; column -t -s';' metricas.csv
 # Waveform anotada do T0 na O2 (issue #17): simula com dump GHW (guarda os records
 # dos registradores entre estagios) e gera em docs/waveforms/ as figuras SVG/PNG,
 # a tabela ciclo a ciclo (CSV) e a sessao do GTKWave (.gtkw).

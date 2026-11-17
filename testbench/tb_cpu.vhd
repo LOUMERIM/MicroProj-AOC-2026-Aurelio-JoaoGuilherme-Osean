@@ -87,6 +87,12 @@ begin
 
     -- 3. Processo principal
     principal : process
+        type contagem_t is array (0 to 9) of natural;
+        -- números do CSV em formato fixo, 6 casas decimais
+        impure function fmt(x : real) return string is
+        begin
+            return to_string(x, 6);
+        end function;
         file f_esp : text;
         file f_csv : text;
         variable l : line;
@@ -94,6 +100,11 @@ begin
         variable ciclos : natural := 0;
         variable instrs : natural := 0;
         variable ocupados : natural := 0;
+        variable ocup_slot : contagem_t := (others => 0);  -- ciclos com stage_valid(i) = 1
+        variable slots_via0, slots_via1 : natural;
+        variable soma : natural;
+        variable existe_csv : boolean;
+        variable desfecho : line;
         variable erros : natural := 0;
         variable reg_num : integer;
         variable valor : std_logic_vector(31 downto 0);
@@ -119,10 +130,21 @@ begin
             for i in 0 to NUM_SLOTS - 1 loop
                 if stage_valid(i) = '1' then
                     ocupados := ocupados + 1;
+                    ocup_slot(i) := ocup_slot(i) + 1;
                 end if;
             end loop;
             exit when done = '1' or hazard_abort = '1' or ciclos = MAX_CICLOS;
         end loop;
+
+        -- Desfecho registrado aqui: a verificação da semântica de aborto (3.3.2)
+        -- reseta o DUT depois, e hazard_abort volta a 0 antes das métricas.
+        if done = '1' then
+            write(desfecho, string'("done"));
+        elsif hazard_abort = '1' then
+            write(desfecho, string'("aborto"));
+        else
+            write(desfecho, string'("tempo_esgotado"));
+        end if;
 
         -- 3.3 Desfecho
         if hazard_abort = '1' then
@@ -237,18 +259,59 @@ begin
             report ORG_NOME & ": tempo esgotado em " & integer'image(ciclos) & " ciclos" severity failure;
         end if;
 
-        -- 3.5 Métricas
+        -- 3.5 Métricas (R6)
+        -- ciclos: do 1º ciclo após o reset até o ciclo em que done = 1, inclusive
+        --         (o laço de 3.2 conta o ciclo antes de testar done).
+        -- instrs: soma de retired; o break não é instrução útil e o DUT não o
+        --         conta em retired (O1 e O2), então não entra no CPI/IPC.
         if instrs > 0 then
             cpi := real(ciclos) / real(instrs);
             ipc := real(instrs) / real(ciclos);
         end if;
         ocup := real(ocupados) / real(ciclos * NUM_SLOTS);
 
+        -- Cabeçalho só quando o arquivo ainda não existe (ou está vazio).
+        file_open(st, f_csv, "metricas.csv", read_mode);
+        existe_csv := st = open_ok;
+        if existe_csv then
+            existe_csv := not endfile(f_csv);
+            file_close(f_csv);
+        end if;
+
         file_open(st, f_csv, "metricas.csv", append_mode);
+        if not existe_csv then
+            write(l, string'("org;programa;ciclos;instrucoes;CPI;IPC;ocupacao;erros;desfecho;" &
+                             "ocup_IF;ocup_ID;ocup_EX;ocup_MEM;ocup_WB;ocup_via0;ocup_via1"));
+            writeline(f_csv, l);
+        end if;
+        -- Colunas do modelo do enunciado (3.5), na mesma ordem...
         write(l, ORG_NOME & ";" & PROG_FILE & ";" & integer'image(ciclos) & ";" &
-               integer'image(instrs) & ";" & real'image(cpi) & ";" &
-               real'image(ipc) & ";" & real'image(ocup) & ";" &
-               integer'image(erros));
+               integer'image(instrs) & ";" & fmt(cpi) & ";" &
+               fmt(ipc) & ";" & fmt(ocup) & ";" &
+               integer'image(erros) & ";" & desfecho.all);
+        -- ...e ocupação por estágio da via 0 (bits 0..4 = IF, ID, EX, MEM, WB) e
+        -- por via. A O1 só tem o slot 0: os estágios 1..4 e a via 1 ficam vazios.
+        for i in 0 to 4 loop
+            write(l, string'(";"));
+            if i < NUM_SLOTS then
+                write(l, fmt(real(ocup_slot(i)) / real(ciclos)));
+            end if;
+        end loop;
+        slots_via0 := minimum(NUM_SLOTS, 5);
+        soma := 0;
+        for i in 0 to slots_via0 - 1 loop
+            soma := soma + ocup_slot(i);
+        end loop;
+        write(l, ";" & fmt(real(soma) / real(ciclos * slots_via0)));
+        write(l, string'(";"));
+        if NUM_SLOTS > 5 then
+            slots_via1 := NUM_SLOTS - 5;
+            soma := 0;
+            for i in 5 to NUM_SLOTS - 1 loop
+                soma := soma + ocup_slot(i);
+            end loop;
+            write(l, fmt(real(soma) / real(ciclos * slots_via1)));
+        end if;
         writeline(f_csv, l);
         file_close(f_csv);
 
