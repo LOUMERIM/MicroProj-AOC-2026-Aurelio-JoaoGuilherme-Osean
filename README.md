@@ -53,7 +53,7 @@ As instruções suportadas estão em [`isa_table_mips.md`](isa_table_mips.md).
 ├── build/              # Gerado pelo make (objetos do GHDL e ondas .ghw) — não versionado
 ├── isa_table_mips.md   # Tabela da ISA (mnemônico, formato, opcode/funct, RTL)
 ├── metricas.csv        # Métricas do R6 por organização × traço limpo (make metricas)
-├── resultados/         # conflitos.csv e tabelas.md, gerados pelo run_all
+├── resultados/         # conflitos.csv, tabelas.md e graficos/, gerados pelo run_all
 └── Makefile
 ```
 
@@ -85,6 +85,7 @@ rodam limpos na O1) e gera:
 | `metricas.csv` | métricas do R6 por organização × traço limpo |
 | `resultados/conflitos.csv` | tipo, `hazard_pc` e `hazard_cycle` detectados em cada traço de conflito |
 | `resultados/tabelas.md` | tabelas do relatório: T0, speedup, série S, ocupação por estágio e registro de conflitos |
+| `resultados/graficos/` | gráficos do relatório: CPI por organização, speedup medido × ideal e speedup × tamanho (eixo x log), SVG e PNG |
 
 Para no primeiro erro, com código de saída ≠ 0. Só precisa de `ghdl`, `make` e `python3` (bash 4+): os
 `.hex` e os `_esperado.txt` estão versionados, então o MARS não é necessário. Com os períodos de clock

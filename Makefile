@@ -65,7 +65,7 @@ STOP_TIME ?= 200us
 # fica em build/ e o arquivo work-obj08.cf nao grava o caminho absoluto da pasta
 # (que quebra o GHDL quando o caminho tem acentos, como "COMPUTAÇÂO").
 
-.PHONY: diagramas all clean run sim compile compile-unit elaborate test-unit serie-s
+.PHONY: graficos diagramas all clean run sim compile compile-unit elaborate test-unit serie-s
 .PHONY: all clean run sim compile compile-unit elaborate test-unit metricas
 .PHONY: all clean run sim compile compile-unit elaborate test-unit wave-t0
 
@@ -156,6 +156,14 @@ diagramas: elaborate
 		-gPROG_FILE=../tracos/t0.hex -gESPERADO_FILE=../tracos/t0_esperado.txt \
 		--stop-time=$(STOP_TIME) --wave=t0_o2.ghw
 	python3 scripts/diagrama_instr_ciclo.py $(BUILD_DIR)/t0_o1.ghw $(BUILD_DIR)/t0_o2.ghw tracos/t0.asm docs
+
+# Graficos do relatorio (issue #23): CPI por organizacao, speedup medido x ideal e
+# speedup x tamanho (eixo x log), em SVG a partir do metricas.csv (sem dependencias).
+# PNG opcional com ImageMagick. O run_all ja gera tudo; este alvo so redesenha.
+graficos:
+	python3 scripts/graficos.py metricas.csv resultados/graficos
+	@if command -v magick >/dev/null 2>&1; then \
+		for f in resultados/graficos/*.svg; do magick -density 150 $$f $${f%.svg}.png; done; fi
 
 clean:
 	rm -rf $(BUILD_DIR)
