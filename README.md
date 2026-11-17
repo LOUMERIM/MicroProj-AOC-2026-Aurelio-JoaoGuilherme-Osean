@@ -14,6 +14,7 @@ As instruções suportadas estão em [`isa_table_mips.md`](isa_table_mips.md).
 - [FSM, caminho de dados e ISA da O1](docs/fsm-o1.md): premissas, diagrama do datapath com registradores e muxes, estados, sinais de controle e ciclos por classe.
 - [Conflito de controle na O2](docs/controle-o2.md): por que o `beq` é resolvido em EX e como o desvio tomado é detectado.
 - [Execução do T0 na O2](docs/waveform-t0-o2.md): waveform anotada (enchimento, pipeline cheio e esvaziamento), gerada por `make wave-t0`.
+- [Diagramas instrução × ciclo](docs/diagrama-instrucao-ciclo.md): 10 primeiras e 3 últimas instruções do T0 na O1 e na O2 (formato 6.1), gerados por `make diagramas`.
 - [Período de clock](docs/periodo-clock.md): tabela de atrasos, caminho crítico por estado (O1) e por estágio (O2) e o período adotado (mesmo critério nas duas).
 
 ## Estrutura de pastas
