@@ -4,24 +4,24 @@ Geradas por `scripts/run_all.sh` a partir de `metricas.csv` e `resultados/confli
 
 ## T0 por organização
 
-| Organização | Ciclos | Instruções | CPI | IPC | Ocupação |
-| --- | --- | --- | --- | --- | --- |
-| O1 | 133 | 32 | 4,156 | 0,241 | 98,5 % |
-| O2 | 37 | 32 | 1,156 | 0,865 | 89,2 % |
+| Organização | Ciclos | Instruções | CPI | IPC | Ocupação | Período (ns) | Tempo (ns) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| O1 | 133 | 32 | 4,156 | 0,241 | 98,5 % | 0,22 | 29,260 |
+| O2 | 37 | 32 | 1,156 | 0,865 | 89,2 % | 0,22 | 8,140 |
 
 ## Speedup da O2 sobre a O1
 
-| Traço | Instruções | Ciclos O1 | Ciclos O2 | Speedup em ciclos (O1/O2) | Speedup ideal (5 estágios) |
-| --- | --- | --- | --- | --- | --- |
-| T0 | 32 | 133 | 37 | 3,595 | 5 |
-| S005 | 5 | 23 | 10 | 2,300 | 5 |
-| S010 | 10 | 43 | 15 | 2,867 | 5 |
-| S020 | 20 | 83 | 25 | 3,320 | 5 |
-| S050 | 50 | 205 | 55 | 3,727 | 5 |
-| S100 | 100 | 409 | 105 | 3,895 | 5 |
-| S200 | 200 | 815 | 205 | 3,976 | 5 |
+| Traço | Instruções | Ciclos O1 | Ciclos O2 | Speedup em ciclos (O1/O2) | Tempo O1 (ns) | Tempo O2 (ns) | Speedup em tempo | Speedup ideal (5 estágios) |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| T0 | 32 | 133 | 37 | 3,595 | 29,260 | 8,140 | 3,595 | 5 |
+| S005 | 5 | 23 | 10 | 2,300 | 5,060 | 2,200 | 2,300 | 5 |
+| S010 | 10 | 43 | 15 | 2,867 | 9,460 | 3,300 | 2,867 | 5 |
+| S020 | 20 | 83 | 25 | 3,320 | 18,260 | 5,500 | 3,320 | 5 |
+| S050 | 50 | 205 | 55 | 3,727 | 45,100 | 12,100 | 3,727 | 5 |
+| S100 | 100 | 409 | 105 | 3,895 | 89,980 | 23,100 | 3,895 | 5 |
+| S200 | 200 | 815 | 205 | 3,976 | 179,300 | 45,100 | 3,976 | 5 |
 
-Tempo de execução e speedup em tempo dependem do período de clock de cada organização (R6, issue #21); defina `PERIODO_O1_NS` e `PERIODO_O2_NS` para incluí-los.
+Períodos de clock: O1 = 0,22 ns, O2 = 0,22 ns (critério e justificativa em `docs/periodo-clock.md`).
 
 ## Série S: efeito do enchimento e do esvaziamento
 

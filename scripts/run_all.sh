@@ -15,7 +15,12 @@
 #   5. scripts/tabelas_metricas.py          -> resultados/tabelas.md
 #
 # Não depende de caminho absoluto nem do MARS: os .hex e _esperado.txt estão versionados.
+#
+# Período de clock (R6, issue #21): por padrão 0,22 ns nas duas organizações, pela tabela
+# de atrasos de docs/periodo-clock.md. Outro critério: PERIODO_O1_NS=... PERIODO_O2_NS=...
 set -uo pipefail
+export PERIODO_O1_NS="${PERIODO_O1_NS:-0.22}"
+export PERIODO_O2_NS="${PERIODO_O2_NS:-0.22}"
 
 RAIZ="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$RAIZ"
@@ -90,7 +95,7 @@ done
 etapa "5/5 tabelas"
 python3 scripts/tabelas_metricas.py metricas.csv "$RES/conflitos.csv" >"$RES/tabelas.md" \
     || falha "geração das tabelas"
-echo "    metricas.csv, $RES/conflitos.csv e $RES/tabelas.md"
+echo "    metricas.csv, $RES/conflitos.csv e $RES/tabelas.md (períodos O1=${PERIODO_O1_NS} ns, O2=${PERIODO_O2_NS} ns)"
 
 echo
 echo "run_all: OK"
