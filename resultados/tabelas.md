@@ -11,15 +11,17 @@ Geradas por `scripts/run_all.sh` a partir de `metricas.csv` e `resultados/confli
 
 ## Speedup da O2 sobre a O1
 
-| Traço | Instruções | Ciclos O1 | Ciclos O2 | Speedup em ciclos (O1/O2) | Tempo O1 (ns) | Tempo O2 (ns) | Speedup em tempo | Speedup ideal (5 estágios) |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| T0 | 32 | 133 | 37 | 3,595 | 29,260 | 8,140 | 3,595 | 5 |
-| S005 | 5 | 23 | 10 | 2,300 | 5,060 | 2,200 | 2,300 | 5 |
-| S010 | 10 | 43 | 15 | 2,867 | 9,460 | 3,300 | 2,867 | 5 |
-| S020 | 20 | 83 | 25 | 3,320 | 18,260 | 5,500 | 3,320 | 5 |
-| S050 | 50 | 205 | 55 | 3,727 | 45,100 | 12,100 | 3,727 | 5 |
-| S100 | 100 | 409 | 105 | 3,895 | 89,980 | 23,100 | 3,895 | 5 |
-| S200 | 200 | 815 | 205 | 3,976 | 179,300 | 45,100 | 3,976 | 5 |
+| Traço | Instruções | Ciclos O1 | Ciclos O2 | Speedup em ciclos (O1/O2) | Tempo O1 (ns) | Tempo O2 (ns) | Speedup em tempo | Speedup ideal (CPI O1 ÷ 1) | Medido / ideal |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| T0 | 32 | 133 | 37 | 3,595 | 29,260 | 8,140 | 3,595 | 4,156 | 86,5 % |
+| S005 | 5 | 23 | 10 | 2,300 | 5,060 | 2,200 | 2,300 | 4,600 | 50,0 % |
+| S010 | 10 | 43 | 15 | 2,867 | 9,460 | 3,300 | 2,867 | 4,300 | 66,7 % |
+| S020 | 20 | 83 | 25 | 3,320 | 18,260 | 5,500 | 3,320 | 4,150 | 80,0 % |
+| S050 | 50 | 205 | 55 | 3,727 | 45,100 | 12,100 | 3,727 | 4,100 | 90,9 % |
+| S100 | 100 | 409 | 105 | 3,895 | 89,980 | 23,100 | 3,895 | 4,090 | 95,2 % |
+| S200 | 200 | 815 | 205 | 3,976 | 179,300 | 45,100 | 3,976 | 4,075 | 97,6 % |
+
+**Speedup ideal** = CPI da O1 ÷ CPI ideal do pipeline (1), corrigido pela razão dos períodos: é o speedup que a O2 teria se não gastasse ciclos para encher e esvaziar o pipeline. Por isso **medido / ideal = instruções ÷ ciclos da O2** (no T0, 32/37), e a diferença é só enchimento e esvaziamento. A referência “número de estágios (5)” só valeria contra uma base com CPI 5; a O1 tem CPI ≈ 4,1 (R, addi e sw levam 4 ciclos, lw 5 e beq 3).
 
 Períodos de clock: O1 = 0,22 ns, O2 = 0,22 ns (critério e justificativa em `docs/periodo-clock.md`).
 
