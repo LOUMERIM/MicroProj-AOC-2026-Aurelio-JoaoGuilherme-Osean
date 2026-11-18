@@ -14,6 +14,8 @@
 #                                           -> resultados/conflitos.csv
 #   5. scripts/tabelas_metricas.py          -> resultados/tabelas.md
 #      scripts/graficos.py                  -> resultados/graficos/*.svg (e .png com ImageMagick)
+#      scripts/tabela_t0.py                 -> docs/tabela-t0.md (e confere que o T0 não tem conflito de dados)
+#      scripts/diagramas_o2.py              -> docs/diagramas-o2.md e docs/diagramas/o2_*.svg
 #
 # Não depende de caminho absoluto nem do MARS: os .hex e _esperado.txt estão versionados.
 #
@@ -97,8 +99,11 @@ etapa "5/5 tabelas e gráficos"
 python3 scripts/tabelas_metricas.py metricas.csv "$RES/conflitos.csv" >"$RES/tabelas.md" \
     || falha "geração das tabelas"
 python3 scripts/graficos.py metricas.csv "$RES/graficos" >/dev/null || falha "geração dos gráficos"
+python3 scripts/tabela_t0.py tracos/t0.asm docs/tabela-t0.md >/dev/null || falha "tabela do T0"
+python3 scripts/diagramas_o2.py vhdl docs >/dev/null || falha "diagramas da O2"
 if command -v magick >/dev/null 2>&1; then
     for f in "$RES"/graficos/*.svg; do magick -density 150 "$f" "${f%.svg}.png" || falha "PNG de $f"; done
+    for f in docs/diagramas/o2_*.svg; do magick -density 100 "$f" "${f%.svg}.png" || falha "PNG de $f"; done
 fi
 echo "    metricas.csv, $RES/conflitos.csv e $RES/tabelas.md (períodos O1=${PERIODO_O1_NS} ns, O2=${PERIODO_O2_NS} ns)"
 echo "    $RES/graficos/: cpi_t0, speedup_t0, speedup_tamanho"

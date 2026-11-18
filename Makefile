@@ -65,7 +65,7 @@ STOP_TIME ?= 200us
 # fica em build/ e o arquivo work-obj08.cf nao grava o caminho absoluto da pasta
 # (que quebra o GHDL quando o caminho tem acentos, como "COMPUTAÇÂO").
 
-.PHONY: graficos diagramas all clean run sim compile compile-unit elaborate test-unit serie-s
+.PHONY: tabela-t0 diagramas-o2 wave-aborto graficos diagramas all clean run sim compile compile-unit elaborate test-unit serie-s
 .PHONY: all clean run sim compile compile-unit elaborate test-unit metricas
 .PHONY: all clean run sim compile compile-unit elaborate test-unit wave-t0
 
@@ -130,7 +130,7 @@ metricas: elaborate
 		done; \
 	done
 	cp $(BUILD_DIR)/metricas.csv metricas.csv
-	@echo "metricas.csv:"; column -t -s';' metricas.csv
+	@echo "metricas.csv:"; if command -v column >/dev/null 2>&1; then column -t -s';' metricas.csv; else cat metricas.csv; fi
 # Waveform anotada do T0 na O2 (issue #17): simula com dump GHW (guarda os records
 # dos registradores entre estagios) e gera em docs/waveforms/ as figuras SVG/PNG,
 # a tabela ciclo a ciclo (CSV) e a sessao do GTKWave (.gtkw).
@@ -164,6 +164,35 @@ graficos:
 	python3 scripts/graficos.py metricas.csv resultados/graficos
 	@if command -v magick >/dev/null 2>&1; then \
 		for f in resultados/graficos/*.svg; do magick -density 150 $$f $${f%.svg}.png; done; fi
+
+# Tabela do T0 (endereco, registradores lidos e escritos, distancia ao produtor): docs/tabela-t0.md.
+tabela-t0:
+	python3 scripts/tabela_t0.py tracos/t0.asm docs/tabela-t0.md
+
+# Diagramas da O2 (caminho de dados, unidade de deteccao e campos dos registradores entre
+# estagios com a largura em bits), lidos de vhdl/o2_pkg.vhd e cpu_top_o2.vhd: docs/diagramas-o2.md.
+diagramas-o2:
+	python3 scripts/diagramas_o2.py vhdl docs
+	@if command -v magick >/dev/null 2>&1; then \
+		for f in docs/diagramas/o2_*.svg; do magick -density 100 $$f $${f%.svg}.png; done; fi
+
+# Waveform de deteccao e aborto de cada conflito (TD, TE, TC) na O2, anotada no ciclo exato:
+# docs/waveforms/<traco>_aborto.{svg,png,csv,gtkw}. Abrir no GTKWave:
+#   gtkwave build/td_o2.ghw docs/waveforms/td_aborto.gtkw
+wave-aborto: elaborate
+	@for spec in "td 1 false 00000014 dados" "te 2 true 00000018 estrutural" "tc 3 false 00000018 controle"; do \
+		set -- $$spec; \
+		echo "== $$1"; \
+		pc=$$(python3 -c "print(format(int('$$4',16),'032b'))"); \
+		( cd $(BUILD_DIR) && ghdl -r $(GHDL_FLAGS) $(TESTBENCH) -gORG_NOME=O2 -gNUM_SLOTS=5 \
+			-gPROG_FILE=../tracos/$$1.hex -gESPERADO_FILE=../tracos/$$1_esperado.txt -gESPERA_ABORTO=true \
+			-gTIPO_ESPERADO=$$2 -gMEM_UNIFICADA=$$3 -gPC_ESPERADO=$$pc --stop-time=$(STOP_TIME) \
+			--wave=$$1_o2.ghw ) </dev/null > $(BUILD_DIR)/wave_aborto.log 2>&1; \
+		rc=$$?; grep -E "ABORTO|error|failure" $(BUILD_DIR)/wave_aborto.log; \
+		if [ $$rc -ne 0 ]; then echo "ERRO: simulacao de $$1 falhou"; exit 1; fi; \
+		python3 scripts/waveform_aborto.py $(BUILD_DIR)/$$1_o2.ghw tracos/$$1.asm docs/waveforms $$1 $$5 || exit 1; \
+		if command -v magick >/dev/null 2>&1; then magick -density 100 docs/waveforms/$$1_aborto.svg docs/waveforms/$$1_aborto.png; fi; \
+	done
 
 clean:
 	rm -rf $(BUILD_DIR)

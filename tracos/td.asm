@@ -8,10 +8,13 @@
 #   0x04 -> 0x08: escrita em $zero não gera dependência (R1).
 #   0x00 -> 0x0c: distância 3 — $t0 é escrito em WB na 1ª metade do ciclo e
 #                 lido em ID na 2ª metade do mesmo ciclo (R2).
-# O conflito real:
-#   0x10 -> 0x14: distância 1 — o sub está em ID lendo $t3 enquanto o addi que
-#                 o produz ainda está em EX. Sem o aborto, o sub leria $t3 = 0 e
-#                 $t4 ficaria -10 em vez de -7.
+# O conflito real (o sub em 0x14 tem DUAS dependências a distância <= 2, as duas
+# detectadas no mesmo ciclo):
+#   0x10 -> 0x14: distância 1 — o sub está em ID lendo $t3 (rs) enquanto o addi
+#                 que o produz ainda está em EX. Sem o aborto, o sub leria
+#                 $t3 = 0 e $t4 ficaria -10 em vez de -7.
+#   0x0c -> 0x14: distância 2 — o sub lê também $t2 (rt), que o add de 0x0c
+#                 ainda está em MEM.
 # Esperado em O2: hazard_type = 01, hazard_pc = 0x14 (a consumidora),
 #                 hazard_cycle = 7 (sub buscado no ciclo 6, em ID no ciclo 7).
 # ------------------------------------------------------------------------

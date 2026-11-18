@@ -6,8 +6,8 @@ use ieee.std_logic_textio.all;
 
 entity tb_cpu is
     generic (
-        PROG_FILE      : string := "tracos/t0.hex"; -- programa (.hex)
-        ESPERADO_FILE  : string := "tracos/t0_esperado.txt"; -- linhas "reg valor_hex"
+        PROG_FILE      : string := "../tracos/t0.hex"; -- programa (.hex), relativo a build/ (onde o GHDL roda)
+        ESPERADO_FILE  : string := "../tracos/t0_esperado.txt"; -- linhas "reg valor_hex", relativo a build/
         ORG_NOME       : string := "O2"; -- rótulo usado na saída
         NUM_SLOTS      : positive := 5; -- O1 = 1, O2 = 5
         MEM_UNIFICADA  : boolean := false; -- true só no traço TE de O2

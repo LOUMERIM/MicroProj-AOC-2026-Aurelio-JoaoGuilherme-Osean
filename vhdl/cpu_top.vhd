@@ -6,7 +6,7 @@ use work.o1_pkg.all;
 
 entity cpu_top is
     generic (
-        PROG_FILE     : string  := "tracos/t0.hex";
+        PROG_FILE     : string  := "../tracos/t0.hex";
         MEM_UNIFICADA : boolean := false
     );
     port (

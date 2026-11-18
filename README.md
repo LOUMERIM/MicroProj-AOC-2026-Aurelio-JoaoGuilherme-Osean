@@ -14,6 +14,9 @@ As instruções suportadas estão em [`isa_table_mips.md`](isa_table_mips.md).
 - [FSM, caminho de dados e ISA da O1](docs/fsm-o1.md): premissas, diagrama do datapath com registradores e muxes, estados, sinais de controle e ciclos por classe.
 - [Conflito de controle na O2](docs/controle-o2.md): por que o `beq` é resolvido em EX e como o desvio tomado é detectado.
 - [Execução do T0 na O2](docs/waveform-t0-o2.md): waveform anotada (enchimento, pipeline cheio e esvaziamento), gerada por `make wave-t0`.
+- [Diagramas da O2](docs/diagramas-o2.md): caminho de dados com IF/ID, ID/EX, EX/MEM e MEM/WB, unidade de detecção e os campos de cada registrador com a largura em bits (lidos do `o2_pkg.vhd`), gerados por `make diagramas-o2`.
+- [Waveforms de detecção e aborto](docs/waveforms-aborto.md): uma por conflito (TD, TE e TC), anotadas no ciclo exato da detecção e do congelamento, geradas por `make wave-aborto`.
+- [Tabela do T0](docs/tabela-t0.md): endereço, instrução, registradores lidos e escritos e distância até o produtor mais próximo, gerada por `make tabela-t0`.
 - [Diagramas instrução × ciclo](docs/diagrama-instrucao-ciclo.md): 10 primeiras e 3 últimas instruções do T0 na O1 e na O2 (formato 6.1), gerados por `make diagramas`.
 - [Período de clock](docs/periodo-clock.md): tabela de atrasos, caminho crítico por estado (O1) e por estágio (O2) e o período adotado (mesmo critério nas duas).
 
@@ -27,7 +30,10 @@ As instruções suportadas estão em [`isa_table_mips.md`](isa_table_mips.md).
 │   ├── waveform-t0-o2.md # O2: waveform anotada do T0 (enchimento e esvaziamento)
 │   ├── waveforms/      # figuras SVG/PNG, CSV ciclo a ciclo e sessão .gtkw (make wave-t0)
 │   ├── diagrama-instrucao-ciclo.md # diagramas instrução × ciclo do T0, O1 e O2 (make diagramas)
-│   ├── diagramas/      # tabelas instrução × ciclo completas em CSV
+│   ├── diagramas/      # figuras da O2 (SVG/PNG) e tabelas instrução × ciclo completas em CSV
+│   ├── diagramas-o2.md # O2: caminho de dados, unidade de detecção e registradores entre estágios (make diagramas-o2)
+│   ├── tabela-t0.md    # T0: endereço, registradores lidos/escritos e distância ao produtor (make tabela-t0)
+│   ├── waveforms-aborto.md # waveforms de detecção e aborto de TD, TE e TC (make wave-aborto)
 │   └── periodo-clock.md # período de clock: tabela de atrasos e caminho crítico (O1 e O2)
 ├── vhdl/               # RTL
 │   ├── o1_pkg, register_file, alu, instruction_memory, data_memory   # componentes comuns
@@ -52,6 +58,9 @@ As instruções suportadas estão em [`isa_table_mips.md`](isa_table_mips.md).
 ├── scripts/            # run_all.sh: compila, simula todos os traços e gera métricas e tabelas (R7)
 │                       # tabelas_metricas.py: tabelas do relatório a partir do metricas.csv
 │                       # graficos.py: gráficos do relatório a partir do metricas.csv (make graficos)
+│                       # tabela_t0.py: tabela do T0 com distâncias (make tabela-t0)
+│                       # diagramas_o2.py: caminho de dados, unidade de detecção e campos dos registradores (make diagramas-o2)
+│                       # waveform_aborto.py: waveform de detecção e aborto de um traço de conflito (make wave-aborto)
 │                       # diagrama_instr_ciclo.py: diagramas instrução × ciclo (make diagramas)
 │                       # run_ghdl_tests.sh: limpa, roda os testes unitários e o tb_cpu
 │                       # gerar_serie_s.py: gera a série S a partir do T0 (make serie-s)
@@ -72,6 +81,7 @@ As instruções suportadas estão em [`isa_table_mips.md`](isa_table_mips.md).
 | Python 3 (só biblioteca padrão) | `run_all`, tabelas, gráficos, `PCESP` | sim | `python3 --version` |
 | bash ≥ 4 | `scripts/run_all.sh` | sim | `bash --version` |
 | GTKWave | visualizar as formas de onda | para ver ondas | `gtkwave --version` |
+| `column` (pacote `bsdextrautils`) | alinhar a tabela impressa por `make metricas` | não (sem ele, imprime o CSV cru) | `column --version` |
 | ImageMagick (`magick`) | PNG dos gráficos e das figuras | não (os SVGs saem sempre) | `magick --version` |
 | MARS 4.5 (Java) | montar traços novos e gerar o esperado | só para traços novos | `java -jar Mars4_5.jar` |
 
@@ -134,6 +144,9 @@ PERIODO_O1_NS=<período O1> PERIODO_O2_NS=<período O2> ./scripts/run_all.sh
 | `make graficos` | redesenha os gráficos a partir do `metricas.csv` → `resultados/graficos/` |
 | `make wave-t0` | waveform anotada do T0 na O2 → `docs/waveforms/` e `build/t0_o2.ghw` |
 | `make diagramas` | diagramas instrução × ciclo do T0 → `docs/diagrama-instrucao-ciclo.md` |
+| `make wave-aborto` | waveform de detecção e aborto de TD, TE e TC → `docs/waveforms/*_aborto.*` |
+| `make tabela-t0` | tabela do T0 (endereço, registradores, distância ao produtor) → `docs/tabela-t0.md` |
+| `make diagramas-o2` | diagramas da O2 e campos dos registradores → `docs/diagramas-o2.md` |
 | `make serie-s` | regenera a série S a partir do T0 (precisa do MARS; só se o T0 mudar) |
 | `make clean` | apaga a pasta `build/` |
 
@@ -177,7 +190,7 @@ não tem conflitos, roda até o fim e confere os registradores com o esperado.
 
 | Traço | Conflito | Instrução envolvida | `hazard_type` | `hazard_pc` | `hazard_cycle` | Comando (O2) |
 | --- | --- | --- | --- | --- | --- | --- |
-| TD | dados (RAW, distância 1) | `sub` consumidora | `01` | `0x14` | 7 | `make sim ORG=O2 SLOTS=5 PROG=tracos/td.hex ESPERADO=tracos/td_esperado.txt ABORTO=true TIPO=1 PCESP=00000014` |
+| TD | dados (RAW: `$t3` a distância 1 e `$t2` a distância 2) | `sub` consumidora | `01` | `0x14` | 7 | `make sim ORG=O2 SLOTS=5 PROG=tracos/td.hex ESPERADO=tracos/td_esperado.txt ABORTO=true TIPO=1 PCESP=00000014` |
 | TE | estrutural (`MEM_UNIFICADA`) | `addi` em IF que não obteve a memória | `10` | `0x18` | 7 | `make sim ORG=O2 SLOTS=5 PROG=tracos/te.hex ESPERADO=tracos/te_esperado.txt ABORTO=true TIPO=2 MEMUNI=true PCESP=00000018` |
 | TC | controle (`beq` tomado) | o `beq` | `11` | `0x18` | 9 | `make sim ORG=O2 SLOTS=5 PROG=tracos/tc.hex ESPERADO=tracos/tc_esperado.txt ABORTO=true TIPO=3 PCESP=00000018` |
 
@@ -240,7 +253,15 @@ make wave-t0
 gtkwave build/t0_o2.ghw docs/waveforms/t0_o2.gtkw
 ```
 
-O `scripts/waveform_o2.py` usa o `ghwdump`, que vem com o GHDL (variável `GHWDUMP` para indicar outro
+Waveform de detecção e aborto de cada conflito (TD, TE e TC), com os campos que disparam a detecção,
+`hazard_abort` e o PC congelado, anotada no ciclo exato:
+
+```bash
+make wave-aborto
+gtkwave build/td_o2.ghw docs/waveforms/td_aborto.gtkw   # ou te / tc
+```
+
+Os scripts `waveform_o2.py`, `waveform_aborto.py` e `diagrama_instr_ciclo.py` usam o `ghwdump`, que vem com o GHDL (variável `GHWDUMP` para indicar outro
 caminho), e o ImageMagick (`magick`), opcional, para gerar os PNGs.
 
 ### Montar um traço novo (MARS)

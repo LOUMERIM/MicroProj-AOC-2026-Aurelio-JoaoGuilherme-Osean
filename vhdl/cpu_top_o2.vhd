@@ -34,7 +34,7 @@ use work.o2_pkg.all;
 -- (IF). As instruções mais novas são descartadas pelo aborto de qualquer forma.
 entity cpu_top_o2 is
     generic (
-        PROG_FILE     : string  := "tracos/t0.hex";
+        PROG_FILE     : string  := "../tracos/t0.hex";
         MEM_UNIFICADA : boolean := false
     );
     port (
