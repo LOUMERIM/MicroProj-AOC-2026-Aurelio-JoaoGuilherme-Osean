@@ -80,7 +80,7 @@ def main():
     cab = ["Traço", "Instruções", "Ciclos O1", "Ciclos O2", "Speedup em ciclos (O1/O2)"]
     if com_tempo:
         cab += ["Tempo O1 (ns)", "Tempo O2 (ns)", "Speedup em tempo"]
-    cab += ["Speedup ideal (5 estágios)"]
+    cab += ["Speedup ideal (CPI O1 ÷ 1)", "Medido / ideal"]
     linhas = []
     for t in tracos:
         a, b = por.get(("O1", t)), por.get(("O2", t))
@@ -91,9 +91,19 @@ def main():
         if com_tempo:
             t1, t2 = c1 * float(per["O1"]), c2 * float(per["O2"])
             l += [f3(t1), f3(t2), f3(t1 / t2)]
-        l += ["5"]
+        # ideal = CPI da O1 ÷ CPI ideal do pipeline (1), com a razão dos períodos: o speedup que a O2
+        # teria sem os ciclos de enchimento e esvaziamento. Medido / ideal = instruções ÷ ciclos da O2.
+        p1, p2 = (float(per["O1"]), float(per["O2"])) if com_tempo else (1.0, 1.0)
+        ideal = float(a["CPI"]) * p1 / p2
+        medido = (c1 * p1) / (c2 * p2)
+        l += [f3(ideal), pct(medido / ideal)]
         linhas.append(l)
     print(tabela(cab, linhas) + "\n")
+    print("**Speedup ideal** = CPI da O1 ÷ CPI ideal do pipeline (1), corrigido pela razão dos períodos: é o "
+          "speedup que a O2 teria se não gastasse ciclos para encher e esvaziar o pipeline. Por isso "
+          "**medido / ideal = instruções ÷ ciclos da O2** (no T0, 32/37), e a diferença é só enchimento e "
+          "esvaziamento. A referência “número de estágios (5)” só valeria contra uma base com CPI 5; a O1 "
+          "tem CPI ≈ 4,1 (R, addi e sw levam 4 ciclos, lw 5 e beq 3).\n")
     if not com_tempo:
         print("Tempo de execução e speedup em tempo dependem do período de clock de cada organização "
               "(R6, issue #21); defina `PERIODO_O1_NS` e `PERIODO_O2_NS` para incluí-los.\n")

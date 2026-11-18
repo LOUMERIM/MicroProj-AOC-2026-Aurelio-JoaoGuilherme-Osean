@@ -11,7 +11,9 @@ Gera:
 
 Speedup = tempo O1 / tempo O2 = (ciclos O1 × período O1) / (ciclos O2 × período O2).
 Períodos em ns por PERIODO_O1_NS e PERIODO_O2_NS (padrão 0,22 ns nas duas, docs/periodo-clock.md).
-Speedup ideal = número de estágios do pipeline (5), a mesma referência de resultados/tabelas.md.
+Speedup ideal = CPI da O1 ÷ CPI ideal do pipeline (1), com a razão dos períodos: o que a O2 faria sem os
+ciclos de enchimento e esvaziamento (a mesma referência de resultados/tabelas.md). Medido / ideal =
+instruções ÷ ciclos da O2.
 Só desenha números medidos pelo tb_cpu; nada é estimado.
 """
 import csv
@@ -25,7 +27,6 @@ from html import escape
 COR = {"O1": "#2a78d6", "O2": "#eb6834", "ideal": "#8a8984",
        "texto": "#0b0b0b", "texto2": "#52514e", "grade": "#e6e5e1", "eixo": "#9b9a95",
        "fundo": "#fcfcfb"}
-ESTAGIOS = 5
 W, H = 640, 420
 M = {"l": 64, "r": 24, "t": 72, "b": 76}          # margens da área de plotagem
 FONTE = 'font-family="Inter, DejaVu Sans, Helvetica, Arial, sans-serif"'
@@ -119,13 +120,19 @@ def speedup(dados, traco, per):
     return (int(a["ciclos"]) * per["O1"]) / (int(b["ciclos"]) * per["O2"])
 
 
+def ideal(dados, traco, per):
+    """CPI da O1 ÷ 1 (CPI ideal do pipeline), corrigido pela razão dos períodos."""
+    return float(dados[("O1", traco)]["CPI"]) * per["O1"] / per["O2"]
+
+
 def grafico_speedup(dados, per, saida):
     s = speedup(dados, "T0", per)
-    vmax = ESTAGIOS + 1
+    ide = ideal(dados, "T0", per)
+    vmax = math.ceil(ide) + 1
     el, y = eixo_y(vmax, 1, "Speedup da O2 sobre a O1")
     larg, gap = 110, 90
     x_ini = M["l"] + (W - M["l"] - M["r"] - (2 * larg + gap)) / 2
-    itens = [("Medido", s, COR["O2"], False), (f"Ideal ({ESTAGIOS} estágios)", ESTAGIOS, COR["ideal"], True)]
+    itens = [("Medido", s, COR["O2"], False), ("Ideal (CPI da O1 ÷ 1)", ide, COR["ideal"], True)]
     for i, (rot, v, cor, trac) in enumerate(itens):
         x = x_ini + i * (larg + gap)
         el.append(barra(x, larg, y(v), y(0), cor, trac))
@@ -133,10 +140,10 @@ def grafico_speedup(dados, per, saida):
                   f'text-anchor="middle" fill="{COR["texto"]}">{num(v)}×</text>')
         el.append(f'<text x="{x + larg / 2}" y="{y(0) + 20:.1f}" font-size="12" text-anchor="middle" '
                   f'fill="{COR["texto"]}">{escape(rot)}</text>')
-    efic = 100 * s / ESTAGIOS
+    efic = 100 * s / ide
     with open(saida, "w", encoding="utf-8") as f:
         f.write(svg("Speedup da O2 sobre a O1 — T0",
-                    f"medido = tempo O1 / tempo O2 = {num(s)}× ({num(efic)} % do ideal)",
+                    f"medido = tempo O1 / tempo O2 = {num(s)}× ({f'{efic:.1f}'.replace('.', ',')} % do ideal: só enchimento e esvaziamento)",
                     el, f"Fonte: metricas.csv; períodos O1 = {num(per['O1'])} ns e O2 = {num(per['O2'])} ns "
                         f"(docs/periodo-clock.md)."))
 
@@ -147,7 +154,8 @@ def grafico_tamanho(dados, per, saida):
     if not serie:
         sys.exit("metricas.csv não tem a série S")
     pts = [(n, speedup(dados, t, per)) for n, t in serie]
-    vmax = ESTAGIOS + 1
+    ide = [(n, ideal(dados, t, per)) for n, t in serie]
+    vmax = math.ceil(max(v for _, v in ide)) + 1
     el, y = eixo_y(vmax, 1, "Speedup da O2 sobre a O1")
     x0, x1 = M["l"] + 24, W - M["r"] - 24
     lo, hi = math.log10(serie[0][0]), math.log10(serie[-1][0])
@@ -159,11 +167,13 @@ def grafico_tamanho(dados, per, saida):
                   f'fill="{COR["texto2"]}">{n}</text>')
     el.append(f'<text x="{(x0 + x1) / 2:.0f}" y="{y(0) + 36:.1f}" font-size="11.5" text-anchor="middle" '
               f'fill="{COR["texto2"]}">Instruções úteis no traço (escala logarítmica)</text>')
-    # referência ideal
-    el.append(f'<line x1="{M["l"]}" y1="{y(ESTAGIOS):.1f}" x2="{W - M["r"]}" y2="{y(ESTAGIOS):.1f}" '
-              f'stroke="{COR["ideal"]}" stroke-width="1.5" stroke-dasharray="6 4"/>')
-    el.append(f'<text x="{W - M["r"]}" y="{y(ESTAGIOS) - 6:.1f}" font-size="11" text-anchor="end" '
-              f'fill="{COR["texto2"]}">ideal = {ESTAGIOS} (nº de estágios)</text>')
+    # referência ideal: CPI da O1 ÷ 1 de cada traço (tracejado)
+    cam_i = " ".join(f"{'M' if i == 0 else 'L'}{x(n):.1f},{y(v):.1f}" for i, (n, v) in enumerate(ide))
+    el.append(f'<path d="{cam_i}" fill="none" stroke="{COR["ideal"]}" stroke-width="1.8" stroke-dasharray="6 4"/>')
+    el.append(f'<text x="{x(ide[-1][0]):.1f}" y="{y(ide[-1][1]) - 12:.1f}" font-size="11" text-anchor="end" '
+              f'fill="{COR["texto2"]}">ideal (CPI da O1 ÷ 1): {num(ide[-1][1])}×</text>')
+    el.append(f'<text x="{x(ide[0][0]):.1f}" y="{y(ide[0][1]) - 12:.1f}" font-size="11" text-anchor="start" '
+              f'fill="{COR["texto2"]}">ideal: {num(ide[0][1])}×</text>')
     # linha da O2 (2 px) e marcadores com anel da cor do fundo
     caminho = " ".join(f"{'M' if i == 0 else 'L'}{x(n):.1f},{y(v):.1f}" for i, (n, v) in enumerate(pts))
     el.append(f'<path d="{caminho}" fill="none" stroke="{COR["O2"]}" stroke-width="2"/>')
@@ -173,8 +183,8 @@ def grafico_tamanho(dados, per, saida):
     for n, v in (pts[0], pts[-1]):                      # rótulos seletivos: extremos
         el.append(f'<text x="{x(n):.1f}" y="{y(v) + 20:.1f}" font-size="12" font-weight="600" '
                   f'text-anchor="middle" fill="{COR["texto"]}">{num(v)}×</text>')
-    el.append(f'<text x="{x(pts[-1][0]) - 10:.1f}" y="{y(pts[-1][1]) - 12:.1f}" font-size="12" '
-              f'text-anchor="end" fill="{COR["texto"]}">O2 (pipeline)</text>')
+    el.append(f'<text x="{x(pts[-1][0]) - 10:.1f}" y="{y(pts[-1][1]) + 38:.1f}" font-size="12" '
+              f'text-anchor="end" fill="{COR["texto"]}">O2 medido (pipeline)</text>')
     # T0 (32 instruções) como ponto de referência, contorno
     if ("O1", "T0") in dados and ("O2", "T0") in dados:
         n0 = int(dados[("O2", "T0")]["instrucoes"])
@@ -186,7 +196,7 @@ def grafico_tamanho(dados, per, saida):
     with open(saida, "w", encoding="utf-8") as f:
         f.write(svg("Speedup × tamanho do traço",
                     f"série S ({', '.join(str(n) for n, _ in serie)} instruções úteis); "
-                    "speedup = tempo O1 / tempo O2",
+                    "speedup = tempo O1 / tempo O2; tracejado = ideal",
                     el, f"Fonte: metricas.csv; períodos O1 = {num(per['O1'])} ns e O2 = {num(per['O2'])} ns."))
 
 
