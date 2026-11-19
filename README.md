@@ -34,7 +34,9 @@ As instruções suportadas estão em [`isa_table_mips.md`](isa_table_mips.md).
 │   ├── diagramas-o2.md # O2: caminho de dados, unidade de detecção e registradores entre estágios (make diagramas-o2)
 │   ├── tabela-t0.md    # T0: endereço, registradores lidos/escritos e distância ao produtor (make tabela-t0)
 │   ├── waveforms-aborto.md # waveforms de detecção e aborto de TD, TE e TC (make wave-aborto)
-│   └── periodo-clock.md # período de clock: tabela de atrasos e caminho crítico (O1 e O2)
+│   ├── periodo-clock.md # período de clock: tabela de atrasos e caminho crítico (O1 e O2)
+|   └── relatorio/       # diretório do relatório
+|       └── Relatorio.pdf # relatorio: relatório final do projeto
 ├── vhdl/               # RTL
 │   ├── o1_pkg, register_file, alu, instruction_memory, data_memory   # componentes comuns
 │   ├── cpu_top.vhd     #   O1: multiciclo (FSM)
