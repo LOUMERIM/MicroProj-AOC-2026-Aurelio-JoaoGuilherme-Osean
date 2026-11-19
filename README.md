@@ -308,8 +308,8 @@ Ao criar um arquivo novo em `vhdl/` (ex.: componentes do O2), inclua-o em `SOURC
   (ex.: `23issue`).
 - **Ninguém faz push direto em `main`.** Toda mudança entra por *Pull Request*.
 - **Todo PR é revisado e aprovado por outro integrante** (não pelo autor) antes do merge.
-- O PR referencia a issue que resolve (`Closes #N`) e só é aberto com `./scripts/run_all.sh`
-  terminando em `run_all: OK`.
+- O PR referencia a issue com `Refs #N`; use `Closes #N` somente quando ela puder ser fechada
+  no merge. O PR só é aberto com `./scripts/run_all.sh` terminando em `run_all: OK`.
 - Cada issue preenche o campo **"Usou IA?"** (sim/não e para quê), que alimenta o Apêndice C do relatório.
 - Arquivos gerados (`build/`, `*.ghw`, `*.vcd`, `*.cf`) não são versionados.
 

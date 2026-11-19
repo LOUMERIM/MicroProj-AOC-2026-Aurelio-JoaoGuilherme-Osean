@@ -50,10 +50,10 @@ GENERICS = -gORG_NOME=$(ORG) -gNUM_SLOTS=$(SLOTS) \
 # PC esperado do aborto (issue #15): com PCESP configurado, divergencia em
 # hazard_pc falha a simulacao. Passe o valor em hexadecimal, sem 0x, ex.:
 #   make sim ... PCESP=00000018
-# (o GHDL so aceita std_logic_vector em binario na linha de comando, entao convertemos)
+# O hexadecimal e convertido para decimal para sobrescrever o generic natural no GHDL.
 PCESP ?=
 ifneq ($(PCESP),)
-GENERICS += -gPC_ESPERADO=$(shell python3 -c 'print(format(int("$(PCESP)", 16), "032b"))')
+GENERICS += -gPC_ESPERADO=$(shell python3 -c 'print(int("$(PCESP)", 16))')
 endif
 
 # Limite de tempo simulado: protege contra simulacao infinita (e arquivo de onda gigante).

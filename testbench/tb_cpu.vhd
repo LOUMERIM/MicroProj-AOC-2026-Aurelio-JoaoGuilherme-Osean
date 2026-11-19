@@ -13,14 +13,13 @@ entity tb_cpu is
         MEM_UNIFICADA  : boolean := false; -- true só no traço TE de O2
         ESPERA_ABORTO  : boolean := false; -- true nos traços TD, TE e TC
         TIPO_ESPERADO  : natural := 0; -- 1 dados, 2 estrutural, 3 controle
-        PC_ESPERADO    : std_logic_vector(31 downto 0) := (others => '0'); -- PC esperado para conflitos
+        PC_ESPERADO    : natural := 0; -- PC esperado para conflitos
         T_CLK          : time := 10 ns; -- período de SIMULAÇÃO, não o real
         MAX_CICLOS     : natural := 10_000 -- proteção contra laço infinito
     );
 end entity;
 
 architecture sim of tb_cpu is
-    constant PC_ZERO : std_logic_vector(31 downto 0) := (others => '0');
     signal clk            : std_logic := '0';
     signal rst            : std_logic := '1';
     signal fim_sim        : boolean := false;
@@ -161,10 +160,9 @@ begin
                 severity error;
             
             -- Divergência em hazard_pc falha o teste quando um PC esperado é
-            -- configurado (PC_ESPERADO /= 0); sem expectativa, não há o que
-            -- conferir (issue #15).
-            if PC_ESPERADO /= PC_ZERO then
-                assert hazard_pc = PC_ESPERADO
+            -- configurado; sem expectativa, não há o que conferir (issue #15).
+            if PC_ESPERADO /= 0 then
+                assert unsigned(hazard_pc) = to_unsigned(PC_ESPERADO, hazard_pc'length)
                     report "hazard_pc difere do esperado"
                     severity error;
             end if;

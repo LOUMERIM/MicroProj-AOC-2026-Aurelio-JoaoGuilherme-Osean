@@ -85,11 +85,31 @@ def parse_types(text):
 def parse_hierarchy(text):
     """{caminho: (tipo, primeiro_índice, último_índice)}"""
     sigs = {}
-    for line in text.splitlines():
-        m = re.match(r"\s*(?:signal|port-in|port-out) (\S+): (.+): #(\d+)(?:-#(\d+))?$", line)
+    stack = []
+    for raw in text.splitlines():
+        indent = len(raw) - len(raw.lstrip())
+        while stack and indent <= stack[-1][0]:
+            stack.pop()
+
+        line = raw.strip()
+        m = re.match(r"instance ([^:]+):", line)
         if m:
-            path, typ, a, b = m.groups()
-            sigs.setdefault(path, (typ.split()[0], int(a), int(b or a)))
+            prefix = stack[-1][1] if stack else ""
+            path = prefix + "/" + m.group(1)
+            stack.append((indent, path))
+            continue
+        m = re.match(r"generate-if ([^:]+):", line)
+        if m:
+            prefix = stack[-1][1] if stack else ""
+            path = prefix + "/" + m.group(1)
+            stack.append((indent, path))
+            continue
+
+        m = re.match(r"(?:signal|port-in|port-out) (\S+): (.+): #(\d+)(?:-#(\d+))?$", line)
+        if m:
+            name, typ, a, b = m.groups()
+            prefix = stack[-1][1] if stack else ""
+            sigs.setdefault(prefix + "/" + name, (typ.split()[0], int(a), int(b or a)))
     return sigs
 
 
@@ -118,7 +138,7 @@ def parse_snapshots(text):
 class Signals:
     def __init__(self, ghw):
         self.records = parse_types(run(["-t"], ghw))
-        self.hier = parse_hierarchy(run(["-H"], ghw))
+        self.hier = parse_hierarchy(run(["-h"], ghw))
         self.snaps = parse_snapshots(run(["-s"], ghw))
 
     def rng(self, path, field=None):
