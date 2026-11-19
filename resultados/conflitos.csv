@@ -1,0 +1,7 @@
+traco;organizacao;tipo_esperado;tipo_detectado;hazard_pc_esperado;hazard_pc;hazard_cycle_esperado;hazard_cycle;resultado
+td;O2;01;01;0x00000014;0x00000014;7;7;ok
+td;O1;00;00;-;-;-;-;ok
+te;O2;10;10;0x00000018;0x00000018;7;7;ok
+te;O1;00;00;-;-;-;-;ok
+tc;O2;11;11;0x00000018;0x00000018;9;9;ok
+tc;O1;00;00;-;-;-;-;ok

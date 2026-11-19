@@ -1,0 +1,429 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1486" height="1024" viewBox="0 0 1486 1024" font-family="DejaVu Sans, Inter, Arial, sans-serif" font-size="12">
+<rect width="100%" height="100%" fill="#FFFFFF"/>
+<text x="12" y="24" font-size="17" font-weight="bold" fill="#14213D">O2 — TD: conflito de dados (hazard_type = 01); aborto no ciclo 7, hazard_pc = 0x00000014</text>
+<text x="12" y="44" font-size="12.5" fill="#4A5568">Ciclo 1 = primeiro ciclo após o reset (borda de descida, convenção do tb_cpu). Hexadecimal; — = estágio sem instrução válida (bolha). hazard_type/pc/cycle só valem com hazard_abort = 1.</text>
+<rect x="902" y="82" width="112" height="730" fill="#FDE2E2"/>
+<rect x="1014" y="82" width="448" height="730" fill="#E3EEFB"/>
+<text x="958.0" y="74" text-anchor="middle" font-weight="bold" fill="#C62828">detecção</text>
+<text x="1238.0" y="74" text-anchor="middle" font-weight="bold" fill="#1F5FB0">congelado</text>
+<text x="286.0" y="98" text-anchor="middle" font-weight="bold" fill="#14213D">C1</text>
+<line x1="230" y1="82" x2="230" y2="812" stroke="#E5E7EB"/>
+<text x="398.0" y="98" text-anchor="middle" font-weight="bold" fill="#14213D">C2</text>
+<line x1="342" y1="82" x2="342" y2="812" stroke="#E5E7EB"/>
+<text x="510.0" y="98" text-anchor="middle" font-weight="bold" fill="#14213D">C3</text>
+<line x1="454" y1="82" x2="454" y2="812" stroke="#E5E7EB"/>
+<text x="622.0" y="98" text-anchor="middle" font-weight="bold" fill="#14213D">C4</text>
+<line x1="566" y1="82" x2="566" y2="812" stroke="#E5E7EB"/>
+<text x="734.0" y="98" text-anchor="middle" font-weight="bold" fill="#14213D">C5</text>
+<line x1="678" y1="82" x2="678" y2="812" stroke="#E5E7EB"/>
+<text x="846.0" y="98" text-anchor="middle" font-weight="bold" fill="#14213D">C6</text>
+<line x1="790" y1="82" x2="790" y2="812" stroke="#E5E7EB"/>
+<text x="958.0" y="98" text-anchor="middle" font-weight="bold" fill="#14213D">C7</text>
+<line x1="902" y1="82" x2="902" y2="812" stroke="#E5E7EB"/>
+<text x="1070.0" y="98" text-anchor="middle" font-weight="bold" fill="#14213D">C8</text>
+<line x1="1014" y1="82" x2="1014" y2="812" stroke="#E5E7EB"/>
+<text x="1182.0" y="98" text-anchor="middle" font-weight="bold" fill="#14213D">C9</text>
+<line x1="1126" y1="82" x2="1126" y2="812" stroke="#E5E7EB"/>
+<text x="1294.0" y="98" text-anchor="middle" font-weight="bold" fill="#14213D">C10</text>
+<line x1="1238" y1="82" x2="1238" y2="812" stroke="#E5E7EB"/>
+<text x="1406.0" y="98" text-anchor="middle" font-weight="bold" fill="#14213D">C11</text>
+<line x1="1350" y1="82" x2="1350" y2="812" stroke="#E5E7EB"/>
+<text x="8" y="127" font-weight="bold" fill="#374151">Relógio</text>
+<line x1="0" y1="111" x2="1486" y2="111" stroke="#9CA3AF"/>
+<text x="18" y="154">clk</text>
+<polyline fill="none" stroke="#14213D" points="230,159 230,142 286.0,142 286.0,159 342,159"/>
+<polyline fill="none" stroke="#14213D" points="342,159 342,142 398.0,142 398.0,159 454,159"/>
+<polyline fill="none" stroke="#14213D" points="454,159 454,142 510.0,142 510.0,159 566,159"/>
+<polyline fill="none" stroke="#14213D" points="566,159 566,142 622.0,142 622.0,159 678,159"/>
+<polyline fill="none" stroke="#14213D" points="678,159 678,142 734.0,142 734.0,159 790,159"/>
+<polyline fill="none" stroke="#14213D" points="790,159 790,142 846.0,142 846.0,159 902,159"/>
+<polyline fill="none" stroke="#14213D" points="902,159 902,142 958.0,142 958.0,159 1014,159"/>
+<polyline fill="none" stroke="#14213D" points="1014,159 1014,142 1070.0,142 1070.0,159 1126,159"/>
+<polyline fill="none" stroke="#14213D" points="1126,159 1126,142 1182.0,142 1182.0,159 1238,159"/>
+<polyline fill="none" stroke="#14213D" points="1238,159 1238,142 1294.0,142 1294.0,159 1350,159"/>
+<polyline fill="none" stroke="#14213D" points="1350,159 1350,142 1406.0,142 1406.0,159 1462,159"/>
+<text x="8" y="181" font-weight="bold" fill="#374151">IF</text>
+<line x1="0" y1="165" x2="1486" y2="165" stroke="#9CA3AF"/>
+<text x="18" y="208" fill="#14213D">PC (IF)</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="235,196 337,196 342,204.5 337,213 235,213 230,204.5"/>
+<text x="286.0" y="208.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x00</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="347,196 449,196 454,204.5 449,213 347,213 342,204.5"/>
+<text x="398.0" y="208.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x04</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="459,196 561,196 566,204.5 561,213 459,213 454,204.5"/>
+<text x="510.0" y="208.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x08</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="571,196 673,196 678,204.5 673,213 571,213 566,204.5"/>
+<text x="622.0" y="208.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x0C</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="683,196 785,196 790,204.5 785,213 683,213 678,204.5"/>
+<text x="734.0" y="208.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x10</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="795,196 897,196 902,204.5 897,213 795,213 790,204.5"/>
+<text x="846.0" y="208.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x14</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="907,196 1009,196 1014,204.5 1009,213 907,213 902,204.5"/>
+<text x="958.0" y="208.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x18</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1019,196 1121,196 1126,204.5 1121,213 1019,213 1014,204.5"/>
+<text x="1070.0" y="208.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x18</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1131,196 1233,196 1238,204.5 1233,213 1131,213 1126,204.5"/>
+<text x="1182.0" y="208.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x18</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1243,196 1345,196 1350,204.5 1345,213 1243,213 1238,204.5"/>
+<text x="1294.0" y="208.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x18</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1355,196 1457,196 1462,204.5 1457,213 1355,213 1350,204.5"/>
+<text x="1406.0" y="208.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x18</text>
+<text x="8" y="235" font-weight="bold" fill="#374151">ID — consumidora</text>
+<line x1="0" y1="219" x2="1486" y2="219" stroke="#9CA3AF"/>
+<text x="18" y="262" fill="#14213D">ID válido</text>
+<line x1="230" y1="267" x2="342" y2="267" stroke="#14213D" stroke-width="2.4"/>
+<line x1="342" y1="250" x2="454" y2="250" stroke="#14213D" stroke-width="2.4"/>
+<line x1="342" y1="250" x2="342" y2="267" stroke="#14213D" stroke-width="2.4"/>
+<line x1="454" y1="250" x2="566" y2="250" stroke="#14213D" stroke-width="2.4"/>
+<line x1="566" y1="250" x2="678" y2="250" stroke="#14213D" stroke-width="2.4"/>
+<line x1="678" y1="250" x2="790" y2="250" stroke="#14213D" stroke-width="2.4"/>
+<line x1="790" y1="250" x2="902" y2="250" stroke="#14213D" stroke-width="2.4"/>
+<line x1="902" y1="250" x2="1014" y2="250" stroke="#14213D" stroke-width="2.4"/>
+<line x1="1014" y1="250" x2="1126" y2="250" stroke="#14213D" stroke-width="2.4"/>
+<line x1="1126" y1="250" x2="1238" y2="250" stroke="#14213D" stroke-width="2.4"/>
+<line x1="1238" y1="250" x2="1350" y2="250" stroke="#14213D" stroke-width="2.4"/>
+<line x1="1350" y1="250" x2="1462" y2="250" stroke="#14213D" stroke-width="2.4"/>
+<text x="18" y="289" fill="#14213D">ID instrução</text>
+<polygon fill="#F3F4F6" stroke="#9CA3AF" points="235,277 337,277 342,285.5 337,294 235,294 230,285.5"/>
+<text x="286.0" y="289.5" text-anchor="middle" font-size="12" fill="#9CA3AF">—</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="347,277 449,277 454,285.5 449,294 347,294 342,285.5"/>
+<text x="398.0" y="289.5" text-anchor="middle" font-size="10.5" fill="#1E3A8A">addi $t0, $zero, 5</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="459,277 561,277 566,285.5 561,294 459,294 454,285.5"/>
+<text x="510.0" y="289.5" text-anchor="middle" font-size="10.5" fill="#1E3A8A">addi $zero, $zero, 1</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="571,277 673,277 678,285.5 673,294 571,294 566,285.5"/>
+<text x="622.0" y="289.5" text-anchor="middle" font-size="10.5" fill="#1E3A8A">add $t1, $zero, $zero</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="683,277 785,277 790,285.5 785,294 683,294 678,285.5"/>
+<text x="734.0" y="289.5" text-anchor="middle" font-size="10.5" fill="#1E3A8A">add $t2, $t0, $t0</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="795,277 897,277 902,285.5 897,294 795,294 790,285.5"/>
+<text x="846.0" y="289.5" text-anchor="middle" font-size="10.5" fill="#1E3A8A">addi $t3, $zero, 3</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="907,277 1009,277 1014,285.5 1009,294 907,294 902,285.5"/>
+<text x="958.0" y="289.5" text-anchor="middle" font-size="10.5" fill="#1E3A8A">sub $t4, $t3, $t2</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1019,277 1121,277 1126,285.5 1121,294 1019,294 1014,285.5"/>
+<text x="1070.0" y="289.5" text-anchor="middle" font-size="10.5" fill="#1E3A8A">sub $t4, $t3, $t2</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1131,277 1233,277 1238,285.5 1233,294 1131,294 1126,285.5"/>
+<text x="1182.0" y="289.5" text-anchor="middle" font-size="10.5" fill="#1E3A8A">sub $t4, $t3, $t2</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1243,277 1345,277 1350,285.5 1345,294 1243,294 1238,285.5"/>
+<text x="1294.0" y="289.5" text-anchor="middle" font-size="10.5" fill="#1E3A8A">sub $t4, $t3, $t2</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1355,277 1457,277 1462,285.5 1457,294 1355,294 1350,285.5"/>
+<text x="1406.0" y="289.5" text-anchor="middle" font-size="10.5" fill="#1E3A8A">sub $t4, $t3, $t2</text>
+<text x="18" y="316" fill="#14213D">ID lê rs</text>
+<polygon fill="#F3F4F6" stroke="#9CA3AF" points="235,304 337,304 342,312.5 337,321 235,321 230,312.5"/>
+<text x="286.0" y="316.5" text-anchor="middle" font-size="12" fill="#9CA3AF">—</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="347,304 449,304 454,312.5 449,321 347,321 342,312.5"/>
+<text x="398.0" y="316.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$zero</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="459,304 561,304 566,312.5 561,321 459,321 454,312.5"/>
+<text x="510.0" y="316.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$zero</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="571,304 673,304 678,312.5 673,321 571,321 566,312.5"/>
+<text x="622.0" y="316.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$zero</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="683,304 785,304 790,312.5 785,321 683,321 678,312.5"/>
+<text x="734.0" y="316.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$t0</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="795,304 897,304 902,312.5 897,321 795,321 790,312.5"/>
+<text x="846.0" y="316.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$zero</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="907,304 1009,304 1014,312.5 1009,321 907,321 902,312.5"/>
+<text x="958.0" y="316.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$t3</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1019,304 1121,304 1126,312.5 1121,321 1019,321 1014,312.5"/>
+<text x="1070.0" y="316.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$t3</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1131,304 1233,304 1238,312.5 1233,321 1131,321 1126,312.5"/>
+<text x="1182.0" y="316.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$t3</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1243,304 1345,304 1350,312.5 1345,321 1243,321 1238,312.5"/>
+<text x="1294.0" y="316.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$t3</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1355,304 1457,304 1462,312.5 1457,321 1355,321 1350,312.5"/>
+<text x="1406.0" y="316.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$t3</text>
+<text x="18" y="343" fill="#14213D">ID lê rt</text>
+<polygon fill="#F3F4F6" stroke="#9CA3AF" points="235,331 337,331 342,339.5 337,348 235,348 230,339.5"/>
+<text x="286.0" y="343.5" text-anchor="middle" font-size="12" fill="#9CA3AF">—</text>
+<polygon fill="#F3F4F6" stroke="#9CA3AF" points="347,331 449,331 454,339.5 449,348 347,348 342,339.5"/>
+<text x="398.0" y="343.5" text-anchor="middle" font-size="12" fill="#9CA3AF">—</text>
+<polygon fill="#F3F4F6" stroke="#9CA3AF" points="459,331 561,331 566,339.5 561,348 459,348 454,339.5"/>
+<text x="510.0" y="343.5" text-anchor="middle" font-size="12" fill="#9CA3AF">—</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="571,331 673,331 678,339.5 673,348 571,348 566,339.5"/>
+<text x="622.0" y="343.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$zero</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="683,331 785,331 790,339.5 785,348 683,348 678,339.5"/>
+<text x="734.0" y="343.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$t0</text>
+<polygon fill="#F3F4F6" stroke="#9CA3AF" points="795,331 897,331 902,339.5 897,348 795,348 790,339.5"/>
+<text x="846.0" y="343.5" text-anchor="middle" font-size="12" fill="#9CA3AF">—</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="907,331 1009,331 1014,339.5 1009,348 907,348 902,339.5"/>
+<text x="958.0" y="343.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$t2</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1019,331 1121,331 1126,339.5 1121,348 1019,348 1014,339.5"/>
+<text x="1070.0" y="343.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$t2</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1131,331 1233,331 1238,339.5 1233,348 1131,348 1126,339.5"/>
+<text x="1182.0" y="343.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$t2</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1243,331 1345,331 1350,339.5 1345,348 1243,348 1238,339.5"/>
+<text x="1294.0" y="343.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$t2</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1355,331 1457,331 1462,339.5 1457,348 1355,348 1350,339.5"/>
+<text x="1406.0" y="343.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$t2</text>
+<text x="8" y="370" font-weight="bold" fill="#374151">EX — produtora a distância 1</text>
+<line x1="0" y1="354" x2="1486" y2="354" stroke="#9CA3AF"/>
+<text x="18" y="397" fill="#14213D">EX válido</text>
+<line x1="230" y1="402" x2="342" y2="402" stroke="#14213D" stroke-width="2.4"/>
+<line x1="342" y1="402" x2="454" y2="402" stroke="#14213D" stroke-width="2.4"/>
+<line x1="454" y1="385" x2="566" y2="385" stroke="#14213D" stroke-width="2.4"/>
+<line x1="454" y1="385" x2="454" y2="402" stroke="#14213D" stroke-width="2.4"/>
+<line x1="566" y1="385" x2="678" y2="385" stroke="#14213D" stroke-width="2.4"/>
+<line x1="678" y1="385" x2="790" y2="385" stroke="#14213D" stroke-width="2.4"/>
+<line x1="790" y1="385" x2="902" y2="385" stroke="#14213D" stroke-width="2.4"/>
+<line x1="902" y1="385" x2="1014" y2="385" stroke="#14213D" stroke-width="2.4"/>
+<line x1="1014" y1="385" x2="1126" y2="385" stroke="#14213D" stroke-width="2.4"/>
+<line x1="1126" y1="385" x2="1238" y2="385" stroke="#14213D" stroke-width="2.4"/>
+<line x1="1238" y1="385" x2="1350" y2="385" stroke="#14213D" stroke-width="2.4"/>
+<line x1="1350" y1="385" x2="1462" y2="385" stroke="#14213D" stroke-width="2.4"/>
+<text x="18" y="424" fill="#14213D">EX instrução</text>
+<polygon fill="#F3F4F6" stroke="#9CA3AF" points="235,412 337,412 342,420.5 337,429 235,429 230,420.5"/>
+<text x="286.0" y="424.5" text-anchor="middle" font-size="12" fill="#9CA3AF">—</text>
+<polygon fill="#F3F4F6" stroke="#9CA3AF" points="347,412 449,412 454,420.5 449,429 347,429 342,420.5"/>
+<text x="398.0" y="424.5" text-anchor="middle" font-size="12" fill="#9CA3AF">—</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="459,412 561,412 566,420.5 561,429 459,429 454,420.5"/>
+<text x="510.0" y="424.5" text-anchor="middle" font-size="10.5" fill="#1E3A8A">addi $t0, $zero, 5</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="571,412 673,412 678,420.5 673,429 571,429 566,420.5"/>
+<text x="622.0" y="424.5" text-anchor="middle" font-size="10.5" fill="#1E3A8A">addi $zero, $zero, 1</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="683,412 785,412 790,420.5 785,429 683,429 678,420.5"/>
+<text x="734.0" y="424.5" text-anchor="middle" font-size="10.5" fill="#1E3A8A">add $t1, $zero, $zero</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="795,412 897,412 902,420.5 897,429 795,429 790,420.5"/>
+<text x="846.0" y="424.5" text-anchor="middle" font-size="10.5" fill="#1E3A8A">add $t2, $t0, $t0</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="907,412 1009,412 1014,420.5 1009,429 907,429 902,420.5"/>
+<text x="958.0" y="424.5" text-anchor="middle" font-size="10.5" fill="#1E3A8A">addi $t3, $zero, 3</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1019,412 1121,412 1126,420.5 1121,429 1019,429 1014,420.5"/>
+<text x="1070.0" y="424.5" text-anchor="middle" font-size="10.5" fill="#1E3A8A">addi $t3, $zero, 3</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1131,412 1233,412 1238,420.5 1233,429 1131,429 1126,420.5"/>
+<text x="1182.0" y="424.5" text-anchor="middle" font-size="10.5" fill="#1E3A8A">addi $t3, $zero, 3</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1243,412 1345,412 1350,420.5 1345,429 1243,429 1238,420.5"/>
+<text x="1294.0" y="424.5" text-anchor="middle" font-size="10.5" fill="#1E3A8A">addi $t3, $zero, 3</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1355,412 1457,412 1462,420.5 1457,429 1355,429 1350,420.5"/>
+<text x="1406.0" y="424.5" text-anchor="middle" font-size="10.5" fill="#1E3A8A">addi $t3, $zero, 3</text>
+<text x="18" y="451" fill="#14213D">EX escreve</text>
+<polygon fill="#F3F4F6" stroke="#9CA3AF" points="235,439 337,439 342,447.5 337,456 235,456 230,447.5"/>
+<text x="286.0" y="451.5" text-anchor="middle" font-size="12" fill="#9CA3AF">—</text>
+<polygon fill="#F3F4F6" stroke="#9CA3AF" points="347,439 449,439 454,447.5 449,456 347,456 342,447.5"/>
+<text x="398.0" y="451.5" text-anchor="middle" font-size="12" fill="#9CA3AF">—</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="459,439 561,439 566,447.5 561,456 459,456 454,447.5"/>
+<text x="510.0" y="451.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$t0</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="571,439 673,439 678,447.5 673,456 571,456 566,447.5"/>
+<text x="622.0" y="451.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$zero (ignora)</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="683,439 785,439 790,447.5 785,456 683,456 678,447.5"/>
+<text x="734.0" y="451.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$t1</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="795,439 897,439 902,447.5 897,456 795,456 790,447.5"/>
+<text x="846.0" y="451.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$t2</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="907,439 1009,439 1014,447.5 1009,456 907,456 902,447.5"/>
+<text x="958.0" y="451.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$t3</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1019,439 1121,439 1126,447.5 1121,456 1019,456 1014,447.5"/>
+<text x="1070.0" y="451.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$t3</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1131,439 1233,439 1238,447.5 1233,456 1131,456 1126,447.5"/>
+<text x="1182.0" y="451.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$t3</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1243,439 1345,439 1350,447.5 1345,456 1243,456 1238,447.5"/>
+<text x="1294.0" y="451.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$t3</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1355,439 1457,439 1462,447.5 1457,456 1355,456 1350,447.5"/>
+<text x="1406.0" y="451.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$t3</text>
+<text x="8" y="478" font-weight="bold" fill="#374151">MEM — produtora a distância 2</text>
+<line x1="0" y1="462" x2="1486" y2="462" stroke="#9CA3AF"/>
+<text x="18" y="505" fill="#14213D">MEM válido</text>
+<line x1="230" y1="510" x2="342" y2="510" stroke="#14213D" stroke-width="2.4"/>
+<line x1="342" y1="510" x2="454" y2="510" stroke="#14213D" stroke-width="2.4"/>
+<line x1="454" y1="510" x2="566" y2="510" stroke="#14213D" stroke-width="2.4"/>
+<line x1="566" y1="493" x2="678" y2="493" stroke="#14213D" stroke-width="2.4"/>
+<line x1="566" y1="493" x2="566" y2="510" stroke="#14213D" stroke-width="2.4"/>
+<line x1="678" y1="493" x2="790" y2="493" stroke="#14213D" stroke-width="2.4"/>
+<line x1="790" y1="493" x2="902" y2="493" stroke="#14213D" stroke-width="2.4"/>
+<line x1="902" y1="493" x2="1014" y2="493" stroke="#14213D" stroke-width="2.4"/>
+<line x1="1014" y1="493" x2="1126" y2="493" stroke="#14213D" stroke-width="2.4"/>
+<line x1="1126" y1="493" x2="1238" y2="493" stroke="#14213D" stroke-width="2.4"/>
+<line x1="1238" y1="493" x2="1350" y2="493" stroke="#14213D" stroke-width="2.4"/>
+<line x1="1350" y1="493" x2="1462" y2="493" stroke="#14213D" stroke-width="2.4"/>
+<text x="18" y="532" fill="#14213D">MEM escreve</text>
+<polygon fill="#F3F4F6" stroke="#9CA3AF" points="235,520 337,520 342,528.5 337,537 235,537 230,528.5"/>
+<text x="286.0" y="532.5" text-anchor="middle" font-size="12" fill="#9CA3AF">—</text>
+<polygon fill="#F3F4F6" stroke="#9CA3AF" points="347,520 449,520 454,528.5 449,537 347,537 342,528.5"/>
+<text x="398.0" y="532.5" text-anchor="middle" font-size="12" fill="#9CA3AF">—</text>
+<polygon fill="#F3F4F6" stroke="#9CA3AF" points="459,520 561,520 566,528.5 561,537 459,537 454,528.5"/>
+<text x="510.0" y="532.5" text-anchor="middle" font-size="12" fill="#9CA3AF">—</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="571,520 673,520 678,528.5 673,537 571,537 566,528.5"/>
+<text x="622.0" y="532.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$t0</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="683,520 785,520 790,528.5 785,537 683,537 678,528.5"/>
+<text x="734.0" y="532.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$zero (ignora)</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="795,520 897,520 902,528.5 897,537 795,537 790,528.5"/>
+<text x="846.0" y="532.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$t1</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="907,520 1009,520 1014,528.5 1009,537 907,537 902,528.5"/>
+<text x="958.0" y="532.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$t2</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1019,520 1121,520 1126,528.5 1121,537 1019,537 1014,528.5"/>
+<text x="1070.0" y="532.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$t2</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1131,520 1233,520 1238,528.5 1233,537 1131,537 1126,528.5"/>
+<text x="1182.0" y="532.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$t2</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1243,520 1345,520 1350,528.5 1345,537 1243,537 1238,528.5"/>
+<text x="1294.0" y="532.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$t2</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1355,520 1457,520 1462,528.5 1457,537 1355,537 1350,528.5"/>
+<text x="1406.0" y="532.5" text-anchor="middle" font-size="12" fill="#1E3A8A">$t2</text>
+<text x="8" y="559" font-weight="bold" fill="#374151">Detecção</text>
+<line x1="0" y1="543" x2="1486" y2="543" stroke="#9CA3AF"/>
+<text x="18" y="586" fill="#C62828" font-weight="bold">data_conflict</text>
+<line x1="230" y1="591" x2="342" y2="591" stroke="#C62828" stroke-width="2.4"/>
+<line x1="342" y1="591" x2="454" y2="591" stroke="#C62828" stroke-width="2.4"/>
+<line x1="454" y1="591" x2="566" y2="591" stroke="#C62828" stroke-width="2.4"/>
+<line x1="566" y1="591" x2="678" y2="591" stroke="#C62828" stroke-width="2.4"/>
+<line x1="678" y1="591" x2="790" y2="591" stroke="#C62828" stroke-width="2.4"/>
+<line x1="790" y1="591" x2="902" y2="591" stroke="#C62828" stroke-width="2.4"/>
+<line x1="902" y1="574" x2="1014" y2="574" stroke="#C62828" stroke-width="2.4"/>
+<line x1="902" y1="574" x2="902" y2="591" stroke="#C62828" stroke-width="2.4"/>
+<line x1="1014" y1="591" x2="1126" y2="591" stroke="#C62828" stroke-width="2.4"/>
+<line x1="1014" y1="574" x2="1014" y2="591" stroke="#C62828" stroke-width="2.4"/>
+<line x1="1126" y1="591" x2="1238" y2="591" stroke="#C62828" stroke-width="2.4"/>
+<line x1="1238" y1="591" x2="1350" y2="591" stroke="#C62828" stroke-width="2.4"/>
+<line x1="1350" y1="591" x2="1462" y2="591" stroke="#C62828" stroke-width="2.4"/>
+<text x="8" y="613" font-weight="bold" fill="#374151">Saídas R3 e congelamento</text>
+<line x1="0" y1="597" x2="1486" y2="597" stroke="#9CA3AF"/>
+<text x="18" y="640" fill="#C62828" font-weight="bold">hazard_abort</text>
+<line x1="230" y1="645" x2="342" y2="645" stroke="#C62828" stroke-width="2.4"/>
+<line x1="342" y1="645" x2="454" y2="645" stroke="#C62828" stroke-width="2.4"/>
+<line x1="454" y1="645" x2="566" y2="645" stroke="#C62828" stroke-width="2.4"/>
+<line x1="566" y1="645" x2="678" y2="645" stroke="#C62828" stroke-width="2.4"/>
+<line x1="678" y1="645" x2="790" y2="645" stroke="#C62828" stroke-width="2.4"/>
+<line x1="790" y1="645" x2="902" y2="645" stroke="#C62828" stroke-width="2.4"/>
+<line x1="902" y1="628" x2="1014" y2="628" stroke="#C62828" stroke-width="2.4"/>
+<line x1="902" y1="628" x2="902" y2="645" stroke="#C62828" stroke-width="2.4"/>
+<line x1="1014" y1="628" x2="1126" y2="628" stroke="#C62828" stroke-width="2.4"/>
+<line x1="1126" y1="628" x2="1238" y2="628" stroke="#C62828" stroke-width="2.4"/>
+<line x1="1238" y1="628" x2="1350" y2="628" stroke="#C62828" stroke-width="2.4"/>
+<line x1="1350" y1="628" x2="1462" y2="628" stroke="#C62828" stroke-width="2.4"/>
+<text x="18" y="667" fill="#14213D">frozen (DUT)</text>
+<line x1="230" y1="672" x2="342" y2="672" stroke="#14213D" stroke-width="2.4"/>
+<line x1="342" y1="672" x2="454" y2="672" stroke="#14213D" stroke-width="2.4"/>
+<line x1="454" y1="672" x2="566" y2="672" stroke="#14213D" stroke-width="2.4"/>
+<line x1="566" y1="672" x2="678" y2="672" stroke="#14213D" stroke-width="2.4"/>
+<line x1="678" y1="672" x2="790" y2="672" stroke="#14213D" stroke-width="2.4"/>
+<line x1="790" y1="672" x2="902" y2="672" stroke="#14213D" stroke-width="2.4"/>
+<line x1="902" y1="672" x2="1014" y2="672" stroke="#14213D" stroke-width="2.4"/>
+<line x1="1014" y1="655" x2="1126" y2="655" stroke="#14213D" stroke-width="2.4"/>
+<line x1="1014" y1="655" x2="1014" y2="672" stroke="#14213D" stroke-width="2.4"/>
+<line x1="1126" y1="655" x2="1238" y2="655" stroke="#14213D" stroke-width="2.4"/>
+<line x1="1238" y1="655" x2="1350" y2="655" stroke="#14213D" stroke-width="2.4"/>
+<line x1="1350" y1="655" x2="1462" y2="655" stroke="#14213D" stroke-width="2.4"/>
+<text x="18" y="694" fill="#14213D">hazard_type</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="235,682 337,682 342,690.5 337,699 235,699 230,690.5"/>
+<text x="286.0" y="694.5" text-anchor="middle" font-size="12" fill="#1E3A8A">00</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="347,682 449,682 454,690.5 449,699 347,699 342,690.5"/>
+<text x="398.0" y="694.5" text-anchor="middle" font-size="12" fill="#1E3A8A">00</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="459,682 561,682 566,690.5 561,699 459,699 454,690.5"/>
+<text x="510.0" y="694.5" text-anchor="middle" font-size="12" fill="#1E3A8A">00</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="571,682 673,682 678,690.5 673,699 571,699 566,690.5"/>
+<text x="622.0" y="694.5" text-anchor="middle" font-size="12" fill="#1E3A8A">00</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="683,682 785,682 790,690.5 785,699 683,699 678,690.5"/>
+<text x="734.0" y="694.5" text-anchor="middle" font-size="12" fill="#1E3A8A">00</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="795,682 897,682 902,690.5 897,699 795,699 790,690.5"/>
+<text x="846.0" y="694.5" text-anchor="middle" font-size="12" fill="#1E3A8A">00</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="907,682 1009,682 1014,690.5 1009,699 907,699 902,690.5"/>
+<text x="958.0" y="694.5" text-anchor="middle" font-size="12" fill="#1E3A8A">01</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1019,682 1121,682 1126,690.5 1121,699 1019,699 1014,690.5"/>
+<text x="1070.0" y="694.5" text-anchor="middle" font-size="12" fill="#1E3A8A">01</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1131,682 1233,682 1238,690.5 1233,699 1131,699 1126,690.5"/>
+<text x="1182.0" y="694.5" text-anchor="middle" font-size="12" fill="#1E3A8A">01</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1243,682 1345,682 1350,690.5 1345,699 1243,699 1238,690.5"/>
+<text x="1294.0" y="694.5" text-anchor="middle" font-size="12" fill="#1E3A8A">01</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1355,682 1457,682 1462,690.5 1457,699 1355,699 1350,690.5"/>
+<text x="1406.0" y="694.5" text-anchor="middle" font-size="12" fill="#1E3A8A">01</text>
+<text x="18" y="721" fill="#14213D">hazard_pc</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="235,709 337,709 342,717.5 337,726 235,726 230,717.5"/>
+<text x="286.0" y="721.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x00000000</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="347,709 449,709 454,717.5 449,726 347,726 342,717.5"/>
+<text x="398.0" y="721.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x00000004</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="459,709 561,709 566,717.5 561,726 459,726 454,717.5"/>
+<text x="510.0" y="721.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x00000008</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="571,709 673,709 678,717.5 673,726 571,726 566,717.5"/>
+<text x="622.0" y="721.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x0000000C</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="683,709 785,709 790,717.5 785,726 683,726 678,717.5"/>
+<text x="734.0" y="721.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x00000010</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="795,709 897,709 902,717.5 897,726 795,726 790,717.5"/>
+<text x="846.0" y="721.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x00000014</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="907,709 1009,709 1014,717.5 1009,726 907,726 902,717.5"/>
+<text x="958.0" y="721.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x00000014</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1019,709 1121,709 1126,717.5 1121,726 1019,726 1014,717.5"/>
+<text x="1070.0" y="721.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x00000014</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1131,709 1233,709 1238,717.5 1233,726 1131,726 1126,717.5"/>
+<text x="1182.0" y="721.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x00000014</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1243,709 1345,709 1350,717.5 1345,726 1243,726 1238,717.5"/>
+<text x="1294.0" y="721.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x00000014</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1355,709 1457,709 1462,717.5 1457,726 1355,726 1350,717.5"/>
+<text x="1406.0" y="721.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x00000014</text>
+<text x="18" y="748" fill="#14213D">hazard_cycle</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="235,736 337,736 342,744.5 337,753 235,753 230,744.5"/>
+<text x="286.0" y="748.5" text-anchor="middle" font-size="12" fill="#1E3A8A">1</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="347,736 449,736 454,744.5 449,753 347,753 342,744.5"/>
+<text x="398.0" y="748.5" text-anchor="middle" font-size="12" fill="#1E3A8A">2</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="459,736 561,736 566,744.5 561,753 459,753 454,744.5"/>
+<text x="510.0" y="748.5" text-anchor="middle" font-size="12" fill="#1E3A8A">3</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="571,736 673,736 678,744.5 673,753 571,753 566,744.5"/>
+<text x="622.0" y="748.5" text-anchor="middle" font-size="12" fill="#1E3A8A">4</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="683,736 785,736 790,744.5 785,753 683,753 678,744.5"/>
+<text x="734.0" y="748.5" text-anchor="middle" font-size="12" fill="#1E3A8A">5</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="795,736 897,736 902,744.5 897,753 795,753 790,744.5"/>
+<text x="846.0" y="748.5" text-anchor="middle" font-size="12" fill="#1E3A8A">6</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="907,736 1009,736 1014,744.5 1009,753 907,753 902,744.5"/>
+<text x="958.0" y="748.5" text-anchor="middle" font-size="12" fill="#1E3A8A">7</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1019,736 1121,736 1126,744.5 1121,753 1019,753 1014,744.5"/>
+<text x="1070.0" y="748.5" text-anchor="middle" font-size="12" fill="#1E3A8A">7</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1131,736 1233,736 1238,744.5 1233,753 1131,753 1126,744.5"/>
+<text x="1182.0" y="748.5" text-anchor="middle" font-size="12" fill="#1E3A8A">7</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1243,736 1345,736 1350,744.5 1345,753 1243,753 1238,744.5"/>
+<text x="1294.0" y="748.5" text-anchor="middle" font-size="12" fill="#1E3A8A">7</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1355,736 1457,736 1462,744.5 1457,753 1355,753 1350,744.5"/>
+<text x="1406.0" y="748.5" text-anchor="middle" font-size="12" fill="#1E3A8A">7</text>
+<text x="18" y="775" fill="#14213D">stage_valid[4:0]</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="235,763 337,763 342,771.5 337,780 235,780 230,771.5"/>
+<text x="286.0" y="775.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x01</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="347,763 449,763 454,771.5 449,780 347,780 342,771.5"/>
+<text x="398.0" y="775.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x03</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="459,763 561,763 566,771.5 561,780 459,780 454,771.5"/>
+<text x="510.0" y="775.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x07</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="571,763 673,763 678,771.5 673,780 571,780 566,771.5"/>
+<text x="622.0" y="775.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x0F</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="683,763 785,763 790,771.5 785,780 683,780 678,771.5"/>
+<text x="734.0" y="775.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x1F</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="795,763 897,763 902,771.5 897,780 795,780 790,771.5"/>
+<text x="846.0" y="775.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x1F</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="907,763 1009,763 1014,771.5 1009,780 907,780 902,771.5"/>
+<text x="958.0" y="775.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x1F</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1019,763 1121,763 1126,771.5 1121,780 1019,780 1014,771.5"/>
+<text x="1070.0" y="775.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x1F</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1131,763 1233,763 1238,771.5 1233,780 1131,780 1126,771.5"/>
+<text x="1182.0" y="775.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x1F</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1243,763 1345,763 1350,771.5 1345,780 1243,780 1238,771.5"/>
+<text x="1294.0" y="775.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x1F</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1355,763 1457,763 1462,771.5 1457,780 1355,780 1350,771.5"/>
+<text x="1406.0" y="775.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0x1F</text>
+<text x="18" y="802" fill="#14213D">retired</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="235,790 337,790 342,798.5 337,807 235,807 230,798.5"/>
+<text x="286.0" y="802.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="347,790 449,790 454,798.5 449,807 347,807 342,798.5"/>
+<text x="398.0" y="802.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="459,790 561,790 566,798.5 561,807 459,807 454,798.5"/>
+<text x="510.0" y="802.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="571,790 673,790 678,798.5 673,807 571,807 566,798.5"/>
+<text x="622.0" y="802.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="683,790 785,790 790,798.5 785,807 683,807 678,798.5"/>
+<text x="734.0" y="802.5" text-anchor="middle" font-size="12" fill="#1E3A8A">1</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="795,790 897,790 902,798.5 897,807 795,807 790,798.5"/>
+<text x="846.0" y="802.5" text-anchor="middle" font-size="12" fill="#1E3A8A">1</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="907,790 1009,790 1014,798.5 1009,807 907,807 902,798.5"/>
+<text x="958.0" y="802.5" text-anchor="middle" font-size="12" fill="#1E3A8A">1</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1019,790 1121,790 1126,798.5 1121,807 1019,807 1014,798.5"/>
+<text x="1070.0" y="802.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1131,790 1233,790 1238,798.5 1233,807 1131,807 1126,798.5"/>
+<text x="1182.0" y="802.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1243,790 1345,790 1350,798.5 1345,807 1243,807 1238,798.5"/>
+<text x="1294.0" y="802.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0</text>
+<polygon fill="#EEF2FF" stroke="#1E3A8A" points="1355,790 1457,790 1462,798.5 1457,807 1355,807 1350,798.5"/>
+<text x="1406.0" y="802.5" text-anchor="middle" font-size="12" fill="#1E3A8A">0</text>
+<circle cx="846.0" cy="52" r="9" fill="#C62828"/>
+<text x="846.0" y="56" text-anchor="middle" fill="#FFFFFF" font-size="11" font-weight="bold">1</text>
+<line x1="846.0" y1="61" x2="846.0" y2="70" stroke="#C62828"/>
+<circle cx="958.0" cy="52" r="9" fill="#C62828"/>
+<text x="958.0" y="56" text-anchor="middle" fill="#FFFFFF" font-size="11" font-weight="bold">2</text>
+<line x1="958.0" y1="61" x2="958.0" y2="70" stroke="#C62828"/>
+<circle cx="1070.0" cy="52" r="9" fill="#C62828"/>
+<text x="1070.0" y="56" text-anchor="middle" fill="#FFFFFF" font-size="11" font-weight="bold">3</text>
+<line x1="1070.0" y1="61" x2="1070.0" y2="70" stroke="#C62828"/>
+<circle cx="1406.0" cy="52" r="9" fill="#C62828"/>
+<text x="1406.0" y="56" text-anchor="middle" fill="#FFFFFF" font-size="11" font-weight="bold">4</text>
+<line x1="1406.0" y1="61" x2="1406.0" y2="70" stroke="#C62828"/>
+<text x="12" y="842" fill="#C62828">(1) C6: a consumidora sub $t4, $t3, $t2 (0x14) é buscada em IF.</text>
+<text x="12" y="862" fill="#C62828">(2) C7: sub $t4, $t3, $t2 (0x14) em ID lê $t3 (rs), que addi $t3, $zero, 3 (0x10) escreve em EX (distância 1); e lê $t2 (rt), que add $t2, $t0, $t0 (0x0C) escreve em MEM (distância 2).</text>
+<text x="34" y="879" fill="#C62828">data_conflict = 1, hazard_abort = 1, hazard_type = 01, hazard_pc = 0x00000014, hazard_cycle = 7 (combinacionais neste ciclo).</text>
+<text x="12" y="899" fill="#C62828">(3) C8: frozen = 1. O PC de IF fica em 0x18, o mesmo de C7: o PC e os estágios congelaram na borda que encerrou a detecção.</text>
+<text x="12" y="919" fill="#C62828">(4) C11: hazard_type = 01, hazard_pc = 0x00000014 e hazard_cycle = 7 continuam estáveis; retired = 0. Só um reset limpa o estado.</text>
+</svg>

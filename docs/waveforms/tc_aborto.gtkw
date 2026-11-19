@@ -1,0 +1,75 @@
+[*] MicroProj-AOC: detecção e aborto (controle) na O2, gerado por scripts/waveform_aborto.py
+[dumpfile] "tc_o2.ghw"
+[timestart] 0
+[size] 1800 900
+[pos] -1 -1
+*-24.000000 80000000 80000000 80000000 100000000 110000000 140000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[markername] AC7 instrucao-causa em IF
+[markername] BC7 beq nao tomado: sem conflito
+[markername] CC9 deteccao: hazard_abort = 1
+[markername] DC10 frozen = 1: PC congelado
+[markername] EC13 hazard_* estaveis
+[signals_width] 300
+[sst_expanded] 1
+@200
+-Ciclo k = (15 ns + (k-1) x 10 ns) a (15 ns + k x 10 ns); amostragem na borda de descida
+@800200
+-Relogio
+@28
++{clk} top.tb_cpu.clk
+@1000200
+-Relogio
+@800200
+-IF
+@22
+#{IF PC} top.tb_cpu.gen_o2.dut.pc[31] top.tb_cpu.gen_o2.dut.pc[30] top.tb_cpu.gen_o2.dut.pc[29] top.tb_cpu.gen_o2.dut.pc[28] top.tb_cpu.gen_o2.dut.pc[27] top.tb_cpu.gen_o2.dut.pc[26] top.tb_cpu.gen_o2.dut.pc[25] top.tb_cpu.gen_o2.dut.pc[24] top.tb_cpu.gen_o2.dut.pc[23] top.tb_cpu.gen_o2.dut.pc[22] top.tb_cpu.gen_o2.dut.pc[21] top.tb_cpu.gen_o2.dut.pc[20] top.tb_cpu.gen_o2.dut.pc[19] top.tb_cpu.gen_o2.dut.pc[18] top.tb_cpu.gen_o2.dut.pc[17] top.tb_cpu.gen_o2.dut.pc[16] top.tb_cpu.gen_o2.dut.pc[15] top.tb_cpu.gen_o2.dut.pc[14] top.tb_cpu.gen_o2.dut.pc[13] top.tb_cpu.gen_o2.dut.pc[12] top.tb_cpu.gen_o2.dut.pc[11] top.tb_cpu.gen_o2.dut.pc[10] top.tb_cpu.gen_o2.dut.pc[9] top.tb_cpu.gen_o2.dut.pc[8] top.tb_cpu.gen_o2.dut.pc[7] top.tb_cpu.gen_o2.dut.pc[6] top.tb_cpu.gen_o2.dut.pc[5] top.tb_cpu.gen_o2.dut.pc[4] top.tb_cpu.gen_o2.dut.pc[3] top.tb_cpu.gen_o2.dut.pc[2] top.tb_cpu.gen_o2.dut.pc[1] top.tb_cpu.gen_o2.dut.pc[0]
+@28
++{IF busca} top.tb_cpu.gen_o2.dut.fetch_valid_now
+@1000200
+-IF
+@800200
+-ID
+@28
++{ID valido} top.tb_cpu.gen_o2.dut.ifid_reg.valid
+@22
+#{ID PC} top.tb_cpu.gen_o2.dut.ifid_reg.pc[31] top.tb_cpu.gen_o2.dut.ifid_reg.pc[30] top.tb_cpu.gen_o2.dut.ifid_reg.pc[29] top.tb_cpu.gen_o2.dut.ifid_reg.pc[28] top.tb_cpu.gen_o2.dut.ifid_reg.pc[27] top.tb_cpu.gen_o2.dut.ifid_reg.pc[26] top.tb_cpu.gen_o2.dut.ifid_reg.pc[25] top.tb_cpu.gen_o2.dut.ifid_reg.pc[24] top.tb_cpu.gen_o2.dut.ifid_reg.pc[23] top.tb_cpu.gen_o2.dut.ifid_reg.pc[22] top.tb_cpu.gen_o2.dut.ifid_reg.pc[21] top.tb_cpu.gen_o2.dut.ifid_reg.pc[20] top.tb_cpu.gen_o2.dut.ifid_reg.pc[19] top.tb_cpu.gen_o2.dut.ifid_reg.pc[18] top.tb_cpu.gen_o2.dut.ifid_reg.pc[17] top.tb_cpu.gen_o2.dut.ifid_reg.pc[16] top.tb_cpu.gen_o2.dut.ifid_reg.pc[15] top.tb_cpu.gen_o2.dut.ifid_reg.pc[14] top.tb_cpu.gen_o2.dut.ifid_reg.pc[13] top.tb_cpu.gen_o2.dut.ifid_reg.pc[12] top.tb_cpu.gen_o2.dut.ifid_reg.pc[11] top.tb_cpu.gen_o2.dut.ifid_reg.pc[10] top.tb_cpu.gen_o2.dut.ifid_reg.pc[9] top.tb_cpu.gen_o2.dut.ifid_reg.pc[8] top.tb_cpu.gen_o2.dut.ifid_reg.pc[7] top.tb_cpu.gen_o2.dut.ifid_reg.pc[6] top.tb_cpu.gen_o2.dut.ifid_reg.pc[5] top.tb_cpu.gen_o2.dut.ifid_reg.pc[4] top.tb_cpu.gen_o2.dut.ifid_reg.pc[3] top.tb_cpu.gen_o2.dut.ifid_reg.pc[2] top.tb_cpu.gen_o2.dut.ifid_reg.pc[1] top.tb_cpu.gen_o2.dut.ifid_reg.pc[0]
+@1000200
+-ID
+@800200
+-EX
+@28
++{EX valido} top.tb_cpu.gen_o2.dut.idex_reg.valid
+@28
++{EX is_beq} top.tb_cpu.gen_o2.dut.idex_reg.is_beq
+@22
+#{EX pc_plus4} top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[31] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[30] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[29] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[28] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[27] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[26] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[25] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[24] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[23] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[22] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[21] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[20] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[19] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[18] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[17] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[16] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[15] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[14] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[13] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[12] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[11] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[10] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[9] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[8] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[7] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[6] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[5] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[4] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[3] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[2] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[1] top.tb_cpu.gen_o2.dut.idex_reg.pc_plus4[0]
+@28
++{zero ULA} top.tb_cpu.gen_o2.dut.alu_zero
+@28
++{branch_taken} top.tb_cpu.gen_o2.dut.branch_taken
+@1000200
+-EX
+@800200
+-Deteccao
+@28
++{control_conflict} top.tb_cpu.gen_o2.dut.control_conflict
+@1000200
+-Deteccao
+@800200
+-Saidas R3
+@28
++{hazard_abort} top.tb_cpu.hazard_abort
+@28
++{frozen} top.tb_cpu.gen_o2.dut.frozen
+@22
+#{hazard_type} top.tb_cpu.hazard_type[1] top.tb_cpu.hazard_type[0]
+@22
+#{hazard_pc} top.tb_cpu.hazard_pc[31] top.tb_cpu.hazard_pc[30] top.tb_cpu.hazard_pc[29] top.tb_cpu.hazard_pc[28] top.tb_cpu.hazard_pc[27] top.tb_cpu.hazard_pc[26] top.tb_cpu.hazard_pc[25] top.tb_cpu.hazard_pc[24] top.tb_cpu.hazard_pc[23] top.tb_cpu.hazard_pc[22] top.tb_cpu.hazard_pc[21] top.tb_cpu.hazard_pc[20] top.tb_cpu.hazard_pc[19] top.tb_cpu.hazard_pc[18] top.tb_cpu.hazard_pc[17] top.tb_cpu.hazard_pc[16] top.tb_cpu.hazard_pc[15] top.tb_cpu.hazard_pc[14] top.tb_cpu.hazard_pc[13] top.tb_cpu.hazard_pc[12] top.tb_cpu.hazard_pc[11] top.tb_cpu.hazard_pc[10] top.tb_cpu.hazard_pc[9] top.tb_cpu.hazard_pc[8] top.tb_cpu.hazard_pc[7] top.tb_cpu.hazard_pc[6] top.tb_cpu.hazard_pc[5] top.tb_cpu.hazard_pc[4] top.tb_cpu.hazard_pc[3] top.tb_cpu.hazard_pc[2] top.tb_cpu.hazard_pc[1] top.tb_cpu.hazard_pc[0]
+@24
+#{hazard_cycle} top.tb_cpu.hazard_cycle[31] top.tb_cpu.hazard_cycle[30] top.tb_cpu.hazard_cycle[29] top.tb_cpu.hazard_cycle[28] top.tb_cpu.hazard_cycle[27] top.tb_cpu.hazard_cycle[26] top.tb_cpu.hazard_cycle[25] top.tb_cpu.hazard_cycle[24] top.tb_cpu.hazard_cycle[23] top.tb_cpu.hazard_cycle[22] top.tb_cpu.hazard_cycle[21] top.tb_cpu.hazard_cycle[20] top.tb_cpu.hazard_cycle[19] top.tb_cpu.hazard_cycle[18] top.tb_cpu.hazard_cycle[17] top.tb_cpu.hazard_cycle[16] top.tb_cpu.hazard_cycle[15] top.tb_cpu.hazard_cycle[14] top.tb_cpu.hazard_cycle[13] top.tb_cpu.hazard_cycle[12] top.tb_cpu.hazard_cycle[11] top.tb_cpu.hazard_cycle[10] top.tb_cpu.hazard_cycle[9] top.tb_cpu.hazard_cycle[8] top.tb_cpu.hazard_cycle[7] top.tb_cpu.hazard_cycle[6] top.tb_cpu.hazard_cycle[5] top.tb_cpu.hazard_cycle[4] top.tb_cpu.hazard_cycle[3] top.tb_cpu.hazard_cycle[2] top.tb_cpu.hazard_cycle[1] top.tb_cpu.hazard_cycle[0]
+@22
+#{stage_valid} top.tb_cpu.stage_valid[4] top.tb_cpu.stage_valid[3] top.tb_cpu.stage_valid[2] top.tb_cpu.stage_valid[1] top.tb_cpu.stage_valid[0]
+@1000200
+-Saidas R3
+[pattern_trace] 1
+[pattern_trace] 0

@@ -1,0 +1,61 @@
+[*] MicroProj-AOC: detecção e aborto (estrutural) na O2, gerado por scripts/waveform_aborto.py
+[dumpfile] "te_o2.ghw"
+[timestart] 0
+[size] 1800 900
+[pos] -1 -1
+*-24.000000 80000000 80000000 90000000 120000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[markername] AC7 deteccao: hazard_abort = 1
+[markername] BC8 frozen = 1: PC congelado
+[markername] CC11 hazard_* estaveis
+[signals_width] 300
+[sst_expanded] 1
+@200
+-Ciclo k = (15 ns + (k-1) x 10 ns) a (15 ns + k x 10 ns); amostragem na borda de descida
+@800200
+-Relogio
+@28
++{clk} top.tb_cpu.clk
+@1000200
+-Relogio
+@800200
+-IF
+@22
+#{IF PC} top.tb_cpu.gen_o2.dut.pc[31] top.tb_cpu.gen_o2.dut.pc[30] top.tb_cpu.gen_o2.dut.pc[29] top.tb_cpu.gen_o2.dut.pc[28] top.tb_cpu.gen_o2.dut.pc[27] top.tb_cpu.gen_o2.dut.pc[26] top.tb_cpu.gen_o2.dut.pc[25] top.tb_cpu.gen_o2.dut.pc[24] top.tb_cpu.gen_o2.dut.pc[23] top.tb_cpu.gen_o2.dut.pc[22] top.tb_cpu.gen_o2.dut.pc[21] top.tb_cpu.gen_o2.dut.pc[20] top.tb_cpu.gen_o2.dut.pc[19] top.tb_cpu.gen_o2.dut.pc[18] top.tb_cpu.gen_o2.dut.pc[17] top.tb_cpu.gen_o2.dut.pc[16] top.tb_cpu.gen_o2.dut.pc[15] top.tb_cpu.gen_o2.dut.pc[14] top.tb_cpu.gen_o2.dut.pc[13] top.tb_cpu.gen_o2.dut.pc[12] top.tb_cpu.gen_o2.dut.pc[11] top.tb_cpu.gen_o2.dut.pc[10] top.tb_cpu.gen_o2.dut.pc[9] top.tb_cpu.gen_o2.dut.pc[8] top.tb_cpu.gen_o2.dut.pc[7] top.tb_cpu.gen_o2.dut.pc[6] top.tb_cpu.gen_o2.dut.pc[5] top.tb_cpu.gen_o2.dut.pc[4] top.tb_cpu.gen_o2.dut.pc[3] top.tb_cpu.gen_o2.dut.pc[2] top.tb_cpu.gen_o2.dut.pc[1] top.tb_cpu.gen_o2.dut.pc[0]
+@28
++{IF busca} top.tb_cpu.gen_o2.dut.fetch_valid_now
+@1000200
+-IF
+@800200
+-MEM
+@28
++{MEM valido} top.tb_cpu.gen_o2.dut.exmem_reg.valid
+@28
++{MEM is_lw} top.tb_cpu.gen_o2.dut.exmem_reg.is_lw
+@28
++{MEM is_sw} top.tb_cpu.gen_o2.dut.exmem_reg.is_sw
+@1000200
+-MEM
+@800200
+-Deteccao
+@28
++{structural_conflict} top.tb_cpu.gen_o2.dut.structural_conflict
+@1000200
+-Deteccao
+@800200
+-Saidas R3
+@28
++{hazard_abort} top.tb_cpu.hazard_abort
+@28
++{frozen} top.tb_cpu.gen_o2.dut.frozen
+@22
+#{hazard_type} top.tb_cpu.hazard_type[1] top.tb_cpu.hazard_type[0]
+@22
+#{hazard_pc} top.tb_cpu.hazard_pc[31] top.tb_cpu.hazard_pc[30] top.tb_cpu.hazard_pc[29] top.tb_cpu.hazard_pc[28] top.tb_cpu.hazard_pc[27] top.tb_cpu.hazard_pc[26] top.tb_cpu.hazard_pc[25] top.tb_cpu.hazard_pc[24] top.tb_cpu.hazard_pc[23] top.tb_cpu.hazard_pc[22] top.tb_cpu.hazard_pc[21] top.tb_cpu.hazard_pc[20] top.tb_cpu.hazard_pc[19] top.tb_cpu.hazard_pc[18] top.tb_cpu.hazard_pc[17] top.tb_cpu.hazard_pc[16] top.tb_cpu.hazard_pc[15] top.tb_cpu.hazard_pc[14] top.tb_cpu.hazard_pc[13] top.tb_cpu.hazard_pc[12] top.tb_cpu.hazard_pc[11] top.tb_cpu.hazard_pc[10] top.tb_cpu.hazard_pc[9] top.tb_cpu.hazard_pc[8] top.tb_cpu.hazard_pc[7] top.tb_cpu.hazard_pc[6] top.tb_cpu.hazard_pc[5] top.tb_cpu.hazard_pc[4] top.tb_cpu.hazard_pc[3] top.tb_cpu.hazard_pc[2] top.tb_cpu.hazard_pc[1] top.tb_cpu.hazard_pc[0]
+@24
+#{hazard_cycle} top.tb_cpu.hazard_cycle[31] top.tb_cpu.hazard_cycle[30] top.tb_cpu.hazard_cycle[29] top.tb_cpu.hazard_cycle[28] top.tb_cpu.hazard_cycle[27] top.tb_cpu.hazard_cycle[26] top.tb_cpu.hazard_cycle[25] top.tb_cpu.hazard_cycle[24] top.tb_cpu.hazard_cycle[23] top.tb_cpu.hazard_cycle[22] top.tb_cpu.hazard_cycle[21] top.tb_cpu.hazard_cycle[20] top.tb_cpu.hazard_cycle[19] top.tb_cpu.hazard_cycle[18] top.tb_cpu.hazard_cycle[17] top.tb_cpu.hazard_cycle[16] top.tb_cpu.hazard_cycle[15] top.tb_cpu.hazard_cycle[14] top.tb_cpu.hazard_cycle[13] top.tb_cpu.hazard_cycle[12] top.tb_cpu.hazard_cycle[11] top.tb_cpu.hazard_cycle[10] top.tb_cpu.hazard_cycle[9] top.tb_cpu.hazard_cycle[8] top.tb_cpu.hazard_cycle[7] top.tb_cpu.hazard_cycle[6] top.tb_cpu.hazard_cycle[5] top.tb_cpu.hazard_cycle[4] top.tb_cpu.hazard_cycle[3] top.tb_cpu.hazard_cycle[2] top.tb_cpu.hazard_cycle[1] top.tb_cpu.hazard_cycle[0]
+@22
+#{stage_valid} top.tb_cpu.stage_valid[4] top.tb_cpu.stage_valid[3] top.tb_cpu.stage_valid[2] top.tb_cpu.stage_valid[1] top.tb_cpu.stage_valid[0]
+@1000200
+-Saidas R3
+[pattern_trace] 1
+[pattern_trace] 0

@@ -1,0 +1,148 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1099" height="420" font-family="DejaVu Sans Mono, monospace" font-size="11">
+<rect width="100%" height="100%" fill="white"/>
+<text x="10" y="20" font-size="15" font-weight="bold">O2 — enchimento do pipeline (t0.asm)</text>
+<rect x="120" y="40" width="137" height="350" fill="#dbeafe" stroke="white"/>
+<text x="188.5" y="54" text-anchor="middle" font-weight="bold">C1</text>
+<text x="188.5" y="66" text-anchor="middle" font-size="9" fill="#4b5563">enchimento</text>
+<rect x="257" y="40" width="137" height="350" fill="#dbeafe" stroke="white"/>
+<text x="325.5" y="54" text-anchor="middle" font-weight="bold">C2</text>
+<text x="325.5" y="66" text-anchor="middle" font-size="9" fill="#4b5563">enchimento</text>
+<rect x="394" y="40" width="137" height="350" fill="#dbeafe" stroke="white"/>
+<text x="462.5" y="54" text-anchor="middle" font-weight="bold">C3</text>
+<text x="462.5" y="66" text-anchor="middle" font-size="9" fill="#4b5563">enchimento</text>
+<rect x="531" y="40" width="137" height="350" fill="#dbeafe" stroke="white"/>
+<text x="599.5" y="54" text-anchor="middle" font-weight="bold">C4</text>
+<text x="599.5" y="66" text-anchor="middle" font-size="9" fill="#4b5563">enchimento</text>
+<rect x="668" y="40" width="137" height="350" fill="#dcfce7" stroke="white"/>
+<text x="736.5" y="54" text-anchor="middle" font-weight="bold">C5</text>
+<text x="736.5" y="66" text-anchor="middle" font-size="9" fill="#4b5563">cheio</text>
+<rect x="805" y="40" width="137" height="350" fill="#dcfce7" stroke="white"/>
+<text x="873.5" y="54" text-anchor="middle" font-weight="bold">C6</text>
+<text x="873.5" y="66" text-anchor="middle" font-size="9" fill="#4b5563">cheio</text>
+<rect x="942" y="40" width="137" height="350" fill="#dcfce7" stroke="white"/>
+<text x="1010.5" y="54" text-anchor="middle" font-weight="bold">C7</text>
+<text x="1010.5" y="66" text-anchor="middle" font-size="9" fill="#4b5563">cheio</text>
+<text x="8" y="94.0" font-weight="bold">IF</text>
+<line x1="0" y1="70" x2="1099" y2="70" stroke="#9ca3af"/>
+<rect x="123" y="73" width="131" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="188.5" y="87" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x00</text>
+<text x="188.5" y="101" text-anchor="middle" font-size="10">addi $t0, $zero, 10</text>
+<rect x="260" y="73" width="131" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="325.5" y="87" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x04</text>
+<text x="325.5" y="101" text-anchor="middle" font-size="10">addi $t1, $zero, 20</text>
+<rect x="397" y="73" width="131" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="462.5" y="87" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x08</text>
+<text x="462.5" y="101" text-anchor="middle" font-size="10">addi $t2, $zero, 30</text>
+<rect x="534" y="73" width="131" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="599.5" y="87" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x0C</text>
+<text x="599.5" y="101" text-anchor="middle" font-size="10">addi $t3, $zero, 40</text>
+<rect x="671" y="73" width="131" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="736.5" y="87" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x10</text>
+<text x="736.5" y="101" text-anchor="middle" font-size="10">addi $t4, $zero, 50</text>
+<rect x="808" y="73" width="131" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="873.5" y="87" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x14</text>
+<text x="873.5" y="101" text-anchor="middle" font-size="10">addi $t5, $zero, 60</text>
+<rect x="945" y="73" width="131" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="1010.5" y="87" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x18</text>
+<text x="1010.5" y="101" text-anchor="middle" font-size="10">addi $t6, $zero, 70</text>
+<text x="8" y="134.0" font-weight="bold">ID</text>
+<line x1="0" y1="110" x2="1099" y2="110" stroke="#9ca3af"/>
+<text x="188.5" y="134.0" text-anchor="middle" fill="#9ca3af">bolha</text>
+<rect x="260" y="113" width="131" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="325.5" y="127" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x00</text>
+<text x="325.5" y="141" text-anchor="middle" font-size="10">addi $t0, $zero, 10</text>
+<rect x="397" y="113" width="131" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="462.5" y="127" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x04</text>
+<text x="462.5" y="141" text-anchor="middle" font-size="10">addi $t1, $zero, 20</text>
+<rect x="534" y="113" width="131" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="599.5" y="127" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x08</text>
+<text x="599.5" y="141" text-anchor="middle" font-size="10">addi $t2, $zero, 30</text>
+<rect x="671" y="113" width="131" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="736.5" y="127" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x0C</text>
+<text x="736.5" y="141" text-anchor="middle" font-size="10">addi $t3, $zero, 40</text>
+<rect x="808" y="113" width="131" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="873.5" y="127" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x10</text>
+<text x="873.5" y="141" text-anchor="middle" font-size="10">addi $t4, $zero, 50</text>
+<rect x="945" y="113" width="131" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="1010.5" y="127" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x14</text>
+<text x="1010.5" y="141" text-anchor="middle" font-size="10">addi $t5, $zero, 60</text>
+<text x="8" y="174.0" font-weight="bold">EX</text>
+<line x1="0" y1="150" x2="1099" y2="150" stroke="#9ca3af"/>
+<text x="188.5" y="174.0" text-anchor="middle" fill="#9ca3af">bolha</text>
+<text x="325.5" y="174.0" text-anchor="middle" fill="#9ca3af">bolha</text>
+<rect x="397" y="153" width="131" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="462.5" y="167" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x00</text>
+<text x="462.5" y="181" text-anchor="middle" font-size="10">addi $t0, $zero, 10</text>
+<rect x="534" y="153" width="131" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="599.5" y="167" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x04</text>
+<text x="599.5" y="181" text-anchor="middle" font-size="10">addi $t1, $zero, 20</text>
+<rect x="671" y="153" width="131" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="736.5" y="167" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x08</text>
+<text x="736.5" y="181" text-anchor="middle" font-size="10">addi $t2, $zero, 30</text>
+<rect x="808" y="153" width="131" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="873.5" y="167" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x0C</text>
+<text x="873.5" y="181" text-anchor="middle" font-size="10">addi $t3, $zero, 40</text>
+<rect x="945" y="153" width="131" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="1010.5" y="167" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x10</text>
+<text x="1010.5" y="181" text-anchor="middle" font-size="10">addi $t4, $zero, 50</text>
+<text x="8" y="214.0" font-weight="bold">MEM</text>
+<line x1="0" y1="190" x2="1099" y2="190" stroke="#9ca3af"/>
+<text x="188.5" y="214.0" text-anchor="middle" fill="#9ca3af">bolha</text>
+<text x="325.5" y="214.0" text-anchor="middle" fill="#9ca3af">bolha</text>
+<text x="462.5" y="214.0" text-anchor="middle" fill="#9ca3af">bolha</text>
+<rect x="534" y="193" width="131" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="599.5" y="207" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x00</text>
+<text x="599.5" y="221" text-anchor="middle" font-size="10">addi $t0, $zero, 10</text>
+<rect x="671" y="193" width="131" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="736.5" y="207" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x04</text>
+<text x="736.5" y="221" text-anchor="middle" font-size="10">addi $t1, $zero, 20</text>
+<rect x="808" y="193" width="131" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="873.5" y="207" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x08</text>
+<text x="873.5" y="221" text-anchor="middle" font-size="10">addi $t2, $zero, 30</text>
+<rect x="945" y="193" width="131" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="1010.5" y="207" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x0C</text>
+<text x="1010.5" y="221" text-anchor="middle" font-size="10">addi $t3, $zero, 40</text>
+<text x="8" y="254.0" font-weight="bold">WB</text>
+<line x1="0" y1="230" x2="1099" y2="230" stroke="#9ca3af"/>
+<text x="188.5" y="254.0" text-anchor="middle" fill="#9ca3af">bolha</text>
+<text x="325.5" y="254.0" text-anchor="middle" fill="#9ca3af">bolha</text>
+<text x="462.5" y="254.0" text-anchor="middle" fill="#9ca3af">bolha</text>
+<text x="599.5" y="254.0" text-anchor="middle" fill="#9ca3af">bolha</text>
+<rect x="671" y="233" width="131" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="736.5" y="247" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x00</text>
+<text x="736.5" y="261" text-anchor="middle" font-size="10">addi $t0, $zero, 10</text>
+<rect x="808" y="233" width="131" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="873.5" y="247" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x04</text>
+<text x="873.5" y="261" text-anchor="middle" font-size="10">addi $t1, $zero, 20</text>
+<rect x="945" y="233" width="131" height="34" rx="4" fill="white" stroke="#1e3a8a"/>
+<text x="1010.5" y="247" text-anchor="middle" fill="#1e3a8a" font-weight="bold">0x08</text>
+<text x="1010.5" y="261" text-anchor="middle" font-size="10">addi $t2, $zero, 30</text>
+<text x="8" y="294.0" font-weight="bold">stage_valid</text>
+<line x1="0" y1="270" x2="1099" y2="270" stroke="#9ca3af"/>
+<text x="188.5" y="294.0" text-anchor="middle">0x01</text>
+<text x="325.5" y="294.0" text-anchor="middle">0x03</text>
+<text x="462.5" y="294.0" text-anchor="middle">0x07</text>
+<text x="599.5" y="294.0" text-anchor="middle">0x0F</text>
+<text x="736.5" y="294.0" text-anchor="middle">0x1F</text>
+<text x="873.5" y="294.0" text-anchor="middle">0x1F</text>
+<text x="1010.5" y="294.0" text-anchor="middle">0x1F</text>
+<text x="8" y="334.0" font-weight="bold">retired</text>
+<line x1="0" y1="310" x2="1099" y2="310" stroke="#9ca3af"/>
+<text x="188.5" y="334.0" text-anchor="middle">0</text>
+<text x="325.5" y="334.0" text-anchor="middle">0</text>
+<text x="462.5" y="334.0" text-anchor="middle">0</text>
+<text x="599.5" y="334.0" text-anchor="middle">0</text>
+<text x="736.5" y="334.0" text-anchor="middle">1</text>
+<text x="873.5" y="334.0" text-anchor="middle">1</text>
+<text x="1010.5" y="334.0" text-anchor="middle">1</text>
+<text x="8" y="374.0" font-weight="bold">done</text>
+<line x1="0" y1="350" x2="1099" y2="350" stroke="#9ca3af"/>
+<text x="188.5" y="374.0" text-anchor="middle">0</text>
+<text x="325.5" y="374.0" text-anchor="middle">0</text>
+<text x="462.5" y="374.0" text-anchor="middle">0</text>
+<text x="599.5" y="374.0" text-anchor="middle">0</text>
+<text x="736.5" y="374.0" text-anchor="middle">0</text>
+<text x="873.5" y="374.0" text-anchor="middle">0</text>
+<text x="1010.5" y="374.0" text-anchor="middle">0</text>
+<text x="10" y="410" fill="#4b5563" font-size="10">Cada célula: PC (hex) e instrução no estágio. PC de MEM/WB = PC de EX 1/2 ciclos antes.</text>
+</svg>

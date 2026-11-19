@@ -1,0 +1,13 @@
+# TC — estado final esperado dos registradores (gerado no MARS 4.5 a partir de tracos/tc.asm).
+# Na O2 o traço aborta por conflito de controle (TIPO=3) e o tb_cpu não consulta
+# este arquivo; ele é conferido na O1, que segue o desvio corretamente.
+# $t5 e $t6 ficam 0: estão no caminho pulado pelo beq tomado.
+# Formato: <numero_do_registrador> <valor_hex_32bits>
+8 00000001
+9 00000002
+10 00000001
+11 00000000
+12 00000009
+13 00000000
+14 00000000
+15 00000005

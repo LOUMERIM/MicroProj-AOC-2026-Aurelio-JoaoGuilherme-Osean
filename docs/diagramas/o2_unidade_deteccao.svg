@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="880" viewBox="0 0 1600 880" font-family="DejaVu Sans, Inter, Arial, sans-serif" font-size="15">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#14213D"/></marker><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#B8421A"/></marker><marker id="ad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#C62828"/></marker></defs>
+<rect width="100%" height="100%" fill="#FFFFFF"/>
+<text x="24" y="30" font-size="21" font-weight="bold" fill="#14213D">Unidade de detecção de conflitos da O2 — entradas, blocos e saídas</text>
+<text x="30" y="62" text-anchor="start" font-size="16" fill="#14213D" font-weight="bold">Entradas (registradores entre estágios)</text>
+<rect x="30" y="75" width="330" height="135" rx="8" fill="#FCE3D6" stroke="#B8421A" stroke-width="2"/>
+<text x="195.0" y="128.4" text-anchor="middle" font-size="14" font-weight="bold" fill="#14213D">IF/ID</text>
+<text x="195.0" y="147.4" text-anchor="middle" font-size="14" fill="#14213D">valid · instr[31:26] opcode</text>
+<text x="195.0" y="166.4" text-anchor="middle" font-size="14" fill="#14213D">instr[25:21] = rs · instr[20:16] = rt</text>
+<rect x="30" y="230" width="330" height="110" rx="8" fill="#FCE3D6" stroke="#B8421A" stroke-width="2"/>
+<text x="195.0" y="270.9" text-anchor="middle" font-size="14" font-weight="bold" fill="#14213D">ID/EX</text>
+<text x="195.0" y="289.9" text-anchor="middle" font-size="14" fill="#14213D">valid · wb_enable · wb_addr[4:0]</text>
+<text x="195.0" y="308.9" text-anchor="middle" font-size="14" fill="#14213D">is_beq</text>
+<rect x="30" y="360" width="330" height="130" rx="8" fill="#FCE3D6" stroke="#B8421A" stroke-width="2"/>
+<text x="195.0" y="410.9" text-anchor="middle" font-size="14" font-weight="bold" fill="#14213D">EX/MEM</text>
+<text x="195.0" y="429.9" text-anchor="middle" font-size="14" fill="#14213D">valid · wb_enable · wb_addr[4:0]</text>
+<text x="195.0" y="448.9" text-anchor="middle" font-size="14" fill="#14213D">is_lw · is_sw</text>
+<rect x="30" y="510" width="330" height="70" rx="8" fill="#E4F1E4" stroke="#2E7D32" stroke-width="2"/>
+<text x="195.0" y="540.4" text-anchor="middle" font-size="14" font-weight="bold" fill="#14213D">ULA (estágio EX)</text>
+<text x="195.0" y="559.4" text-anchor="middle" font-size="14" fill="#14213D">alu_zero  (rs − rt = 0)</text>
+<rect x="30" y="600" width="330" height="120" rx="8" fill="#FFFFFF" stroke="#14213D" stroke-width="2"/>
+<text x="195.0" y="645.9" text-anchor="middle" font-size="14" font-weight="bold" fill="#14213D">IF (busca)</text>
+<text x="195.0" y="664.9" text-anchor="middle" font-size="14" fill="#14213D">fetch_valid_now = stream_active ∧ ¬frozen</text>
+<text x="195.0" y="683.9" text-anchor="middle" font-size="14" fill="#14213D">∧ ¬(break em ID) · generic MEM_UNIFICADA</text>
+<rect x="560" y="75" width="420" height="120" rx="8" fill="#F3ECCB" stroke="#8A6D00" stroke-width="2"/>
+<text x="770.0" y="120.9" text-anchor="middle" font-size="14" font-weight="bold" fill="#14213D">Uso de operandos: id_uses_rs / id_uses_rt</text>
+<text x="770.0" y="139.9" text-anchor="middle" font-size="14" fill="#14213D">tipo R (≠ break): rs e rt</text>
+<text x="770.0" y="158.9" text-anchor="middle" font-size="14" fill="#14213D">addi, lw: só rs · sw, beq: rs e rt</text>
+<rect x="560" y="215" width="420" height="230" rx="8" fill="#FFF1F0" stroke="#C62828" stroke-width="2"/>
+<text x="770.0" y="287.4" text-anchor="middle" font-size="14" font-weight="bold" fill="#14213D">Conflito de DADOS (tipo 01)</text>
+<text x="770.0" y="306.4" text-anchor="middle" font-size="14" fill="#14213D">hit: produtora válida (wb_enable = 1,</text>
+<text x="770.0" y="325.4" text-anchor="middle" font-size="14" fill="#14213D">wb_addr ≠ $zero) em distância 1 (ID/EX) ou</text>
+<text x="770.0" y="344.4" text-anchor="middle" font-size="14" fill="#14213D">distância 2 (EX/MEM) e (usa rs ∧ rs = wb_addr)</text>
+<text x="770.0" y="363.4" text-anchor="middle" font-size="14" fill="#14213D">ou (usa rt ∧ rt = wb_addr)</text>
+<text x="770.0" y="382.4" text-anchor="middle" font-size="14" fill="#14213D">data_conflict = hit ∧ ¬frozen ∧ ¬branch_taken</text>
+<rect x="560" y="465" width="420" height="100" rx="8" fill="#FFF1F0" stroke="#C62828" stroke-width="2"/>
+<text x="770.0" y="500.9" text-anchor="middle" font-size="14" font-weight="bold" fill="#14213D">Conflito ESTRUTURAL (tipo 10)</text>
+<text x="770.0" y="519.9" text-anchor="middle" font-size="14" fill="#14213D">MEM_UNIFICADA ∧ fetch_valid_now ∧</text>
+<text x="770.0" y="538.9" text-anchor="middle" font-size="14" fill="#14213D">EX/MEM.valid ∧ (is_lw ∨ is_sw)  →  structural_conflict</text>
+<rect x="560" y="585" width="420" height="160" rx="8" fill="#FFF1F0" stroke="#C62828" stroke-width="2"/>
+<text x="770.0" y="631.9" text-anchor="middle" font-size="14" font-weight="bold" fill="#14213D">Conflito de CONTROLE (tipo 11)</text>
+<text x="770.0" y="650.9" text-anchor="middle" font-size="14" fill="#14213D">branch_taken = ID/EX.valid ∧ is_beq ∧ alu_zero</text>
+<text x="770.0" y="669.9" text-anchor="middle" font-size="14" fill="#14213D">control_conflict = branch_taken ∧ ¬frozen ∧</text>
+<text x="770.0" y="688.9" text-anchor="middle" font-size="14" fill="#14213D">(IF/ID.valid ∨ fetch_valid_now)</text>
+<text x="770.0" y="707.9" text-anchor="middle" font-size="14" fill="#14213D">branch_pc = pc_plus4 − 4</text>
+<path d="M750,195 L750,215" fill="none" stroke="#14213D" stroke-width="2" marker-end="url(#ah)"/>
+<text x="796" y="210" text-anchor="middle" font-size="13" fill="#14213D">usa rs/rt</text>
+<path d="M360,145 L380,145" fill="none" stroke="#14213D" stroke-width="1.8"/>
+<path d="M380,120 L380,610" fill="none" stroke="#14213D" stroke-width="1.8"/>
+<path d="M380,120 L560,120" fill="none" stroke="#14213D" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="470.0" y="115" text-anchor="middle" font-size="13" fill="#14213D">opcode</text>
+<circle cx="380" cy="120" r="4" fill="#14213D"/>
+<path d="M380,250 L560,250" fill="none" stroke="#14213D" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="470.0" y="245" text-anchor="middle" font-size="13" fill="#14213D">rs, rt</text>
+<circle cx="380" cy="250" r="4" fill="#14213D"/>
+<path d="M380,610 L560,610" fill="none" stroke="#14213D" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="470.0" y="605" text-anchor="middle" font-size="13" fill="#14213D">valid</text>
+<circle cx="380" cy="610" r="4" fill="#14213D"/>
+<path d="M360,285 L400,285" fill="none" stroke="#14213D" stroke-width="1.8"/>
+<path d="M400,285 L400,640" fill="none" stroke="#14213D" stroke-width="1.8"/>
+<path d="M400,300 L560,300" fill="none" stroke="#14213D" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="480.0" y="295" text-anchor="middle" font-size="13" fill="#14213D">dist. 1</text>
+<circle cx="400" cy="300" r="4" fill="#14213D"/>
+<path d="M400,640 L560,640" fill="none" stroke="#14213D" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="480.0" y="635" text-anchor="middle" font-size="13" fill="#14213D">valid, is_beq</text>
+<circle cx="400" cy="640" r="4" fill="#14213D"/>
+<path d="M360,425 L420,425" fill="none" stroke="#14213D" stroke-width="1.8"/>
+<path d="M420,350 L420,495" fill="none" stroke="#14213D" stroke-width="1.8"/>
+<path d="M420,350 L560,350" fill="none" stroke="#14213D" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="490.0" y="345" text-anchor="middle" font-size="13" fill="#14213D">dist. 2</text>
+<circle cx="420" cy="350" r="4" fill="#14213D"/>
+<path d="M420,495 L560,495" fill="none" stroke="#14213D" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="490.0" y="490" text-anchor="middle" font-size="13" fill="#14213D">valid, lw/sw</text>
+<circle cx="420" cy="495" r="4" fill="#14213D"/>
+<path d="M360,545 L440,545" fill="none" stroke="#14213D" stroke-width="1.8"/>
+<path d="M440,545 L440,670" fill="none" stroke="#14213D" stroke-width="1.8"/>
+<path d="M440,670 L560,670" fill="none" stroke="#14213D" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="500.0" y="665" text-anchor="middle" font-size="13" fill="#14213D">zero</text>
+<circle cx="440" cy="670" r="4" fill="#14213D"/>
+<path d="M360,660 L460,660" fill="none" stroke="#14213D" stroke-width="1.8"/>
+<path d="M460,535 L460,700" fill="none" stroke="#14213D" stroke-width="1.8"/>
+<path d="M460,535 L560,535" fill="none" stroke="#14213D" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="510.0" y="530" text-anchor="middle" font-size="13" fill="#14213D">fetch_valid_now</text>
+<circle cx="460" cy="535" r="4" fill="#14213D"/>
+<path d="M460,700 L560,700" fill="none" stroke="#14213D" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="510.0" y="695" text-anchor="middle" font-size="13" fill="#14213D">fetch_valid_now</text>
+<circle cx="460" cy="700" r="4" fill="#14213D"/>
+<rect x="1100" y="215" width="180" height="530" rx="8" fill="#FFF1F0" stroke="#C62828" stroke-width="2"/>
+<text x="1190.0" y="389.9" text-anchor="middle" font-size="14" font-weight="bold" fill="#14213D">Prioridade</text>
+<text x="1190.0" y="408.9" text-anchor="middle" font-size="14" font-weight="bold" fill="#14213D">e aborto</text>
+<text x="1190.0" y="427.9" text-anchor="middle" font-size="14" fill="#14213D"></text>
+<text x="1190.0" y="446.9" text-anchor="middle" font-size="14" fill="#14213D">controle (EX)</text>
+<text x="1190.0" y="465.9" text-anchor="middle" font-size="14" fill="#14213D">&gt; dados (ID)</text>
+<text x="1190.0" y="484.9" text-anchor="middle" font-size="14" fill="#14213D">&gt; estrutural (IF)</text>
+<text x="1190.0" y="503.9" text-anchor="middle" font-size="14" fill="#14213D"></text>
+<text x="1190.0" y="522.9" text-anchor="middle" font-size="14" fill="#14213D">frozen ← 1</text>
+<text x="1190.0" y="541.9" text-anchor="middle" font-size="14" fill="#14213D">hazard_type_reg</text>
+<text x="1190.0" y="560.9" text-anchor="middle" font-size="14" fill="#14213D">hazard_pc_reg</text>
+<text x="1190.0" y="579.9" text-anchor="middle" font-size="14" fill="#14213D">cycle_cnt</text>
+<path d="M980,330 L1100,330" fill="none" stroke="#C62828" stroke-width="2" marker-end="url(#ad)"/>
+<path d="M980,515 L1100,515" fill="none" stroke="#C62828" stroke-width="2" marker-end="url(#ad)"/>
+<path d="M980,665 L1100,665" fill="none" stroke="#C62828" stroke-width="2" marker-end="url(#ad)"/>
+<text x="1040" y="322" text-anchor="middle" font-size="11" fill="#C62828">data_conflict</text>
+<text x="1040" y="507" text-anchor="middle" font-size="11" fill="#C62828">structural_conflict</text>
+<text x="1040" y="657" text-anchor="middle" font-size="11" fill="#C62828">control_conflict</text>
+<text x="1340" y="210" text-anchor="start" font-size="16" fill="#14213D" font-weight="bold">Saídas (R3)</text>
+<rect x="1340" y="235" width="200" height="80" rx="8" fill="#FFFFFF" stroke="#14213D" stroke-width="2"/>
+<text x="1440.0" y="270.4" text-anchor="middle" font-size="14" font-weight="bold" fill="#14213D">hazard_abort</text>
+<text x="1440.0" y="289.4" text-anchor="middle" font-size="14" fill="#14213D">1 bit</text>
+<path d="M1280,275 L1340,275" fill="none" stroke="#C62828" stroke-width="2" marker-end="url(#ad)"/>
+<rect x="1340" y="345" width="200" height="80" rx="8" fill="#FFFFFF" stroke="#14213D" stroke-width="2"/>
+<text x="1440.0" y="380.4" text-anchor="middle" font-size="14" font-weight="bold" fill="#14213D">hazard_type</text>
+<text x="1440.0" y="399.4" text-anchor="middle" font-size="14" fill="#14213D">2 bits: 01 · 10 · 11</text>
+<path d="M1280,385 L1340,385" fill="none" stroke="#C62828" stroke-width="2" marker-end="url(#ad)"/>
+<rect x="1340" y="455" width="200" height="80" rx="8" fill="#FFFFFF" stroke="#14213D" stroke-width="2"/>
+<text x="1440.0" y="490.4" text-anchor="middle" font-size="14" font-weight="bold" fill="#14213D">hazard_pc</text>
+<text x="1440.0" y="509.4" text-anchor="middle" font-size="14" fill="#14213D">32 bits</text>
+<path d="M1280,495 L1340,495" fill="none" stroke="#C62828" stroke-width="2" marker-end="url(#ad)"/>
+<rect x="1340" y="565" width="200" height="80" rx="8" fill="#FFFFFF" stroke="#14213D" stroke-width="2"/>
+<text x="1440.0" y="600.4" text-anchor="middle" font-size="14" font-weight="bold" fill="#14213D">hazard_cycle</text>
+<text x="1440.0" y="619.4" text-anchor="middle" font-size="14" fill="#14213D">32 bits</text>
+<path d="M1280,605 L1340,605" fill="none" stroke="#C62828" stroke-width="2" marker-end="url(#ad)"/>
+<text x="1340" y="690" text-anchor="start" font-size="12" fill="#555" font-style="italic">hazard_pc: a consumidora (dados), a</text>
+<text x="1340" y="707" text-anchor="start" font-size="12" fill="#555" font-style="italic">instrução em IF (estrutural) ou o beq</text>
+<text x="1340" y="724" text-anchor="start" font-size="12" fill="#555" font-style="italic">(controle).</text>
+<text x="1340" y="745" text-anchor="start" font-size="12" fill="#555" font-style="italic">hazard_cycle = cycle_cnt + 1 até congelar.</text>
+<rect x="560" y="790" width="720" height="60" rx="8" fill="#FFF1F0" stroke="#C62828" stroke-width="2"/>
+<text x="920.0" y="815.4" text-anchor="middle" font-size="14" fill="#14213D">frozen = 1: PC, registradores entre estágios, banco de registradores e</text>
+<text x="920.0" y="834.4" text-anchor="middle" font-size="14" fill="#14213D">memória param; hazard_* ficam estáveis até o reset</text>
+<path d="M1190,745 L1190,790" fill="none" stroke="#C62828" stroke-width="1.8" stroke-dasharray="7 5" marker-end="url(#ad)"/>
+</svg>

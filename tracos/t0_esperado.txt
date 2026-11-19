@@ -1,0 +1,22 @@
+# Estado final esperado do T0 (gerado no MARS 4.5 a partir de tracos/t0.asm)
+# Formato: <numero_do_registrador> <valor_hex_32bits>
+# $a0
+4 00000000
+# $t0-$t7
+8 00000014
+9 FFFFFFDA
+10 00000000
+11 FFFFFFFC
+12 00000001
+13 0000003C
+14 00000046
+15 00000050
+# $s0-$s7
+16 0000001E
+17 FFFFFFF6
+18 00000030
+19 00000056
+20 0000001E
+21 FFFFFFF6
+22 00000030
+23 00000056
